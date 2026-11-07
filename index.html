@@ -1,2152 +1,995 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Musyawarah Hub - Majelis Taklim Srengseng Kalibata 1</title>
-  
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#f0fdf4',
-              100: '#dcfce7',
-              500: '#22c55e',
-              600: '#16a34a',
-              700: '#15803d',
-              800: '#166534',
-              900: '#14532d',
-              950: '#052e16'
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musyawarah Taklim System — Dokumentasi & Progress Monitoring</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace']
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            900: '#14532d'
+                        }
+                    }
+                }
             }
-          }
         }
-      }
-    }
-  </script>
-
-  <!-- Google Fonts & Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <!-- html2pdf.js for Client PDF Export -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #f1f5f9; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </script>
     
-    .print-only { display: none; }
-    @media print {
-      .no-print { display: none !important; }
-      .print-only { display: block !important; }
-    }
-  </style>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 99px;
+        }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col md:flex-row">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-white">
 
-  <!-- SIDEBAR NAVIGATION -->
-  <aside id="sidebar" class="w-64 bg-slate-900 text-slate-300 flex-shrink-0 border-r border-slate-800 flex flex-col justify-between hidden md:flex transition-all duration-300 z-30 fixed md:relative inset-y-0 left-0">
-    <div>
-      <!-- Brand Logo Header -->
-      <div class="p-4 border-b border-slate-800 flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white font-bold shadow-lg shadow-brand-900/50">
-            <i data-lucide="users" class="w-6 h-6"></i>
-          </div>
-          <div>
-            <h1 class="font-bold text-white text-base leading-tight">Musyawarah Hub</h1>
-            <p class="text-xs text-brand-400 font-medium">MT Srengseng Kalibata 1</p>
-          </div>
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 gap-4">
+                
+                <!-- Logo & Title -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 font-bold">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-base sm:text-lg text-slate-900 dark:text-white tracking-tight leading-tight">
+                            Musyawarah Taklim
+                        </h1>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Sistem Dokumen & Monitoring Progress Hasil Musyawarah</p>
+                    </div>
+                </div>
+
+                <!-- Right Actions -->
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <button onclick="syncDataFromSpreadsheet()" class="flex items-center space-x-2 px-3.5 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl transition-all" title="Refresh Data">
+                        <i id="syncIcon" data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                        <span class="hidden md:inline">Sinkronisasi</span>
+                    </button>
+                    <button onclick="toggleDarkMode()" class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all" title="Toggle Theme">
+                        <i data-lucide="moon" id="themeIcon" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+            </div>
         </div>
-        <button id="closeSidebarBtn" class="md:hidden text-slate-400 hover:text-white p-1">
-          <i data-lucide="x" class="w-6 h-6"></i>
-        </button>
-      </div>
-
-      <!-- Navigation Links -->
-      <nav class="p-3 space-y-1">
-        <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-brand-700 text-white shadow-sm">
-          <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-          <span>Dashboard</span>
-        </a>
-        <a href="#" onclick="switchTab('notulensi')" id="nav-notulensi" class="nav-item flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-          <i data-lucide="file-text" class="w-5 h-5"></i>
-          <span>Notulensi & Hasil</span>
-        </a>
-        <a href="#" onclick="switchTab('musyawarah')" id="nav-musyawarah" class="nav-item menu-admin-only flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-          <i data-lucide="calendar" class="w-5 h-5"></i>
-          <span>Musyawarah</span>
-        </a>
-        <a href="#" onclick="switchTab('tracker')" id="nav-tracker" class="nav-item menu-admin-only flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-          <i data-lucide="check-square" class="w-5 h-5"></i>
-          <span>Action Tracker</span>
-        </a>
-        <a href="#" onclick="switchTab('monitoring')" id="nav-monitoring" class="nav-item menu-admin-only flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-          <i data-lucide="users-2" class="w-5 h-5"></i>
-          <span>Monitoring Tim</span>
-        </a>
-        <a href="#" onclick="switchTab('arsip')" id="nav-arsip" class="nav-item menu-admin-only flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-          <i data-lucide="archive" class="w-5 h-5"></i>
-          <span>Arsip & Laporan</span>
-        </a>
-        <a href="#" onclick="switchTab('pengurus')" id="nav-pengurus" class="nav-item menu-admin-only flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-          <i data-lucide="user-check" class="w-5 h-5"></i>
-          <span>Manajemen Pengurus</span>
-        </a>
-      </nav>
-    </div>
-
-    <!-- Backend Sync Footer -->
-    <div class="p-3 border-t border-slate-800 bg-slate-950/40">
-      <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-        <span class="flex items-center"><i data-lucide="database" class="w-3.5 h-3.5 mr-1 text-slate-400"></i> Mode Data:</span>
-        <span id="dataModeBadge" class="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-950 text-blue-400 border border-blue-800/50">Google Sheets Connected</span>
-      </div>
-      <button onclick="syncDataFromBackend()" id="syncBtn" class="w-full py-1.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded text-xs flex items-center justify-center space-x-1.5 transition">
-        <i data-lucide="refresh-cw" class="w-3.5 h-3.5" id="syncIcon"></i>
-        <span id="syncText">Sinkronisasi Backend</span>
-      </button>
-    </div>
-  </aside>
-
-  <!-- MAIN CONTENT CONTAINER -->
-  <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
-    
-    <!-- TOP HEADER BAR -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-20 px-4 py-3 flex items-center justify-between shadow-sm">
-      <div class="flex items-center space-x-3">
-        <!-- 3-Line Hamburger Menu Button for Sidebar Toggle (Desktop & Mobile) -->
-        <button id="toggleSidebarBtn" onclick="toggleSidebar()" class="text-slate-600 hover:text-slate-900 p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 transition">
-          <i data-lucide="menu" class="w-5 h-5"></i>
-        </button>
-        <h2 id="currentPageTitle" class="text-lg font-bold text-slate-800 flex items-center gap-2">
-          <i data-lucide="layout-dashboard" class="w-5 h-5 text-brand-600"></i>
-          Dashboard Overview
-        </h2>
-      </div>
-
-      <!-- Top Right User Controls (Avatar, Name, Role, & Logout Button) -->
-      <div class="flex items-center space-x-3">
-        <div class="flex items-center space-x-3 pl-2 border-l border-slate-200">
-          <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-800 font-bold flex items-center justify-center text-xs border border-brand-300" id="userAvatar">
-            --
-          </div>
-          <div class="text-left">
-            <div id="topUserName" class="text-xs font-semibold text-slate-700">Belum Login</div>
-            <div id="topUserRole" class="text-[10px] text-slate-500 font-medium text-brand-600">-</div>
-          </div>
-          <button onclick="logoutUser()" class="ml-2 px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-lg text-xs font-semibold flex items-center gap-1 transition">
-            <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar
-          </button>
-        </div>
-      </div>
     </header>
 
-    <!-- CONTENT VIEWS -->
-    <main class="p-4 md:p-6 space-y-6 flex-1">
-      
-      <!-- 1. DASHBOARD VIEW -->
-      <section id="view-dashboard" class="space-y-6">
-        <!-- KPI Cards Grid -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-            <div>
-              <p class="text-xs text-slate-500 font-medium">Total Musyawarah</p>
-              <h3 id="kpi-total-meetings" class="text-2xl font-bold text-slate-900 mt-1">0</h3>
-            </div>
-            <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
-              <i data-lucide="calendar" class="w-5 h-5"></i>
-            </div>
-          </div>
+    <!-- MAIN CONTAINER -->
+    <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row gap-6">
 
-          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-            <div>
-              <p class="text-xs text-slate-500 font-medium">Total Action Items</p>
-              <h3 id="kpi-total-actions" class="text-2xl font-bold text-slate-900 mt-1">0</h3>
-            </div>
-            <div class="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center">
-              <i data-lucide="list-checks" class="w-5 h-5"></i>
-            </div>
-          </div>
-
-          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-            <div>
-              <p class="text-xs text-slate-500 font-medium">Tugas Completed</p>
-              <h3 id="kpi-status-completed" class="text-2xl font-bold text-emerald-600 mt-1">0</h3>
-            </div>
-            <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
-              <i data-lucide="check-circle-2" class="w-5 h-5"></i>
-            </div>
-          </div>
-
-          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-            <div>
-              <p class="text-xs text-slate-500 font-medium">Tugas Overdue</p>
-              <h3 id="kpi-status-overdue" class="text-2xl font-bold text-rose-600 mt-1">0</h3>
-            </div>
-            <div class="w-10 h-10 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center">
-              <i data-lucide="alert-triangle" class="w-5 h-5"></i>
-            </div>
-          </div>
-        </div>
-
-        <!-- Overall & Team Progress Section -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
-            <h4 class="font-bold text-slate-800 text-sm mb-4">Persentase Penyelesaian Total</h4>
-            <div class="flex flex-col items-center justify-center space-y-3 my-auto">
-              <div class="relative w-32 h-32 flex items-center justify-center">
-                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
-                  <circle cx="60" cy="60" r="52" stroke="currentColor" stroke-width="12" class="text-slate-100" fill="transparent" />
-                  <circle id="overallProgressCircle" cx="60" cy="60" r="52" stroke="currentColor" stroke-width="12" class="text-brand-600 transition-all duration-700" stroke-dasharray="326.72" stroke-dashoffset="326.72" fill="transparent" stroke-linecap="round" />
-                </svg>
-                <span id="overallProgressText" class="absolute text-xl font-bold text-slate-800">0%</span>
-              </div>
-              <p class="text-xs text-slate-500 text-center">Berdasarkan status penyelesaian Action Items</p>
-            </div>
-          </div>
-
-          <div class="lg:col-span-2 bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
-            <h4 class="font-bold text-slate-800 text-sm">Progres Pekerjaan per Tim / Bidang</h4>
-            <div id="teamProgressContainer" class="space-y-3">
-              <div class="text-xs text-slate-400 text-center py-4">Memuat data tim...</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Urgent Tasks Table -->
-        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4">
-          <div class="flex items-center justify-between">
-            <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-              <i data-lucide="clock" class="w-4 h-4 text-amber-500"></i>
-              Tugas Mendekati / Melewati Deadline
-            </h4>
-            <span id="urgentCountBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">0 Tugas</span>
-          </div>
-
-          <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-              <thead>
-                <tr class="border-b border-slate-200 text-[11px] font-semibold text-slate-500 uppercase bg-slate-50">
-                  <th class="p-2.5">Nama Pekerjaan</th>
-                  <th class="p-2.5">Tim / PIC</th>
-                  <th class="p-2.5">Deadline</th>
-                  <th class="p-2.5">Status</th>
-                  <th class="p-2.5 text-right">Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="urgentTaskTableBody" class="divide-y divide-slate-100 text-xs">
-                <tr><td colspan="5" class="text-center p-4 text-slate-400">Tidak ada tugas kritis saat ini.</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- 2. NOTULENSI VIEW -->
-      <section id="view-notulensi" class="space-y-6 hidden">
-        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h3 class="font-bold text-slate-800 text-base">Notulensi & Hasil Musyawarah</h3>
-            <p class="text-xs text-slate-500">Pilih musyawarah di bawah ini untuk melihat rincian agenda, hasil diskusi per tim, dan keputusan resmi.</p>
-          </div>
-          <div class="flex items-center space-x-2">
-            <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
-            <input type="text" id="searchNotulensiInput" onkeyup="renderNotulensiView()" placeholder="Cari notulensi..." class="text-xs border border-slate-300 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-brand-500 text-slate-800">
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <!-- Meeting List Selection Column -->
-          <div class="space-y-3">
-            <h4 class="font-bold text-slate-700 text-xs uppercase tracking-wider">Daftar Musyawarah</h4>
-            <div id="notulensiMeetingList" class="space-y-2 max-h-[70vh] overflow-y-auto pr-1">
-              <!-- Rendered dynamically -->
-            </div>
-          </div>
-
-          <!-- Meeting Detailed Minutes View Column -->
-          <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm p-6" id="notulensiDetailContainer">
-            <div class="text-center py-16 text-slate-400 space-y-2">
-              <i data-lucide="file-text" class="w-12 h-12 mx-auto text-slate-300"></i>
-              <p class="text-xs">Pilih salah satu musyawarah di sebelah kiri untuk melihat notulensi lengkap.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 3. MUSYAWARAH VIEW (ADMIN ONLY) -->
-      <section id="view-musyawarah" class="space-y-6 hidden">
-        <div class="flex flex-col sm:flex-row justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <div class="flex items-center space-x-2 flex-1">
-            <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
-            <input type="text" id="searchMeetingInput" onkeyup="renderMeetingsList()" placeholder="Cari judul musyawarah..." class="w-full text-xs border-0 focus:ring-0 text-slate-800">
-          </div>
-          <button onclick="openAddMeetingPage()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-lg shadow-sm flex items-center space-x-1.5 self-start sm:self-auto">
-            <i data-lucide="plus" class="w-4 h-4"></i>
-            <span>+ Buat Musyawarah Baru</span>
-          </button>
-        </div>
-
-        <div id="meetingsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <!-- Rendered dynamically -->
-        </div>
-      </section>
-
-      <!-- 3B. HALAMAN FORM INPUT MUSYAWARAH BARU (DEDICATED FULL PAGE) -->
-      <section id="view-musyawarah-form" class="space-y-6 hidden">
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
-          <div class="flex justify-between items-center border-b pb-4">
-            <div>
-              <h3 id="musyawarahPageTitle" class="text-lg font-bold text-slate-900">Input Data Musyawarah & Notulensi Hasil</h3>
-              <p class="text-xs text-slate-500">Isikan data pelaksanaan musyawarah beserta daftar peserta dan rincian hasil keputusan per agenda pembahasan.</p>
-            </div>
-            <button onclick="cancelMeetingFormPage()" class="px-3.5 py-1.5 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-100 font-semibold text-xs flex items-center gap-1">
-              <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali
-            </button>
-          </div>
-
-          <form id="fullMeetingForm" onsubmit="saveFullMeetingForm(event)" class="space-y-6 text-xs">
-            <input type="hidden" id="fullMeetingId">
-
-            <!-- Informasi Umum Musyawarah -->
-            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
-              <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                <i data-lucide="info" class="w-4 h-4 text-brand-600"></i> Informasi Umum Musyawarah
-              </h4>
-              
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="md:col-span-2">
-                  <label class="block font-semibold text-slate-700 mb-1">Judul Musyawarah *</label>
-                  <input type="text" id="fullMeetingTitle" required placeholder="Contoh: Musyawarah Kerja Awal Bulan & Persiapan Acara..." class="w-full p-2.5 border border-slate-300 rounded-lg bg-white text-slate-800 focus:ring-2 focus:ring-brand-500">
-                </div>
-                <div>
-                  <label class="block font-semibold text-slate-700 mb-1">Status Musyawarah *</label>
-                  <select id="fullMeetingStatus" required class="w-full p-2.5 border border-slate-300 rounded-lg bg-white font-medium">
-                    <option value="Draft">Draft</option>
-                    <option value="Berlangsung">Berlangsung</option>
-                    <option value="Selesai">Selesai</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                  <label class="block font-semibold text-slate-700 mb-1">Tanggal *</label>
-                  <input type="date" id="fullMeetingDate" required class="w-full p-2 border border-slate-300 rounded-lg bg-white">
-                </div>
-                <div>
-                  <label class="block font-semibold text-slate-700 mb-1">Waktu Mulai *</label>
-                  <input type="time" id="fullMeetingStartTime" required class="w-full p-2 border border-slate-300 rounded-lg bg-white">
-                </div>
-                <div>
-                  <label class="block font-semibold text-slate-700 mb-1">Waktu Selesai *</label>
-                  <input type="time" id="fullMeetingEndTime" required class="w-full p-2 border border-slate-300 rounded-lg bg-white">
-                </div>
-                <div>
-                  <label class="block font-semibold text-slate-700 mb-1">Lokasi Musyawarah *</label>
-                  <input type="text" id="fullMeetingLocation" required placeholder="Aula Utama / Ruang Rapat..." class="w-full p-2 border border-slate-300 rounded-lg bg-white">
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label class="block font-semibold text-slate-700 mb-1">Pimpinan Musyawarah *</label>
-                  <select id="fullMeetingLeader" required class="w-full p-2 border border-slate-300 rounded-lg bg-white"></select>
-                </div>
-                <div>
-                  <label class="block font-semibold text-slate-700 mb-1">Notulis *</label>
-                  <select id="fullMeetingNotulis" required class="w-full p-2 border border-slate-300 rounded-lg bg-white"></select>
-                </div>
-              </div>
-            </div>
-
-            <!-- Peserta Musyawarah Yang Hadir -->
-            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
-              <div class="flex items-center justify-between">
-                <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                  <i data-lucide="users" class="w-4 h-4 text-purple-600"></i> 1) Daftar Peserta Yang Hadir *
-                </h4>
-                <div class="space-x-2">
-                  <button type="button" onclick="toggleSelectAllParticipants(true)" class="text-[11px] text-brand-700 hover:underline font-semibold">Pilih Semua</button>
-                  <span class="text-slate-300">|</span>
-                  <button type="button" onclick="toggleSelectAllParticipants(false)" class="text-[11px] text-slate-500 hover:underline font-semibold">Hapus Semua</button>
-                </div>
-              </div>
-              <div id="participantCheckboxesContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 bg-white p-3 rounded-lg border border-slate-200 max-h-48 overflow-y-auto">
-                <!-- Checkboxes populated dynamically -->
-              </div>
-            </div>
-
-            <!-- Tabel Agenda Pembahasan, Permasalahan, Hasil Diskusi & Action Items -->
-            <div class="space-y-3">
-              <div class="flex items-center justify-between">
-                <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                  <i data-lucide="list-checks" class="w-4 h-4 text-emerald-600"></i> 2) Rincian Agenda Pembahasan, Permasalahan & Keputusan
-                </h4>
-                <p class="text-[11px] text-slate-500">Tabel pembahasan hasil musyawarah & instruksi pekerjaan.</p>
-              </div>
-
-              <div class="overflow-x-auto border border-slate-200 rounded-xl shadow-sm">
-                <table class="w-full text-left border-collapse min-w-[850px]">
-                  <thead>
-                    <tr class="bg-slate-100 text-slate-700 border-b font-bold text-[11px] uppercase">
-                      <th class="p-3 w-10 text-center">No</th>
-                      <th class="p-3 w-48">Topik Pembahasan & Tim *</th>
-                      <th class="p-3 min-w-[180px]">Permasalahan / Latar Belakang *</th>
-                      <th class="p-3 min-w-[200px]">Hasil Diskusi & Keputusan *</th>
-                      <th class="p-3 w-44">PIC Utama *</th>
-                      <th class="p-3 w-36">Estimasi Selesai *</th>
-                      <th class="p-3 w-12 text-center">Hapus</th>
-                    </tr>
-                  </thead>
-                  <tbody id="agendaTableBody" class="divide-y divide-slate-200 bg-white">
-                    <!-- Dynamic Rows appended here -->
-                  </tbody>
-                </table>
-              </div>
-
-              <!-- Tombol Tambah Agenda Pembahasan -->
-              <div class="pt-2">
-                <button type="button" onclick="addAgendaRow()" class="px-4 py-2 bg-brand-50 hover:bg-brand-100 border border-brand-300 text-brand-800 rounded-xl font-bold text-xs flex items-center space-x-1.5 transition shadow-sm">
-                  <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                  <span>+ Tambah Agenda Pembahasan</span>
+        <!-- SIDEBAR NAVIGATION & STATS -->
+        <aside class="w-full md:w-64 shrink-0 space-y-4">
+            
+            <!-- Navigation Card -->
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-3 shadow-sm border border-slate-200 dark:border-slate-700 space-y-1">
+                <button onclick="switchTab('input')" id="tabInputBtn" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all bg-emerald-600 text-white shadow-sm">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                    <span>Input Musyawarah</span>
                 </button>
-              </div>
+                <button onclick="switchTab('list')" id="tabListBtn" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+                    <i data-lucide="file-text" class="w-4 h-4"></i>
+                    <span>Daftar Notulensi</span>
+                </button>
+                <button onclick="switchTab('board')" id="tabBoardBtn" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+                    <i data-lucide="kanban" class="w-4 h-4"></i>
+                    <span>Progress Board</span>
+                </button>
             </div>
 
-            <!-- Tombol Simpan Form -->
-            <div class="flex justify-end space-x-3 pt-4 border-t">
-              <button type="button" onclick="cancelMeetingFormPage()" class="px-5 py-2.5 border border-slate-300 rounded-xl text-slate-700 hover:bg-slate-100 font-bold text-xs">Batal</button>
-              <button type="submit" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-md flex items-center gap-1.5">
-                <i data-lucide="save" class="w-4 h-4"></i> Simpan Seluruh Musyawarah
-              </button>
-            </div>
-          </form>
-        </div>
-      </section>
-
-      <!-- 4. ACTION TRACKER VIEW (ADMIN ONLY) -->
-      <section id="view-tracker" class="space-y-6 hidden">
-        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          <div class="p-4 border-b border-slate-200 font-bold text-slate-800 text-sm">Daftar Action Items</div>
-          <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-              <thead>
-                <tr class="border-b border-slate-200 text-[11px] font-semibold text-slate-500 uppercase bg-slate-50">
-                  <th class="p-3">Nama Pekerjaan</th>
-                  <th class="p-3">Tim</th>
-                  <th class="p-3">PIC</th>
-                  <th class="p-3">Deadline</th>
-                  <th class="p-3">Status</th>
-                  <th class="p-3">Progres</th>
-                  <th class="p-3 text-right">Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="actionTrackerTableBody" class="divide-y divide-slate-100">
-                <!-- Rendered dynamically -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- 5. MONITORING VIEW (ADMIN ONLY) -->
-      <section id="view-monitoring" class="space-y-6 hidden">
-        <div id="monitoringGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <!-- Rendered dynamically -->
-        </div>
-      </section>
-
-      <!-- 6. ARSIP VIEW (ADMIN ONLY) -->
-      <section id="view-arsip" class="space-y-6 hidden">
-        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          <div class="p-4 border-b border-slate-200 font-bold text-slate-800 text-sm">Arsip Dokumen Musyawarah</div>
-          <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-              <thead>
-                <tr class="border-b border-slate-200 text-[11px] font-semibold text-slate-500 uppercase bg-slate-50">
-                  <th class="p-3">ID</th>
-                  <th class="p-3">Judul</th>
-                  <th class="p-3">Tanggal</th>
-                  <th class="p-3">Pimpinan</th>
-                  <th class="p-3">Status</th>
-                  <th class="p-3 text-right">Cetak PDF</th>
-                </tr>
-              </thead>
-              <tbody id="arsipTableBody" class="divide-y divide-slate-100">
-                <!-- Rendered dynamically -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- 7. PENGURUS VIEW (ADMIN ONLY) -->
-      <section id="view-pengurus" class="space-y-6 hidden">
-        <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <h3 class="font-bold text-slate-800 text-sm">Daftar Pengurus Majelis Taklim</h3>
-          <button onclick="openAddUserModal()" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-lg shadow-sm">
-            + Tambah Pengurus
-          </button>
-        </div>
-
-        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-              <thead>
-                <tr class="border-b border-slate-200 text-[11px] font-semibold text-slate-500 uppercase bg-slate-50">
-                  <th class="p-3">Nama Pengurus</th>
-                  <th class="p-3">Tim / Bidang</th>
-                  <th class="p-3">No. WhatsApp</th>
-                  <th class="p-3">Role</th>
-                  <th class="p-3">Status</th>
-                  <th class="p-3 text-right">Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="usersTableBody" class="divide-y divide-slate-100 text-xs">
-                <!-- Rendered dynamically -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-    </main>
-  </div>
-
-  <!-- LOGIN OVERLAY MODAL -->
-  <div id="loginOverlay" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-5 border border-slate-100">
-      <div class="text-center space-y-2">
-        <div class="w-14 h-14 bg-brand-100 text-brand-700 rounded-2xl mx-auto flex items-center justify-center shadow-inner">
-          <i data-lucide="users" class="w-8 h-8"></i>
-        </div>
-        <h3 class="text-xl font-bold text-slate-900">Musyawarah Hub</h3>
-        <p class="text-xs text-slate-500">Majelis Taklim Srengseng Kalibata 1</p>
-      </div>
-
-      <form onsubmit="handleLoginSubmit(event)" class="space-y-4 text-xs">
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Pilih Nama Pengurus *</label>
-          <select id="loginUserSelect" required class="w-full p-2.5 border border-slate-300 rounded-xl bg-white text-slate-800 focus:ring-2 focus:ring-brand-500 font-medium">
-            <option value="">-- Memuat Pengurus --</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Kata Sandi (Password) *</label>
-          <input type="password" id="loginPasswordInput" required placeholder="Masukkan kata sandi..." class="w-full p-2.5 border border-slate-300 rounded-xl text-slate-800 focus:ring-2 focus:ring-brand-500">
-        </div>
-
-        <button type="submit" id="loginSubmitBtn" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow-md transition flex items-center justify-center space-x-2">
-          <i data-lucide="log-in" class="w-4 h-4"></i>
-          <span>Masuk ke Aplikasi</span>
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- USER FORM MODAL (ADD & EDIT) -->
-  <div id="userModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-      <div class="flex justify-between items-center border-b pb-3">
-        <h3 id="userModalTitle" class="font-bold text-slate-800 text-base">Tambah Pengurus Baru</h3>
-        <button type="button" onclick="closeUserModal()" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-
-      <form id="userForm" onsubmit="saveUserForm(event)" class="space-y-3 text-xs">
-        <input type="hidden" id="formUserId">
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Nama Lengkap *</label>
-          <input type="text" id="formUserName" required placeholder="Nama pengurus..." class="w-full p-2 border border-slate-300 rounded-lg">
-        </div>
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">No. WhatsApp *</label>
-          <input type="text" id="formUserWa" required placeholder="08123456789..." class="w-full p-2 border border-slate-300 rounded-lg">
-        </div>
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Tim / Bidang *</label>
-          <select id="formUserTeam" required onchange="handleTeamSelectChange(this)" class="w-full p-2 border border-slate-300 rounded-lg bg-white"></select>
-        </div>
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Email (Opsional)</label>
-          <input type="email" id="formUserEmail" placeholder="email@gmail.com..." class="w-full p-2 border border-slate-300 rounded-lg">
-        </div>
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Kata Sandi (Password)</label>
-          <input type="password" id="formUserPassword" placeholder="Biarkan kosong jika tidak diubah" class="w-full p-2 border border-slate-300 rounded-lg">
-        </div>
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Role / Hak Akses *</label>
-          <select id="formUserRole" required class="w-full p-2 border border-slate-300 rounded-lg bg-white">
-            <option value="Administrator">Administrator</option>
-            <option value="Ketua Tim">Ketua Tim</option>
-            <option value="Anggota">Anggota</option>
-            <option value="Viewer">Viewer</option>
-          </select>
-        </div>
-
-        <div class="flex justify-end space-x-2 pt-3 border-t mt-4">
-          <button type="button" onclick="closeUserModal()" class="px-3.5 py-1.5 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-100 font-semibold text-xs">Batal</button>
-          <button type="submit" class="px-4 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs rounded-lg shadow-sm">Simpan Data</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- DELETE USER CONFIRMATION MODAL -->
-  <div id="deleteModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4 text-center">
-      <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto">
-        <i data-lucide="trash-2" class="w-6 h-6"></i>
-      </div>
-      <h4 class="font-bold text-slate-900 text-base">Konfirmasi Hapus</h4>
-      <p id="deleteConfirmText" class="text-xs text-slate-600">Apakah Anda yakin ingin menghapus data pengurus ini?</p>
-      <input type="hidden" id="deleteTargetUserId">
-      <div class="flex justify-center space-x-3 pt-2">
-        <button type="button" onclick="closeDeleteModal()" class="px-4 py-2 border border-slate-300 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100">Batal</button>
-        <button type="button" onclick="confirmDeleteUser()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl shadow-md">Ya, Hapus</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ADD / EDIT MUSYAWARAH MODAL -->
-  <div id="meetingModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-      <div class="flex justify-between items-center border-b pb-3">
-        <h3 id="meetingModalTitle" class="font-bold text-slate-800 text-base">Buat Musyawarah Baru</h3>
-        <button onclick="closeMeetingModal()" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-
-      <form id="meetingForm" onsubmit="saveMeetingForm(event)" class="space-y-3 text-xs">
-        <input type="hidden" id="formMeetingId">
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Judul Musyawarah *</label>
-          <input type="text" id="formMeetingTitle" required placeholder="Musyawarah Kerja Awal Bulan..." class="w-full p-2 border border-slate-300 rounded-lg">
-        </div>
-        <div class="grid grid-cols-3 gap-2">
-          <div>
-            <label class="block font-semibold text-slate-700 mb-1">Tanggal *</label>
-            <input type="date" id="formMeetingDate" required class="w-full p-2 border border-slate-300 rounded-lg">
-          </div>
-          <div>
-            <label class="block font-semibold text-slate-700 mb-1">Waktu Mulai *</label>
-            <input type="time" id="formMeetingStartTime" required class="w-full p-2 border border-slate-300 rounded-lg">
-          </div>
-          <div>
-            <label class="block font-semibold text-slate-700 mb-1">Waktu Selesai *</label>
-            <input type="time" id="formMeetingEndTime" required class="w-full p-2 border border-slate-300 rounded-lg">
-          </div>
-        </div>
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Lokasi Musyawarah *</label>
-          <input type="text" id="formMeetingLocation" required placeholder="Aula Utama Majelis Taklim..." class="w-full p-2 border border-slate-300 rounded-lg">
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block font-semibold text-slate-700 mb-1">Pimpinan Musyawarah *</label>
-            <select id="formMeetingLeader" required class="w-full p-2 border border-slate-300 rounded-lg bg-white"></select>
-          </div>
-          <div>
-            <label class="block font-semibold text-slate-700 mb-1">Notulis *</label>
-            <select id="formMeetingNotulis" required class="w-full p-2 border border-slate-300 rounded-lg bg-white"></select>
-          </div>
-        </div>
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Agenda Pembahasan *</label>
-          <textarea id="formMeetingAgenda" rows="3" required placeholder="Tuliskan agenda utama pembahasan..." class="w-full p-2 border border-slate-300 rounded-lg"></textarea>
-        </div>
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Status Musyawarah *</label>
-          <select id="formMeetingStatus" required class="w-full p-2 border border-slate-300 rounded-lg bg-white">
-            <option value="Draft">Draft</option>
-            <option value="Berlangsung">Berlangsung</option>
-            <option value="Selesai">Selesai</option>
-          </select>
-        </div>
-
-        <div class="flex justify-end space-x-2 pt-3 border-t mt-4">
-          <button type="button" onclick="closeMeetingModal()" class="px-3.5 py-1.5 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-100 font-semibold text-xs">Batal</button>
-          <button type="submit" class="px-4 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs rounded-lg shadow-sm">Simpan Musyawarah</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- EDIT ACTION ITEM MODAL -->
-  <div id="actionModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-      <div class="flex justify-between items-center border-b pb-3">
-        <h3 class="font-bold text-slate-800 text-base">Update Action Item</h3>
-        <button onclick="closeActionModal()" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-
-      <form id="actionForm" onsubmit="saveActionForm(event)" class="space-y-3 text-xs">
-        <input type="hidden" id="formActionId">
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Nama Pekerjaan</label>
-          <input type="text" id="formActionTask" readonly class="w-full p-2 border border-slate-200 bg-slate-50 rounded-lg font-semibold text-slate-700">
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block font-semibold text-slate-700 mb-1">Status *</label>
-            <select id="formActionStatus" required class="w-full p-2 border border-slate-300 rounded-lg bg-white">
-              <option value="Belum Dimulai">Belum Dimulai</option>
-              <option value="Dalam Proses">Dalam Proses</option>
-              <option value="Tertunda">Tertunda</option>
-              <option value="Selesai">Selesai</option>
-              <option value="Dibatalkan">Dibatalkan</option>
-            </select>
-          </div>
-          <div>
-            <label class="block font-semibold text-slate-700 mb-1">Progres (%) *</label>
-            <input type="number" id="formActionProgress" min="0" max="100" required class="w-full p-2 border border-slate-300 rounded-lg">
-          </div>
-        </div>
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Catatan Progres Terakhir</label>
-          <textarea id="formActionLog" rows="2" placeholder="Catat perkembangan pekerjaan..." class="w-full p-2 border border-slate-300 rounded-lg"></textarea>
-        </div>
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Kendala (Jika ada)</label>
-          <input type="text" id="formActionConstraint" placeholder="Kendala yang dihadapi..." class="w-full p-2 border border-slate-300 rounded-lg">
-        </div>
-
-        <div class="flex justify-end space-x-2 pt-3 border-t mt-4">
-          <button type="button" onclick="closeActionModal()" class="px-3.5 py-1.5 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-100 font-semibold text-xs">Batal</button>
-          <button type="submit" class="px-4 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs rounded-lg shadow-sm">Simpan Update</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- DETAIL MODAL -->
-  <div id="detailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-      <div class="flex justify-between items-center border-b pb-3">
-        <h3 id="detailModalTitle" class="font-bold text-slate-800 text-base">Detail Informasi</h3>
-        <button onclick="closeDetailModal()" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-      <div id="detailModalBody" class="space-y-4 text-xs text-slate-700"></div>
-    </div>
-  </div>
-
-  <!-- JAVASCRIPT APPLICATION ENGINE -->
-  <script>
-    // Safe array helper declared at top of script block to prevent ReferenceErrors
-    function safeArray(arr) {
-      if (!arr) return [];
-      if (Array.isArray(arr)) return arr;
-      return [];
-    }
-
-    const APP_STATE = {
-      currentUser: null,
-      currentUserRole: 'Viewer',
-      currentUserName: '',
-      gasUrl: 'https://script.google.com/macros/s/AKfycbxdbXUKAF9u8etrB2QqpgL4ccrjcOM57bHp8sVuCwGZUyG1j8K4SB3i3HyoIkaSJIxq/exec',
-      isLoading: true,
-      
-      teams: [],
-      meetings: [],
-      discussions: [],
-      actionItems: [],
-      users: [],
-      logs: []
-    };
-
-    window.addEventListener('DOMContentLoaded', () => {
-      if (window.lucide) lucide.createIcons();
-      initSidebar();
-
-      const savedUser = localStorage.getItem('musyawarah_user');
-      if (savedUser) {
-        try {
-          const u = JSON.parse(savedUser);
-          setLoggedInSession(u);
-        } catch (e) {
-          showLoginOverlay();
-        }
-      } else {
-        showLoginOverlay();
-      }
-
-      syncDataFromBackend();
-    });
-
-    function showLoginOverlay() {
-      const overlay = document.getElementById('loginOverlay');
-      if (overlay) overlay.classList.remove('hidden');
-    }
-
-    function hideLoginOverlay() {
-      const overlay = document.getElementById('loginOverlay');
-      if (overlay) overlay.classList.add('hidden');
-    }
-
-    function populateLoginUserDropdown() {
-      const select = document.getElementById('loginUserSelect');
-      if (!select) return;
-
-      const usersList = safeArray(APP_STATE.users);
-      if (usersList.length === 0) {
-        select.innerHTML = `<option value="">-- Tidak Ada Data Pengurus --</option>`;
-        return;
-      }
-
-      // Display ONLY the name of each pengurus (removed role label from dropdown)
-      select.innerHTML = `<option value="">-- Pilih Nama Anda --</option>` +
-        usersList.map(u => `<option value="${u.name}">${u.name}</option>`).join('');
-    }
-
-    function handleLoginSubmit(e) {
-      e.preventDefault();
-      const nameSelect = document.getElementById('loginUserSelect');
-      const passInput = document.getElementById('loginPasswordInput');
-
-      const selectedName = nameSelect ? nameSelect.value : '';
-      const enteredPassword = passInput ? passInput.value : '';
-
-      if (!selectedName) {
-        showToast('Pilih nama pengurus terlebih dahulu!');
-        return;
-      }
-
-      const usersList = safeArray(APP_STATE.users);
-      const user = usersList.find(u => u.name === selectedName);
-
-      if (!user) {
-        showToast('Data pengurus tidak ditemukan!');
-        return;
-      }
-
-      // Check Password matching against Spreadsheet data
-      const storedPassword = user.password || '';
-      if (storedPassword && storedPassword !== enteredPassword) {
-        showToast('Kata sandi salah! Periksa kembali password Anda.');
-        return;
-      }
-
-      // Login Successful
-      setLoggedInSession(user);
-      hideLoginOverlay();
-      if (passInput) passInput.value = '';
-      showToast(`Selamat datang, ${user.name}!`);
-    }
-
-    function setLoggedInSession(user) {
-      APP_STATE.currentUser = user;
-      APP_STATE.currentUserRole = user.role || 'Viewer';
-      APP_STATE.currentUserName = user.name || 'Pengurus';
-
-      localStorage.setItem('musyawarah_user', JSON.stringify(user));
-
-      // Update Top Header Bar Profile Info
-      const topUserName = document.getElementById('topUserName');
-      const topUserRole = document.getElementById('topUserRole');
-      const userAvatar = document.getElementById('userAvatar');
-
-      if (topUserName) topUserName.innerText = user.name;
-      if (topUserRole) topUserRole.innerText = user.role || 'Pengurus';
-      if (userAvatar) {
-        const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'US';
-        userAvatar.innerText = initials;
-      }
-
-      // Role Based Access Control (RBAC)
-      // Administrator: Access all menus
-      // Non-Administrator: Restricted to Dashboard and Notulensi only
-      const isAdmin = user.role === 'Administrator';
-      const adminOnlyMenus = document.querySelectorAll('.menu-admin-only');
-
-      adminOnlyMenus.forEach(el => {
-        if (isAdmin) {
-          el.classList.remove('hidden');
-        } else {
-          el.classList.add('hidden');
-        }
-      });
-
-      if (!isAdmin) {
-        switchTab('dashboard');
-      }
-    }
-
-    function logoutUser() {
-      APP_STATE.currentUser = null;
-      APP_STATE.currentUserRole = 'Viewer';
-      APP_STATE.currentUserName = '';
-
-      localStorage.removeItem('musyawarah_user');
-
-      const topUserName = document.getElementById('topUserName');
-      const topUserRole = document.getElementById('topUserRole');
-      const userAvatar = document.getElementById('userAvatar');
-
-      if (topUserName) topUserName.innerText = 'Belum Login';
-      if (topUserRole) topUserRole.innerText = '-';
-      if (userAvatar) userAvatar.innerText = '--';
-
-      showLoginOverlay();
-      showToast('Anda telah keluar dari aplikasi.');
-    }
-
-    // Dynamic Agenda Table Counter
-    let agendaRowCounter = 0;
-
-    function openAddMeetingPage() {
-      const form = document.getElementById('fullMeetingForm');
-      if (form) form.reset();
-
-      document.getElementById('fullMeetingId').value = '';
-      document.getElementById('musyawarahPageTitle').innerText = 'Input Data Musyawarah Baru';
-      document.getElementById('fullMeetingDate').value = new Date().toISOString().split('T')[0];
-
-      populateFullMeetingDropdowns();
-      renderParticipantCheckboxes([]);
-
-      // Reset Agenda Table with 1 empty row
-      const tbody = document.getElementById('agendaTableBody');
-      if (tbody) tbody.innerHTML = '';
-      agendaRowCounter = 0;
-      addAgendaRow();
-
-      // Show Full Page View
-      switchTab('musyawarah-form');
-    }
-
-    function cancelMeetingFormPage() {
-      switchTab('musyawarah');
-    }
-
-    function populateFullMeetingDropdowns() {
-      const leaderSelect = document.getElementById('fullMeetingLeader');
-      const notulisSelect = document.getElementById('fullMeetingNotulis');
-      
-      const usersList = safeArray(APP_STATE.users);
-      const options = `<option value="">-- Pilih Pengurus --</option>` +
-        usersList.map(u => `<option value="${u.name}">${u.name}</option>`).join('');
-
-      if (leaderSelect) leaderSelect.innerHTML = options;
-      if (notulisSelect) notulisSelect.innerHTML = options;
-    }
-
-    function renderParticipantCheckboxes(selectedNames = []) {
-      const container = document.getElementById('participantCheckboxesContainer');
-      if (!container) return;
-
-      const usersList = safeArray(APP_STATE.users);
-      if (usersList.length === 0) {
-        container.innerHTML = `<div class="text-xs text-slate-400 col-span-full">Belum ada data pengurus.</div>`;
-        return;
-      }
-
-      container.innerHTML = usersList.map((u, idx) => {
-        const isChecked = selectedNames.includes(u.name);
-        return `
-          <label class="flex items-center space-x-2 text-xs text-slate-700 hover:bg-slate-50 p-1 rounded cursor-pointer">
-            <input type="checkbox" name="participantCheckbox" value="${u.name}" ${isChecked ? 'checked' : ''} class="w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
-            <span class="truncate">${u.name}</span>
-          </label>
-        `;
-      }).join('');
-    }
-
-    function toggleSelectAllParticipants(checkAll) {
-      const checkboxes = document.querySelectorAll('input[name="participantCheckbox"]');
-      checkboxes.forEach(cb => cb.checked = checkAll);
-    }
-
-    function addAgendaRow(data = {}) {
-      const tbody = document.getElementById('agendaTableBody');
-      if (!tbody) return;
-
-      agendaRowCounter++;
-      const rowId = `agenda-row-${agendaRowCounter}`;
-
-      const teamsList = safeArray(APP_STATE.teams);
-      const teamOptions = teamsList.map(t => `<option value="${t.id}" ${data.teamId === t.id ? 'selected' : ''}>${t.name}</option>`).join('');
-
-      const usersList = safeArray(APP_STATE.users);
-      const picOptions = usersList.map(u => `<option value="${u.name}" ${data.pic === u.name ? 'selected' : ''}>${u.name}</option>`).join('');
-
-      const tr = document.createElement('tr');
-      tr.id = rowId;
-      tr.className = 'hover:bg-slate-50/70 align-top text-xs';
-      tr.innerHTML = `
-        <td class="p-3 text-center font-bold text-slate-500 row-number"></td>
-        <td class="p-2 space-y-1.5">
-          <select class="w-full p-1.5 border border-slate-300 rounded-lg bg-white font-medium agenda-team" required>
-            <option value="">-- Pilih Tim --</option>
-            ${teamOptions}
-          </select>
-          <input type="text" value="${data.title || ''}" placeholder="Judul topik bahasan..." class="w-full p-1.5 border border-slate-300 rounded-lg agenda-title" required>
-        </td>
-        <td class="p-2">
-          <textarea rows="2" placeholder="Jelaskan permasalahan / latar belakang..." class="w-full p-1.5 border border-slate-300 rounded-lg agenda-problem" required>${data.problem || ''}</textarea>
-        </td>
-        <td class="p-2">
-          <textarea rows="2" placeholder="Tuliskan hasil diskusi & keputusan resmi..." class="w-full p-1.5 border border-slate-300 rounded-lg agenda-decision" required>${data.decision || ''}</textarea>
-        </td>
-        <td class="p-2">
-          <select class="w-full p-1.5 border border-slate-300 rounded-lg bg-white agenda-pic" required>
-            <option value="">-- Pilih PIC --</option>
-            ${picOptions}
-          </select>
-        </td>
-        <td class="p-2">
-          <input type="date" value="${data.deadline || ''}" class="w-full p-1.5 border border-slate-300 rounded-lg agenda-deadline" required>
-        </td>
-        <td class="p-2 text-center">
-          <button type="button" onclick="removeAgendaRow('${rowId}')" class="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition">
-            <i data-lucide="trash-2" class="w-4 h-4"></i>
-          </button>
-        </td>
-      `;
-
-      tbody.appendChild(tr);
-      updateRowNumbers();
-      lucide.createIcons();
-    }
-
-    function removeAgendaRow(rowId) {
-      const tbody = document.getElementById('agendaTableBody');
-      const row = document.getElementById(rowId);
-      if (row && tbody.rows.length > 1) {
-        row.remove();
-        updateRowNumbers();
-      } else {
-        showToast('Minimal harus ada 1 agenda pembahasan!');
-      }
-    }
-
-    function updateRowNumbers() {
-      const rows = document.querySelectorAll('#agendaTableBody tr');
-      rows.forEach((row, idx) => {
-        const numCell = row.querySelector('.row-number');
-        if (numCell) numCell.innerText = idx + 1;
-      });
-    }
-
-    function saveFullMeetingForm(e) {
-      e.preventDefault();
-
-      const title = document.getElementById('fullMeetingTitle')?.value;
-      const date = document.getElementById('fullMeetingDate')?.value;
-      const startTime = document.getElementById('fullMeetingStartTime')?.value;
-      const endTime = document.getElementById('fullMeetingEndTime')?.value;
-      const location = document.getElementById('fullMeetingLocation')?.value;
-      const leader = document.getElementById('fullMeetingLeader')?.value;
-      const notulis = document.getElementById('fullMeetingNotulis')?.value;
-      const status = document.getElementById('fullMeetingStatus')?.value;
-
-      // Collect checked participants
-      const checkedParticipants = Array.from(document.querySelectorAll('input[name="participantCheckbox"]:checked')).map(cb => cb.value);
-      const participantStr = checkedParticipants.join(', ');
-
-      const idInput = document.getElementById('fullMeetingId')?.value;
-      const meetingId = idInput || ('MTG-' + new Date().getFullYear() + '-' + String(safeArray(APP_STATE.meetings).length + 1).padStart(3, '0'));
-
-      const agendaRows = document.querySelectorAll('#agendaTableBody tr');
-      const agendaTopics = [];
-
-      agendaRows.forEach((row, idx) => {
-        const teamId = row.querySelector('.agenda-team')?.value;
-        const topicTitle = row.querySelector('.agenda-title')?.value;
-        const problem = row.querySelector('.agenda-problem')?.value;
-        const decision = row.querySelector('.agenda-decision')?.value;
-        const pic = row.querySelector('.agenda-pic')?.value;
-        const deadline = row.querySelector('.agenda-deadline')?.value;
-
-        if (topicTitle && teamId) {
-          const discId = `DSC-${meetingId}-${idx + 1}`;
-          const actionId = `ACT-${meetingId}-${idx + 1}`;
-
-          // Create Discussion Record
-          const discPayload = {
-            id: discId,
-            meetingId: meetingId,
-            teamId: teamId,
-            title: topicTitle,
-            problem: problem,
-            details: decision,
-            decision: decision,
-            status: 'Disepakati'
-          };
-          APP_STATE.discussions.push(discPayload);
-          sendToBackend('SAVE_DISCUSSION', discPayload);
-
-          // Create Action Item Record
-          const actionPayload = {
-            id: actionId,
-            meetingId: meetingId,
-            discussionId: discId,
-            teamId: teamId,
-            task: topicTitle,
-            description: problem,
-            pic: pic,
-            support: '',
-            startDate: date,
-            deadline: deadline,
-            status: 'Belum Dimulai',
-            progress: 0,
-            log: 'Action Item dibuat dari musyawarah',
-            constraint: '',
-            completedDate: ''
-          };
-          APP_STATE.actionItems.push(actionPayload);
-          sendToBackend('SAVE_ACTION', actionPayload);
-
-          agendaTopics.push(topicTitle);
-        }
-      });
-
-      const meetingPayload = {
-        id: meetingId,
-        title: title,
-        date: date,
-        startTime: startTime,
-        endTime: endTime,
-        location: location,
-        leader: leader,
-        notulis: notulis,
-        participants: participantStr || `${leader}, ${notulis}`,
-        agenda: agendaTopics.join('; '),
-        status: status
-      };
-
-      if (idInput) {
-        const idx = safeArray(APP_STATE.meetings).findIndex(m => m.id === idInput);
-        if (idx !== -1) APP_STATE.meetings[idx] = meetingPayload;
-      } else {
-        APP_STATE.meetings.push(meetingPayload);
-      }
-
-      sendToBackend('SAVE_MEETING', meetingPayload);
-      switchTab('musyawarah');
-      renderMeetingsList();
-      renderDashboard();
-      showToast('Musyawarah dan hasil pembahasan berhasil disimpan!');
-    }
-
-    function openEditMeetingModal(meetingId) {
-      const m = safeArray(APP_STATE.meetings).find(item => item.id === meetingId);
-      if (!m) return;
-
-      openAddMeetingPage();
-
-      document.getElementById('fullMeetingId').value = m.id;
-      document.getElementById('musyawarahPageTitle').innerText = `Edit Musyawarah (${m.id})`;
-      document.getElementById('fullMeetingTitle').value = m.title;
-      document.getElementById('fullMeetingDate').value = m.date;
-      document.getElementById('fullMeetingStartTime').value = m.startTime || '';
-      document.getElementById('fullMeetingEndTime').value = m.endTime || '';
-      document.getElementById('fullMeetingLocation').value = m.location || '';
-      document.getElementById('fullMeetingLeader').value = m.leader || '';
-      document.getElementById('fullMeetingNotulis').value = m.notulis || '';
-      document.getElementById('fullMeetingStatus').value = m.status || 'Draft';
-
-      const participants = (m.participants || '').split(',').map(p => p.trim());
-      renderParticipantCheckboxes(participants);
-
-      // Populate existing discussions into the agenda table
-      const existingDiscussions = safeArray(APP_STATE.discussions).filter(d => d.meetingId === meetingId);
-      const tbody = document.getElementById('agendaTableBody');
-      if (tbody) tbody.innerHTML = '';
-      agendaRowCounter = 0;
-
-      if (existingDiscussions.length > 0) {
-        existingDiscussions.forEach(d => {
-          const act = safeArray(APP_STATE.actionItems).find(a => a.discussionId === d.id);
-          addAgendaRow({
-            teamId: d.teamId,
-            title: d.title,
-            problem: d.problem,
-            decision: d.decision,
-            pic: act ? act.pic : '',
-            deadline: act ? act.deadline : ''
-          });
-        });
-      } else {
-        addAgendaRow();
-      }
-    }
-
-    function switchTab(tabId) {
-      const tabs = ['dashboard', 'notulensi', 'musyawarah', 'musyawarah-form', 'tracker', 'monitoring', 'arsip', 'pengurus'];
-      
-      tabs.forEach(t => {
-        const section = document.getElementById(`view-${t}`);
-        const nav = document.getElementById(`nav-${t}`);
-        
-        if (section) {
-          if (t === tabId) {
-            section.classList.remove('hidden');
-          } else {
-            section.classList.add('hidden');
-          }
-        }
-
-        if (nav) {
-          if (t === tabId || (tabId === 'musyawarah-form' && t === 'musyawarah')) {
-            nav.className = 'nav-item flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-brand-700 text-white shadow-sm';
-          } else {
-            nav.className = 'nav-item flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200';
-          }
-        }
-      });
-
-      if (tabId === 'notulensi') {
-        renderNotulensiView();
-      } else if (tabId === 'musyawarah') {
-        renderMeetingsList();
-      } else if (tabId === 'tracker') {
-        renderActionTracker();
-      } else if (tabId === 'monitoring') {
-        renderMonitoringView();
-      } else if (tabId === 'arsip') {
-        renderArsipTable();
-      } else if (tabId === 'pengurus') {
-        renderUsersTable();
-      }
-
-      const titleMap = {
-        dashboard: 'Dashboard Overview',
-        notulensi: 'Notulensi & Hasil Musyawarah',
-        musyawarah: 'Manajemen Musyawarah',
-        'musyawarah-form': 'Form Input Musyawarah & Notulensi',
-        tracker: 'Action Item Tracker',
-        monitoring: 'Monitoring Kinerja Tim',
-        arsip: 'Arsip & Laporan',
-        pengurus: 'Manajemen Pengurus'
-      };
-
-      const pageTitle = document.getElementById('currentPageTitle');
-      if (pageTitle) {
-        pageTitle.innerHTML = `<i data-lucide="layout-dashboard" class="w-5 h-5 text-brand-600"></i> ${titleMap[tabId] || 'Musyawarah Hub'}`;
-        lucide.createIcons();
-      }
-    }
-
-    let activeSelectedNotulensiId = null;
-
-    function renderNotulensiView() {
-      const listContainer = document.getElementById('notulensiMeetingList');
-      if (!listContainer) return;
-
-      const search = (document.getElementById('searchNotulensiInput')?.value || '').toLowerCase();
-      const meetingsList = safeArray(APP_STATE.meetings);
-      
-      const filtered = meetingsList.filter(m => {
-        if (!m) return false;
-        return (m.title || '').toLowerCase().includes(search) ||
-               (m.leader || '').toLowerCase().includes(search) ||
-               (m.id || '').toLowerCase().includes(search);
-      });
-
-      if (filtered.length === 0) {
-        listContainer.innerHTML = `<div class="p-4 text-center text-xs text-slate-400 bg-white rounded-xl border border-slate-200">Tidak ada notulensi yang sesuai.</div>`;
-        document.getElementById('notulensiDetailContainer').innerHTML = `
-          <div class="text-center py-16 text-slate-400 space-y-2">
-            <i data-lucide="file-text" class="w-12 h-12 mx-auto text-slate-300"></i>
-            <p class="text-xs">Tidak ada data notulensi musyawarah.</p>
-          </div>
-        `;
-        return;
-      }
-
-      if (!activeSelectedNotulensiId || !filtered.some(m => m.id === activeSelectedNotulensiId)) {
-        activeSelectedNotulensiId = filtered[0].id;
-      }
-
-      listContainer.innerHTML = filtered.map(m => {
-        const isActive = m.id === activeSelectedNotulensiId;
-        return `
-          <div onclick="selectNotulensiMeeting('${m.id}')" class="p-3.5 rounded-xl border cursor-pointer transition ${isActive ? 'bg-brand-50 border-brand-500 shadow-sm' : 'bg-white border-slate-200 hover:bg-slate-50'}">
-            <div class="flex justify-between items-start mb-1">
-              <span class="text-[10px] font-mono font-bold text-slate-500">${m.id}</span>
-              ${getStatusBadge(m.status)}
-            </div>
-            <h5 class="font-bold text-slate-800 text-xs leading-snug line-clamp-2">${m.title}</h5>
-            <div class="text-[11px] text-slate-500 mt-2 flex items-center justify-between">
-              <span><i data-lucide="calendar" class="w-3 h-3 inline"></i> ${m.date}</span>
-              <span><i data-lucide="user" class="w-3 h-3 inline"></i> ${m.leader}</span>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      renderNotulensiDetail(activeSelectedNotulensiId);
-      lucide.createIcons();
-    }
-
-    function selectNotulensiMeeting(meetingId) {
-      activeSelectedNotulensiId = meetingId;
-      renderNotulensiView();
-    }
-
-    function renderNotulensiDetail(meetingId) {
-      const container = document.getElementById('notulensiDetailContainer');
-      if (!container) return;
-
-      const m = safeArray(APP_STATE.meetings).find(item => item.id === meetingId);
-      if (!m) {
-        container.innerHTML = `<div class="text-center py-12 text-slate-400">Pilih musyawarah untuk melihat rincian notulensi.</div>`;
-        return;
-      }
-
-      const discussions = safeArray(APP_STATE.discussions).filter(d => d.meetingId === meetingId);
-      const actionItems = safeArray(APP_STATE.actionItems).filter(a => a.meetingId === meetingId);
-
-      container.innerHTML = `
-        <div class="space-y-6">
-          <!-- Header Notulensi -->
-          <div class="border-b pb-4 space-y-3">
-            <div class="flex justify-between items-start">
-              <div>
-                <span class="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-100 text-slate-700 border">${m.id}</span>
-                <h3 class="text-xl font-bold text-slate-900 mt-1">${m.title}</h3>
-              </div>
-              <button onclick="exportMeetingPDF('${m.id}')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm">
-                <i data-lucide="download" class="w-4 h-4"></i> Ekspor PDF
-              </button>
-            </div>
-
-            <!-- Metadata Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs">
-              <div>
-                <span class="text-slate-400 block text-[10px] uppercase font-semibold">Tanggal & Waktu</span>
-                <span class="font-semibold text-slate-700">${m.date} (${m.startTime || '-'} - ${m.endTime || '-'})</span>
-              </div>
-              <div>
-                <span class="text-slate-400 block text-[10px] uppercase font-semibold">Lokasi</span>
-                <span class="font-semibold text-slate-700">${m.location || '-'}</span>
-              </div>
-              <div>
-                <span class="text-slate-400 block text-[10px] uppercase font-semibold">Pimpinan</span>
-                <span class="font-semibold text-slate-700">${m.leader || '-'}</span>
-              </div>
-              <div>
-                <span class="text-slate-400 block text-[10px] uppercase font-semibold">Notulis</span>
-                <span class="font-semibold text-slate-700">${m.notulis || '-'}</span>
-              </div>
-            </div>
-
-            <!-- Agenda Umum -->
-            <div class="text-xs space-y-1">
-              <span class="font-bold text-slate-800">Agenda Musyawarah:</span>
-              <p class="text-slate-600 bg-emerald-50/60 border border-emerald-200/60 p-2.5 rounded-lg">${m.agenda || 'Tidak ada agenda khusus.'}</p>
-            </div>
-          </div>
-
-          <!-- Section Hasil Discussion Per Tim -->
-          <div class="space-y-4">
-            <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-              <i data-lucide="message-square" class="w-4 h-4 text-brand-600"></i>
-              Hasil Pembahasan & Keputusan Resmi (${discussions.length} Topik)
-            </h4>
-
-            ${discussions.length === 0 ? `
-              <div class="p-4 text-center text-xs text-slate-400 bg-slate-50 rounded-xl border border-dashed">
-                Belum ada rincian pembahasan recorded untuk musyawarah ini.
-              </div>
-            ` : discussions.map((d, index) => {
-              const team = safeArray(APP_STATE.teams).find(t => t.id === d.teamId) || { name: d.teamId || '-' };
-              return `
-                <div class="bg-white rounded-xl border border-slate-200 p-4 space-y-2 shadow-sm">
-                  <div class="flex justify-between items-center border-b pb-2">
-                    <span class="font-bold text-brand-700 text-xs">#${index + 1} Tim ${team.name} - ${d.title}</span>
-                    ${getStatusBadge(d.status || 'Disepakati')}
-                  </div>
-                  <div class="text-xs space-y-1">
-                    <span class="text-slate-500 font-semibold block">Latar Belakang / Permasalahan:</span>
-                    <p class="text-slate-700">${d.problem || '-'}</p>
-                  </div>
-                  <div class="text-xs space-y-1">
-                    <span class="text-slate-500 font-semibold block">Hasil Diskusi:</span>
-                    <p class="text-slate-700">${d.details || d.hasilDiskusi || '-'}</p>
-                  </div>
-                  <div class="text-xs space-y-1 bg-brand-50/50 p-2.5 rounded-lg border border-brand-200/50">
-                    <span class="font-bold text-brand-900 block">Keputusan Musyawarah:</span>
-                    <p class="font-semibold text-brand-950">${d.decision || '-'}</p>
-                  </div>
+            <!-- Spreadsheet Info Card -->
+            <div class="bg-emerald-50 dark:bg-emerald-950/40 rounded-2xl p-4 border border-emerald-200/60 dark:border-emerald-800/60 space-y-2 text-xs">
+                <div class="flex items-center space-x-2 font-bold text-emerald-900 dark:text-emerald-300">
+                    <i data-lucide="database" class="w-4 h-4"></i>
+                    <span>Manajemen User Status</span>
                 </div>
-              `;
-            }).join('')}
-          </div>
+                <div id="sheetStatusText" class="text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+                    Memuat daftar pengurus dari spreadsheet...
+                </div>
+                <div class="pt-2 border-t border-emerald-200 dark:border-emerald-800/50 flex justify-between items-center text-[11px] font-mono">
+                    <span class="text-slate-500 dark:text-slate-400">Total User:</span>
+                    <span id="userCountBadge" class="font-bold text-emerald-700 dark:text-emerald-400 bg-white dark:bg-slate-800 px-2 py-0.5 rounded-md">0 Pengurus</span>
+                </div>
+            </div>
 
-          <!-- Section Action Items Tindak Lanjut -->
-          <div class="space-y-4 border-t pt-4">
-            <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-              <i data-lucide="check-square" class="w-4 h-4 text-purple-600"></i>
-              Action Items / Tindak Lanjut (${actionItems.length} Pekerjaan)
-            </h4>
+            <!-- Quick Metrics -->
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Statistik Musyawarah</h3>
+                <div class="grid grid-cols-2 gap-2 text-center">
+                    <div class="bg-slate-50 dark:bg-slate-700/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-700">
+                        <span id="totalMusyawarahCount" class="block text-lg font-extrabold text-slate-900 dark:text-white font-mono">0</span>
+                        <span class="text-[10px] text-slate-400 font-medium">Musyawarah</span>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-700/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-700">
+                        <span id="totalActionItemCount" class="block text-lg font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">0</span>
+                        <span class="text-[10px] text-slate-400 font-medium">Action Items</span>
+                    </div>
+                </div>
+            </div>
 
-            ${actionItems.length === 0 ? `
-              <div class="p-4 text-center text-xs text-slate-400 bg-slate-50 rounded-xl border border-dashed">
-                Belum ada instruksi tindak lanjut yang dibuat dari musyawarah ini.
-              </div>
-            ` : `
-              <div class="overflow-x-auto border border-slate-200 rounded-xl">
-                <table class="w-full text-left border-collapse text-xs">
-                  <thead>
-                    <tr class="bg-slate-50 text-slate-500 border-b font-semibold">
-                      <th class="p-2.5">Nama Pekerjaan</th>
-                      <th class="p-2.5">PIC</th>
-                      <th class="p-2.5">Deadline</th>
-                      <th class="p-2.5">Status</th>
-                      <th class="p-2.5">Progres</th>
-                    </tr>
-                  </thead>
-                  <tbody class="divide-y divide-slate-100">
-                    ${actionItems.map(a => `
-                      <tr class="hover:bg-slate-50">
-                        <td class="p-2.5 font-medium text-slate-800">${a.task}</td>
-                        <td class="p-2.5 text-slate-600">${a.pic}</td>
-                        <td class="p-2.5 text-slate-600">${a.deadline || '-'}</td>
-                        <td class="p-2.5">${getStatusBadge(a.status)}</td>
-                        <td class="p-2.5">
-                          <div class="flex items-center space-x-2">
-                            <div class="w-16 bg-slate-100 rounded-full h-1.5 overflow-hidden">
-                              <div class="bg-brand-600 h-1.5" style="width: ${a.progress || 0}%"></div>
+        </aside>
+
+        <!-- CONTENT AREA -->
+        <main class="flex-1 min-w-0">
+
+            <!-- TAB 1: FORM INPUT MUSYAWARAH -->
+            <section id="inputTabSection" class="space-y-6">
+                
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 space-y-6">
+                    
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100 dark:border-slate-700">
+                        <div>
+                            <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                <i data-lucide="file-plus" class="w-5 h-5 text-emerald-600"></i>
+                                <span id="formTitleText">Input Hasil Musyawarah Baru</span>
+                            </h2>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Lengkapi notulensi utama musyawarah serta perincian action items yang disepakati.</p>
+                        </div>
+                        <div class="inline-flex items-center px-3 py-1 bg-slate-100 dark:bg-slate-700 rounded-lg text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 self-start sm:self-auto">
+                            ID: <span id="displayMeetingId" class="ml-1">MT-YYYYMM-001</span>
+                        </div>
+                    </div>
+
+                    <form id="musyawarahForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                        
+                        <!-- Section 1: Informasi Utama Musyawarah -->
+                        <div class="space-y-4">
+                            <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-wider flex items-center gap-1.5">
+                                <i data-lucide="info" class="w-4 h-4"></i> Informasi Umum Musyawarah
+                            </h3>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="md:col-span-2">
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Judul Musyawarah <span class="text-rose-500">*</span></label>
+                                    <input type="text" id="inputJudul" required placeholder="Contoh: Musyawarah Persiapan Tabligh Akbar Ramadhan 1448 H" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Tanggal Musyawarah <span class="text-rose-500">*</span></label>
+                                    <input type="date" id="inputTanggal" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Lokasi Pelaksanaan <span class="text-rose-500">*</span></label>
+                                    <input type="text" id="inputLokasi" required placeholder="Contoh: Ruang Utama Masjid Al-Ikhlas / Sekretariat" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Ketua Musyawarah <span class="text-rose-500">*</span></label>
+                                    <select id="selectKetua" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                        <option value="" disabled selected>-- Memuat Daftar Pengurus... --</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Notulis Musyawarah <span class="text-rose-500">*</span></label>
+                                    <select id="selectNotulis" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                        <option value="" disabled selected>-- Memuat Daftar Pengurus... --</option>
+                                    </select>
+                                </div>
                             </div>
-                            <span class="text-[10px] text-slate-500 font-semibold">${a.progress || 0}%</span>
-                          </div>
-                        </td>
-                      </tr>
-                    `).join('')}
-                  </tbody>
-                </table>
-              </div>
-            `}
-          </div>
-        </div>
-      `;
 
-      lucide.createIcons();
-    }
+                            <!-- Peserta Checkbox List -->
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                                    Peserta Yang Hadir <span class="text-rose-500">*</span> <span class="text-[10px] text-slate-400 font-normal ml-1">(Centang pengurus yang hadir)</span>
+                                </label>
+                                <div id="pesertaCheckboxContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 bg-slate-50 dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 max-h-48 overflow-y-auto custom-scrollbar">
+                                    <span class="text-xs text-slate-400 italic col-span-full">Memuat daftar peserta...</span>
+                                </div>
+                            </div>
+                        </div>
 
-    function renderUsersTable() {
-      const container = document.getElementById('usersTableBody');
-      if (!container) return;
+                        <!-- Section 2: Action Items Dynamic List -->
+                        <div class="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-700">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-wider flex items-center gap-1.5">
+                                        <i data-lucide="check-square" class="w-4 h-4"></i> Pokok Bahasan & Action Items
+                                    </h3>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">Satu ID Musyawarah dapat memiliki beberapa pokok bahasan/action items sekaligus.</p>
+                                </div>
+                                <button type="button" onclick="addActionItemCard()" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1 border border-emerald-200 dark:border-emerald-800">
+                                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Tambah Action Item
+                                </button>
+                            </div>
 
-      const usersList = safeArray(APP_STATE.users);
-      if (usersList.length === 0) {
-        container.innerHTML = `<tr><td colspan="6" class="text-center p-6 text-slate-400">Belum ada data pengurus.</td></tr>`;
-        return;
-      }
+                            <!-- Container Kartu Dynamic Action Items -->
+                            <div id="actionItemsDynamicContainer" class="space-y-4">
+                                <!-- Card item akan di-render secara otomatis oleh JS -->
+                            </div>
+                        </div>
 
-      container.innerHTML = usersList.map(u => {
-        const team = safeArray(APP_STATE.teams).find(t => t.id === u.teamId) || { name: u.teamId || '-' };
-        return `
-          <tr class="hover:bg-slate-50 text-xs">
-            <td class="p-3 font-semibold text-slate-800">${u.name}</td>
-            <td class="p-3 text-slate-600">${team.name}</td>
-            <td class="p-3 text-slate-600">${u.wa || '-'}</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${u.role === 'Administrator' ? 'bg-purple-100 text-purple-700' : 'bg-slate-100 text-slate-700'}">${u.role || 'Viewer'}</span></td>
-            <td class="p-3">${getStatusBadge(u.status || 'Aktif')}</td>
-            <td class="p-3 text-right space-x-1">
-              <button onclick="openEditUserModal('${u.id}')" class="px-2 py-1 border border-brand-600 text-brand-600 hover:bg-brand-50 rounded font-medium text-xs">Edit</button>
-              <button onclick="openDeleteUserModal('${u.id}')" class="px-2 py-1 bg-rose-50 text-rose-600 hover:bg-rose-100 border border-rose-200 rounded font-medium text-xs">Hapus</button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
+                        <!-- Submit Buttons -->
+                        <div class="flex items-center justify-end space-x-3 pt-4 border-t border-slate-100 dark:border-slate-700">
+                            <button type="button" onclick="resetMusyawarahForm()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-semibold transition-all">
+                                Batal / Reset
+                            </button>
+                            <button type="submit" id="submitFormBtn" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md shadow-emerald-500/20 active:scale-95 transition-all flex items-center space-x-2">
+                                <i data-lucide="save" class="w-4 h-4"></i>
+                                <span id="submitFormBtnText">Simpan Notulensi Musyawarah</span>
+                            </button>
+                        </div>
 
-    function renderArsipTable() {
-      const container = document.getElementById('arsipTableBody');
-      if (!container) return;
+                    </form>
 
-      const meetingsList = safeArray(APP_STATE.meetings);
-      if (meetingsList.length === 0) {
-        container.innerHTML = `<tr><td colspan="6" class="text-center p-6 text-slate-400">Belum ada arsip musyawarah.</td></tr>`;
-        return;
-      }
-
-      container.innerHTML = meetingsList.map(m => `
-        <tr class="hover:bg-slate-50 text-xs">
-          <td class="p-3 font-mono text-slate-500">${m.id}</td>
-          <td class="p-3 font-semibold text-slate-800">${m.title}</td>
-          <td class="p-3 text-slate-600">${m.date}</td>
-          <td class="p-3 text-slate-600">${m.leader}</td>
-          <td class="p-3">${getStatusBadge(m.status)}</td>
-          <td class="p-3 text-right">
-            <button onclick="exportMeetingPDF('${m.id}')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-900 text-white rounded font-medium text-xs flex items-center gap-1 ml-auto">
-              <i data-lucide="download" class="w-3.5 h-3.5"></i> PDF
-            </button>
-          </td>
-        </tr>
-      `).join('');
-      lucide.createIcons();
-    }
-
-    function renderDashboard() {
-      const totalMeetings = safeArray(APP_STATE.meetings).length;
-      const totalActions = safeArray(APP_STATE.actionItems).length;
-      const completedActions = safeArray(APP_STATE.actionItems).filter(a => a.status === 'Selesai').length;
-      
-      const todayStr = new Date().toISOString().split('T')[0];
-      const overdueActions = safeArray(APP_STATE.actionItems).filter(a => a.status !== 'Selesai' && a.deadline && a.deadline < todayStr).length;
-
-      const kpiMeetings = document.getElementById('kpi-total-meetings');
-      const kpiActions = document.getElementById('kpi-total-actions');
-      const kpiCompleted = document.getElementById('kpi-status-completed');
-      const kpiOverdue = document.getElementById('kpi-status-overdue');
-
-      if (kpiMeetings) kpiMeetings.innerText = totalMeetings;
-      if (kpiActions) kpiActions.innerText = totalActions;
-      if (kpiCompleted) kpiCompleted.innerText = completedActions;
-      if (kpiOverdue) kpiOverdue.innerText = overdueActions;
-
-      const overallPct = totalActions > 0 ? Math.round((completedActions / totalActions) * 100) : 0;
-      const circle = document.getElementById('overallProgressCircle');
-      const text = document.getElementById('overallProgressText');
-
-      if (circle) {
-        const offset = 326.72 - (326.72 * overallPct / 100);
-        circle.style.strokeDashoffset = offset;
-      }
-      if (text) text.innerText = `${overallPct}%`;
-
-      const teamProgressContainer = document.getElementById('teamProgressContainer');
-      if (teamProgressContainer) {
-        const teamsList = safeArray(APP_STATE.teams);
-        if (teamsList.length === 0) {
-          teamProgressContainer.innerHTML = `<div class="text-xs text-slate-400 text-center py-2">Belum ada data tim.</div>`;
-        } else {
-          teamProgressContainer.innerHTML = teamsList.slice(0, 6).map(t => {
-            const teamTasks = safeArray(APP_STATE.actionItems).filter(a => a.teamId === t.id);
-            const done = teamTasks.filter(a => a.status === 'Selesai').length;
-            const pct = teamTasks.length > 0 ? Math.round((done / teamTasks.length) * 100) : 0;
-            return `
-              <div class="space-y-1">
-                <div class="flex justify-between text-xs font-medium">
-                  <span class="text-slate-700">${t.name}</span>
-                  <span class="text-slate-500">${pct}%</span>
                 </div>
-                <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                  <div class="bg-brand-600 h-2 rounded-full" style="width: ${pct}%"></div>
+
+            </section>
+
+            <!-- TAB 2: DAFTAR NOTULENSI MUSYAWARAH -->
+            <section id="listTabSection" class="hidden space-y-4">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <h2 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                        <i data-lucide="list" class="w-4 h-4 text-emerald-600"></i>
+                        <span>Daftar Musyawarah Tercipta</span>
+                    </h2>
+                    <div class="relative w-full sm:w-64">
+                        <input type="text" id="searchMusyawarahInput" onkeyup="renderMusyawarahList()" placeholder="Cari musyawarah..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl pl-8 pr-3 py-1.5 text-xs font-medium focus:outline-none">
+                        <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                    </div>
                 </div>
-              </div>
-            `;
-          }).join('');
-        }
-      }
-    }
 
-    function getStatusBadge(status) {
-      const badgeMap = {
-        'Draft': '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">Draft</span>',
-        'Berlangsung': '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700">Berlangsung</span>',
-        'Selesai': '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700">Selesai</span>',
-        'Belum Dimulai': '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600">Belum Dimulai</span>',
-        'Dalam Proses': '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-700">Dalam Proses</span>',
-        'Tertunda': '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-orange-100 text-orange-700">Tertunda</span>',
-        'Dibatalkan': '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700">Dibatalkan</span>',
-        'Overdue': '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700">Overdue</span>',
-        'Aktif': '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700">Aktif</span>'
-      };
-      return badgeMap[status] || `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">${status || '-'}</span>`;
-    }
-
-    function showToast(msg) {
-      const toast = document.createElement('div');
-      toast.className = 'fixed bottom-4 right-4 bg-slate-900 text-white px-4 py-2.5 rounded-xl shadow-xl text-xs font-semibold z-50 transition-all duration-300';
-      toast.innerText = msg;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
-    }
-
-    function exportMeetingPDF(meetingId) {
-      const m = safeArray(APP_STATE.meetings).find(item => item.id === meetingId);
-      if (!m) return;
-      showToast(`Mengekspor notulensi ${m.id} ke PDF...`);
-    }
-
-    function initSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const closeBtn = document.getElementById('closeSidebarBtn');
-
-      if (closeBtn && sidebar) {
-        closeBtn.addEventListener('click', () => sidebar.classList.add('hidden'));
-      }
-    }
-
-    // Toggle Sidebar for Hamburger button on Top Header
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      if (sidebar) {
-        sidebar.classList.toggle('hidden');
-      }
-    }
-
-    function renderMeetingsList() {
-      const grid = document.getElementById('meetingsGrid');
-      if (!grid) return;
-
-      const search = (document.getElementById('searchMeetingInput')?.value || '').toLowerCase();
-      const meetingsList = safeArray(APP_STATE.meetings);
-      const filtered = meetingsList.filter(m => {
-        if (!m) return false;
-        return (m.title || '').toLowerCase().includes(search) ||
-               (m.leader || '').toLowerCase().includes(search);
-      });
-
-      if (filtered.length === 0) {
-        grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-400 bg-white rounded-xl border border-slate-200">Tidak ada data musyawarah.</div>`;
-        return;
-      }
-
-      grid.innerHTML = filtered.map(m => `
-        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-3 flex flex-col justify-between">
-          <div class="space-y-2">
-            <div class="flex justify-between items-start">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border">${m.id}</span>
-              ${getStatusBadge(m.status)}
-            </div>
-            <h4 class="font-bold text-slate-900 text-base leading-snug">${m.title}</h4>
-            <div class="text-xs text-slate-500 space-y-1">
-              <div><i data-lucide="calendar" class="w-3.5 h-3.5 inline text-brand-600"></i> ${m.date} (${m.startTime || ''} - ${m.endTime || ''})</div>
-              <div><i data-lucide="user" class="w-3.5 h-3.5 inline text-slate-400"></i> Pimpinan: ${m.leader}</div>
-              <div><i data-lucide="map-pin" class="w-3.5 h-3.5 inline text-slate-400"></i> ${m.location || '-'}</div>
-            </div>
-          </div>
-          <div class="pt-2 border-t flex justify-end space-x-2">
-            <button onclick="viewMeetingDetail('${m.id}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-xs font-semibold flex items-center gap-1">
-              <i data-lucide="eye" class="w-3.5 h-3.5"></i> Detail
-            </button>
-            <button onclick="openEditMeetingModal('${m.id}')" class="px-2.5 py-1 border border-brand-600 text-brand-600 hover:bg-brand-50 rounded text-xs font-semibold flex items-center gap-1">
-              <i data-lucide="edit" class="w-3.5 h-3.5"></i> Edit
-            </button>
-          </div>
-        </div>
-      `).join('');
-
-      lucide.createIcons();
-    }
-
-    function openAddMeetingModal() {
-      const form = document.getElementById('meetingForm');
-      const idInput = document.getElementById('formMeetingId');
-      const modalTitle = document.getElementById('meetingModalTitle');
-      const modal = document.getElementById('meetingModal');
-
-      if (form) form.reset();
-      if (idInput) idInput.value = '';
-      if (modalTitle) modalTitle.innerText = 'Buat Musyawarah Baru';
-      
-      populateMeetingUsersDropdowns();
-      if (modal) modal.classList.remove('hidden');
-    }
-
-    function closeMeetingModal() {
-      const modal = document.getElementById('meetingModal');
-      if (modal) modal.classList.add('hidden');
-    }
-
-    function openEditMeetingModal(meetingId) {
-      const m = safeArray(APP_STATE.meetings).find(item => item.id === meetingId);
-      if (!m) return;
-
-      populateMeetingUsersDropdowns();
-
-      document.getElementById('formMeetingId').value = m.id;
-      document.getElementById('formMeetingTitle').value = m.title;
-      document.getElementById('formMeetingDate').value = m.date;
-      document.getElementById('formMeetingStartTime').value = m.startTime || '';
-      document.getElementById('formMeetingEndTime').value = m.endTime || '';
-      document.getElementById('formMeetingLocation').value = m.location || '';
-      document.getElementById('formMeetingLeader').value = m.leader || '';
-      document.getElementById('formMeetingNotulis').value = m.notulis || '';
-      document.getElementById('formMeetingAgenda').value = m.agenda || '';
-      document.getElementById('formMeetingStatus').value = m.status || 'Draft';
-
-      document.getElementById('meetingModalTitle').innerText = 'Edit Data Musyawarah';
-      document.getElementById('meetingModal').classList.remove('hidden');
-    }
-
-    function populateMeetingUsersDropdowns() {
-      const leaderSelect = document.getElementById('formMeetingLeader');
-      const notulisSelect = document.getElementById('formMeetingNotulis');
-      
-      const usersList = safeArray(APP_STATE.users);
-      const options = `<option value="">-- Pilih Pengurus --</option>` +
-        usersList.map(u => `<option value="${u.name}">${u.name}</option>`).join('');
-
-      if (leaderSelect) leaderSelect.innerHTML = options;
-      if (notulisSelect) notulisSelect.innerHTML = options;
-    }
-
-    function saveMeetingForm(e) {
-      e.preventDefault();
-
-      const idInput = document.getElementById('formMeetingId')?.value;
-      const title = document.getElementById('formMeetingTitle')?.value;
-      const date = document.getElementById('formMeetingDate')?.value;
-      const startTime = document.getElementById('formMeetingStartTime')?.value;
-      const endTime = document.getElementById('formMeetingEndTime')?.value;
-      const location = document.getElementById('formMeetingLocation')?.value;
-      const leader = document.getElementById('formMeetingLeader')?.value;
-      const notulis = document.getElementById('formMeetingNotulis')?.value;
-      const agenda = document.getElementById('formMeetingAgenda')?.value;
-      const status = document.getElementById('formMeetingStatus')?.value;
-
-      const meetingId = idInput || ('MTG-' + new Date().getFullYear() + '-' + String(safeArray(APP_STATE.meetings).length + 1).padStart(3, '0'));
-      
-      const payload = {
-        id: meetingId,
-        title: title,
-        date: date,
-        startTime: startTime,
-        endTime: endTime,
-        location: location,
-        leader: leader,
-        notulis: notulis,
-        participants: `${leader}, ${notulis}`,
-        agenda: agenda,
-        status: status
-      };
-
-      if (idInput) {
-        const idx = safeArray(APP_STATE.meetings).findIndex(m => m.id === idInput);
-        if (idx !== -1) APP_STATE.meetings[idx] = payload;
-      } else {
-        APP_STATE.meetings.push(payload);
-      }
-
-      sendToBackend('SAVE_MEETING', payload);
-      closeMeetingModal();
-      renderMeetingsList();
-      renderDashboard();
-      showToast('Data musyawarah berhasil disimpan!');
-    }
-
-    function renderActionTracker() {
-      const container = document.getElementById('actionTrackerTableBody');
-      if (!container) return;
-
-      const actionsList = safeArray(APP_STATE.actionItems);
-      if (actionsList.length === 0) {
-        container.innerHTML = `<tr><td colspan="7" class="text-center p-6 text-slate-400">Belum ada Action Items.</td></tr>`;
-        return;
-      }
-
-      const todayStr = new Date().toISOString().split('T')[0];
-
-      container.innerHTML = actionsList.map(a => {
-        const team = safeArray(APP_STATE.teams).find(t => t.id === a.teamId) || { name: a.teamId };
-        const isOverdue = a.status !== 'Selesai' && a.deadline && a.deadline < todayStr;
-        return `
-          <tr class="hover:bg-slate-50 text-xs">
-            <td class="p-3 font-semibold text-slate-800">${a.task}</td>
-            <td class="p-3 text-slate-600">${team.name}</td>
-            <td class="p-3 font-medium text-slate-700">${a.pic}</td>
-            <td class="p-3 ${isOverdue ? 'text-rose-600 font-bold' : 'text-slate-600'}">${a.deadline || '-'}</td>
-            <td class="p-3">${getStatusBadge(isOverdue ? 'Overdue' : a.status)}</td>
-            <td class="p-3">
-              <div class="w-24 bg-slate-100 rounded-full h-2 overflow-hidden">
-                <div class="bg-brand-600 h-2" style="width: ${a.progress || 0}%"></div>
-              </div>
-            </td>
-            <td class="p-3 text-right">
-              <button onclick="openEditActionModal('${a.id}')" class="px-2.5 py-1 border border-brand-600 text-brand-600 hover:bg-brand-50 rounded font-medium">Edit</button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function openEditActionModal(actionId) {
-      const a = safeArray(APP_STATE.actionItems).find(item => item.id === actionId);
-      if (!a) return;
-
-      document.getElementById('formActionId').value = a.id;
-      document.getElementById('formActionTask').value = a.task;
-      document.getElementById('formActionStatus').value = a.status || 'Belum Dimulai';
-      document.getElementById('formActionProgress').value = a.progress || 0;
-      document.getElementById('formActionLog').value = a.log || '';
-      document.getElementById('formActionConstraint').value = a.constraint || '';
-
-      document.getElementById('actionModal').classList.remove('hidden');
-    }
-
-    function closeActionModal() {
-      document.getElementById('actionModal').classList.add('hidden');
-    }
-
-    function saveActionForm(e) {
-      e.preventDefault();
-
-      const actionId = document.getElementById('formActionId')?.value;
-      const a = safeArray(APP_STATE.actionItems).find(item => item.id === actionId);
-      if (!a) return;
-
-      a.status = document.getElementById('formActionStatus')?.value;
-      a.progress = parseInt(document.getElementById('formActionProgress')?.value || 0);
-      a.log = document.getElementById('formActionLog')?.value;
-      a.constraint = document.getElementById('formActionConstraint')?.value;
-
-      if (a.status === 'Selesai') {
-        a.completedDate = new Date().toISOString().split('T')[0];
-      }
-
-      sendToBackend('SAVE_ACTION', a);
-      closeActionModal();
-      renderActionTracker();
-      renderDashboard();
-      showToast('Action item berhasil diperbarui!');
-    }
-
-    function viewMeetingDetail(meetingId) {
-      const m = safeArray(APP_STATE.meetings).find(item => item.id === meetingId);
-      if (!m) return;
-
-      const discussions = safeArray(APP_STATE.discussions).filter(d => d.meetingId === meetingId);
-
-      document.getElementById('detailModalTitle').innerText = `Detail Musyawarah: ${m.title}`;
-      document.getElementById('detailModalBody').innerHTML = `
-        <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
-          <div><strong class="text-slate-900">ID:</strong> ${m.id}</div>
-          <div><strong class="text-slate-900">Waktu & Tempat:</strong> ${m.date} (${m.startTime} - ${m.endTime}) di ${m.location}</div>
-          <div><strong class="text-slate-900">Pimpinan:</strong> ${m.leader} | <strong class="text-slate-900">Notulis:</strong> ${m.notulis}</div>
-          <div><strong class="text-slate-900">Agenda Utama:</strong> ${m.agenda}</div>
-        </div>
-        <div class="space-y-2">
-          <h5 class="font-bold text-slate-800">Topik & Hasil Pembahasan (${discussions.length})</h5>
-          ${discussions.length === 0 ? '<p class="text-slate-400">Belum ada rincian pembahasan recorded.</p>' : discussions.map(d => `
-            <div class="p-3 bg-white border border-slate-200 rounded-lg space-y-1">
-              <div class="font-semibold text-brand-700">${d.title}</div>
-              <div><strong class="text-slate-800">Keputusan:</strong> ${d.decision}</div>
-            </div>
-          `).join('')}
-        </div>
-      `;
-
-      document.getElementById('detailModal').classList.remove('hidden');
-    }
-
-    function viewTeamDetail(teamId) {
-      const team = safeArray(APP_STATE.teams).find(t => t.id === teamId);
-      if (!team) return;
-
-      const teamActions = safeArray(APP_STATE.actionItems).filter(a => a.teamId === teamId);
-
-      document.getElementById('detailModalTitle').innerText = `Detail Monitoring Tim ${team.name}`;
-      document.getElementById('detailModalBody').innerHTML = `
-        <div class="p-4 bg-slate-50 rounded-xl border space-y-1">
-          <div><strong>Ketua Tim:</strong> ${team.leader || 'Belum ditentukan'}</div>
-          <div><strong>Total Pekerjaan:</strong> ${teamActions.length} Action Items</div>
-        </div>
-        <div class="space-y-2">
-          <h5 class="font-bold text-slate-800">Daftar Pekerjaan Tim</h5>
-          ${teamActions.length === 0 ? '<p class="text-slate-400">Belum ada tugas untuk tim ini.</p>' : teamActions.map(a => `
-            <div class="p-3 bg-white border rounded-lg flex justify-between items-center">
-              <div>
-                <div class="font-semibold text-slate-800">${a.task}</div>
-                <div class="text-[11px] text-slate-500">PIC: ${a.pic} | Deadline: ${a.deadline}</div>
-              </div>
-              <div>${getStatusBadge(a.status)}</div>
-            </div>
-          `).join('')}
-        </div>
-      `;
-
-      document.getElementById('detailModal').classList.remove('hidden');
-    }
-
-    function closeDetailModal() {
-      document.getElementById('detailModal').classList.add('hidden');
-    }
-
-    function renderMonitoringView() {
-      const container = document.getElementById('monitoringGrid');
-      if (!container) return;
-
-      const teamsList = safeArray(APP_STATE.teams);
-      const actionList = safeArray(APP_STATE.actionItems);
-
-      if (teamsList.length === 0) {
-        container.innerHTML = `<div class="col-span-full p-8 text-center text-slate-400 bg-white rounded-xl">Belum ada data tim.</div>`;
-        return;
-      }
-
-      container.innerHTML = teamsList.map(team => {
-        const teamTasks = actionList.filter(a => a.teamId === team.id);
-        const done = teamTasks.filter(a => a.status === 'Selesai').length;
-        const pct = teamTasks.length > 0 ? Math.round((done / teamTasks.length) * 100) : 0;
-
-        return `
-          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-3 flex flex-col justify-between">
-            <div class="space-y-2">
-              <div class="flex justify-between items-center">
-                <h4 class="font-bold text-slate-800 text-base">Tim ${team.name}</h4>
-                <span class="text-xs font-bold text-brand-700 bg-brand-50 px-2.5 py-1 rounded-full border border-brand-200">${pct}% Selesai</span>
-              </div>
-              <p class="text-xs text-slate-500">Ketua: <span class="font-semibold text-slate-700">${team.leader || '-'}</span></p>
-            </div>
-            <div class="pt-2 border-t flex justify-end">
-              <button onclick="viewTeamDetail('${team.id}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-xs font-semibold flex items-center gap-1">
-                <i data-lucide="eye" class="w-3.5 h-3.5"></i> Detail Pekerjaan
-              </button>
-            </div>
-          </div>
-        `;
-      }).join('');
-      lucide.createIcons();
-    }
-
-    function openDeleteUserModal(userId) {
-      const u = safeArray(APP_STATE.users).find(usr => usr.id === userId);
-      if (!u) return;
-
-      const targetInput = document.getElementById('deleteTargetUserId');
-      const confirmText = document.getElementById('deleteConfirmText');
-      const modal = document.getElementById('deleteModal');
-
-      if (targetInput) targetInput.value = u.id;
-      if (confirmText) confirmText.innerText = `Apakah Anda yakin ingin menghapus data pengurus "${u.name}"?`;
-      if (modal) modal.classList.remove('hidden');
-    }
-
-    function closeDeleteModal() {
-      const modal = document.getElementById('deleteModal');
-      if (modal) modal.classList.add('hidden');
-    }
-
-    function confirmDeleteUser() {
-      const userId = document.getElementById('deleteTargetUserId')?.value;
-      if (!userId) return;
-
-      APP_STATE.users = safeArray(APP_STATE.users).filter(u => u.id !== userId);
-
-      sendToBackend('DELETE_USER', { id: userId });
-      closeDeleteModal();
-      renderUsersTable();
-      populateLoginUserDropdown();
-      showToast('Data pengurus berhasil dihapus!');
-    }
-
-    function openAddUserModal() {
-      const form = document.getElementById('userForm');
-      const idInput = document.getElementById('formUserId');
-      const modalTitle = document.getElementById('userModalTitle');
-      const modal = document.getElementById('userModal');
-
-      if (form) form.reset();
-      if (idInput) idInput.value = '';
-      if (modalTitle) modalTitle.innerText = 'Tambah Pengurus Baru';
-      
-      renderTeamsDropdowns();
-      if (modal) modal.classList.remove('hidden');
-    }
-
-    function closeUserModal() {
-      const modal = document.getElementById('userModal');
-      if (modal) modal.classList.add('hidden');
-    }
-
-    function openEditUserModal(userId) {
-      const u = safeArray(APP_STATE.users).find(usr => usr.id === userId);
-      if (!u) return;
-
-      renderTeamsDropdowns();
-
-      const idInput = document.getElementById('formUserId');
-      const nameInput = document.getElementById('formUserName');
-      const emailInput = document.getElementById('formUserEmail');
-      const passInput = document.getElementById('formUserPassword');
-      const waInput = document.getElementById('formUserWa');
-      const teamInput = document.getElementById('formUserTeam');
-      const roleInput = document.getElementById('formUserRole');
-      const modalTitle = document.getElementById('userModalTitle');
-      const modal = document.getElementById('userModal');
-
-      if (idInput) idInput.value = u.id;
-      if (nameInput) nameInput.value = u.name;
-      if (emailInput) emailInput.value = u.email || '';
-      if (passInput) passInput.value = u.password || '';
-      if (waInput) waInput.value = u.wa || '';
-      if (teamInput) teamInput.value = u.teamId || '';
-      if (roleInput) roleInput.value = u.role || 'Viewer';
-
-      if (modalTitle) modalTitle.innerText = 'Edit Data Pengurus';
-      if (modal) modal.classList.remove('hidden');
-    }
-
-    function saveUserForm(e) {
-      e.preventDefault();
-      
-      const idInput = document.getElementById('formUserId')?.value;
-      const name = document.getElementById('formUserName')?.value;
-      const email = document.getElementById('formUserEmail')?.value;
-      const wa = document.getElementById('formUserWa')?.value;
-      const password = document.getElementById('formUserPassword')?.value;
-      const teamId = document.getElementById('formUserTeam')?.value;
-      const role = document.getElementById('formUserRole')?.value;
-
-      if (!name || !wa || !teamId) {
-        showToast('Harap lengkapi semua kolom wajib!');
-        return;
-      }
-
-      const userId = idInput || ('USR-' + String(safeArray(APP_STATE.users).length + 1).padStart(2, '0'));
-      const userPayload = {
-        id: userId,
-        name: name,
-        email: email || '',
-        wa: wa,
-        password: password || '',
-        teamId: teamId,
-        role: role || 'Viewer',
-        status: 'Aktif'
-      };
-
-      if (idInput) {
-        const idx = safeArray(APP_STATE.users).findIndex(u => u.id === idInput);
-        if (idx !== -1) APP_STATE.users[idx] = userPayload;
-      } else {
-        APP_STATE.users.push(userPayload);
-      }
-
-      sendToBackend('SAVE_USER', userPayload);
-      closeUserModal();
-      renderUsersTable();
-      populateLoginUserDropdown();
-      showToast('Data pengurus berhasil disimpan!');
-    }
-
-    function handleTeamSelectChange(selectEl) {
-      if (selectEl.value === '__ADD_NEW__') {
-        const newTeamName = prompt('Masukkan nama Tim / Bidang baru:');
-        if (newTeamName && newTeamName.trim()) {
-          const newTeamId = 'T-' + String(safeArray(APP_STATE.teams).length + 1).padStart(2, '0');
-          const newTeamObj = { id: newTeamId, name: newTeamName.trim(), leader: '', status: 'Aktif' };
-
-          APP_STATE.teams.push(newTeamObj);
-          sendToBackend('SAVE_TEAM', newTeamObj);
-
-          renderTeamsDropdowns();
-          selectEl.value = newTeamId;
-          showToast(`Tim "${newTeamName.trim()}" berhasil ditambahkan!`);
-        } else {
-          selectEl.value = '';
-        }
-      }
-    }
-
-    function renderTeamsDropdowns() {
-      const userTeamSelect = document.getElementById('formUserTeam');
-      if (userTeamSelect) {
-        const options = safeArray(APP_STATE.teams).map(t => `<option value="${t.id}">${t.name}</option>`).join('');
-        userTeamSelect.innerHTML = `<option value="">-- Pilih Tim --</option>` + options + `<option value="__ADD_NEW__" class="font-semibold text-brand-600">+ Tambah Tim Baru...</option>`;
-      }
-    }
-
-    function syncDataFromBackend() {
-      const icon = document.getElementById('syncIcon');
-      const text = document.getElementById('syncText');
-      const btn = document.getElementById('syncBtn');
-
-      if (icon) icon.classList.add('animate-pulse');
-      if (text) text.innerText = 'Sinkronisasi...';
-      if (btn) btn.disabled = true;
-
-      fetch(`${APP_STATE.gasUrl}?action=getAllData`, {
-        method: 'GET',
-        redirect: 'follow'
-      })
-        .then(res => res.text())
-        .then(textData => {
-          let res;
-          try {
-            res = JSON.parse(textData);
-          } catch (e) {
-            throw new Error(`Gagal memuat respon JSON backend.`);
-          }
-
-          if (res && res.status === 'success' && res.data) {
-            APP_STATE.meetings = safeArray(res.data.meetings);
-            APP_STATE.discussions = safeArray(res.data.discussions);
-            APP_STATE.actionItems = safeArray(res.data.actionItems);
-            APP_STATE.users = safeArray(res.data.users);
-            APP_STATE.teams = safeArray(res.data.teams);
-            APP_STATE.logs = safeArray(res.data.logs);
-
-            APP_STATE.isLoading = false;
-
-            populateLoginUserDropdown();
-            renderDashboard();
-            renderMeetingsList();
-            renderNotulensiView();
-            renderActionTracker();
-            renderMonitoringView();
-            renderArsipTable();
-            renderUsersTable();
-            renderTeamsDropdowns();
-            showToast('Data berhasil disinkronkan!');
-          }
-        })
-        .catch(err => {
-          showToast(err.message || 'Gagal memuat data dari Spreadsheet.');
-          APP_STATE.isLoading = false;
-          renderDashboard();
-          renderMeetingsList();
-          renderActionTracker();
-          renderMonitoringView();
-          renderArsipTable();
-          renderUsersTable();
-        })
-        .finally(() => {
-          if (icon) icon.classList.remove('animate-pulse');
-          if (text) text.innerText = 'Sinkronisasi Backend';
-          if (btn) btn.disabled = false;
+                <div id="musyawarahCardsList" class="space-y-4">
+                    <!-- Dynamic List Musyawarah Cards -->
+                </div>
+            </section>
+
+            <!-- TAB 3: PROGRESS BOARD (KANBAN) -->
+            <section id="boardTabSection" class="hidden space-y-4">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="kanban" class="w-4 h-4 text-emerald-600"></i>
+                            <span>Progress Board Hasil Musyawarah</span>
+                        </h2>
+                        <p class="text-xs text-slate-400">Monitoring status eksekusi action items berdasarkan PIC & Deadline</p>
+                    </div>
+                </div>
+
+                <!-- 4 Columns Kanban -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    
+                    <!-- Belum Dimulai -->
+                    <div class="bg-slate-100 dark:bg-slate-800/60 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
+                        <div class="flex items-center justify-between text-xs font-bold text-slate-500 dark:text-slate-400">
+                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span> Belum Dimulai</span>
+                            <span id="countBelumDimulai" class="bg-white dark:bg-slate-700 px-2 py-0.5 rounded-md text-[10px]">0</span>
+                        </div>
+                        <div id="kanbanBelumDimulai" class="space-y-2.5 min-h-[150px]"></div>
+                    </div>
+
+                    <!-- Dalam Proses -->
+                    <div class="bg-blue-50/60 dark:bg-slate-800/60 p-3.5 rounded-2xl border border-blue-100 dark:border-slate-700 space-y-3">
+                        <div class="flex items-center justify-between text-xs font-bold text-blue-600 dark:text-blue-400">
+                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Dalam Proses</span>
+                            <span id="countDalamProses" class="bg-white dark:bg-slate-700 px-2 py-0.5 rounded-md text-[10px]">0</span>
+                        </div>
+                        <div id="kanbanDalamProses" class="space-y-2.5 min-h-[150px]"></div>
+                    </div>
+
+                    <!-- Tertunda -->
+                    <div class="bg-amber-50/60 dark:bg-slate-800/60 p-3.5 rounded-2xl border border-amber-100 dark:border-slate-700 space-y-3">
+                        <div class="flex items-center justify-between text-xs font-bold text-amber-600 dark:text-amber-400">
+                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Tertunda</span>
+                            <span id="countTertunda" class="bg-white dark:bg-slate-700 px-2 py-0.5 rounded-md text-[10px]">0</span>
+                        </div>
+                        <div id="kanbanTertunda" class="space-y-2.5 min-h-[150px]"></div>
+                    </div>
+
+                    <!-- Selesai -->
+                    <div class="bg-emerald-50/60 dark:bg-slate-800/60 p-3.5 rounded-2xl border border-emerald-100 dark:border-slate-700 space-y-3">
+                        <div class="flex items-center justify-between text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Selesai</span>
+                            <span id="countSelesai" class="bg-white dark:bg-slate-700 px-2 py-0.5 rounded-md text-[10px]">0</span>
+                        </div>
+                        <div id="kanbanSelesai" class="space-y-2.5 min-h-[150px]"></div>
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toastNotification" class="hidden fixed bottom-5 right-5 z-50 bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 px-4 py-3 rounded-xl text-xs font-semibold shadow-lg flex items-center space-x-2">
+        <i data-lucide="check-circle" class="w-4 h-4"></i>
+        <span id="toastMsg">Pesan sukses...</span>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // CONFIG & STATE
+        const USER_SHEETS_URL = "https://script.google.com/macros/s/AKfycbxFWquCku8RTLpoQmgsfiHt6BTkN1zcXWEg5JWYaTbUSRcON8u1fP7bF5YhuD6ZtAmUsA/exec";
+        const MUSYAWARAH_SHEETS_URL = "https://script.google.com/macros/s/AKfycbyKP-pootHFvcd5qYA1PDStJIbTTfqchUiNR2A95wWeltv8pLoq9VLeBpr5dVB9sFi_9g/exec"; 
+        
+        let usersData = [];
+        let musyawarahData = [];
+        let currentMeetingId = "";
+        let actionItemCounter = 0;
+        let editingMeetingId = null;
+
+        // Fallback pengurus sesuai daftar pengguna
+        const fallbackUsers = [
+            { nama: "Arif Firmansyah", teamid: "T-02" },
+            { nama: "Nur Rachman", teamid: "T-02" },
+            { nama: "Nursahid Yanurianto", teamid: "T-01" },
+            { nama: "Eko Setyo Budi Purnomo", teamid: "T-03" },
+            { nama: "Fandi Akhmad", teamid: "T-03" },
+            { nama: "David Adi Prayoga", teamid: "T-04" },
+            { nama: "H. Priyanto", teamid: "T-05" },
+            { nama: "Maryono", teamid: "T-01" }
+        ];
+
+        // INIT APPLICATION
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) lucide.createIcons();
+            
+            // Set Default Date
+            document.getElementById('inputTanggal').value = new Date().toISOString().split('T')[0];
+            
+            generateNewMeetingId();
+            fetchUsersFromSheet();
+            fetchMusyawarahData();
+            
+            // Initial Action Item Card
+            addActionItemCard();
         });
-    }
 
-    function sendToBackend(action, payload) {
-      if (!APP_STATE.gasUrl) return;
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+            }
+        }
 
-      const icon = document.getElementById('syncIcon');
-      const text = document.getElementById('syncText');
-      
-      if (icon) icon.classList.add('animate-pulse');
-      if (text) text.innerText = 'Menyimpan...';
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotification');
+            const toastMsg = document.getElementById('toastMsg');
+            toastMsg.textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3500);
+        }
 
-      const bodyData = JSON.stringify({
-        action: action,
-        userRole: APP_STATE.currentUserRole,
-        userName: APP_STATE.currentUserName,
-        payload: payload
-      });
+        function generateNewMeetingId() {
+            const now = new Date();
+            const yyyy = now.getFullYear();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const randomNum = String(musyawarahData.length + 1).padStart(3, '0');
+            currentMeetingId = `MT-${yyyy}${mm}-${randomNum}`;
+            document.getElementById('displayMeetingId').textContent = currentMeetingId;
+        }
 
-      fetch(APP_STATE.gasUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: bodyData
-      })
-      .then(() => {
-        console.log(`Payload ${action} dikirim ke Apps Script.`);
-      })
-      .catch(err => {
-        console.error('Gagal mengirim data ke backend Apps Script:', err);
-      })
-      .finally(() => {
-        if (icon) icon.classList.remove('animate-pulse');
-        if (text) text.innerText = 'Sinkronisasi Backend';
-      });
-    }
-  </script>
+        // FETCH USERS FROM SPREADSHEET
+        async function fetchUsersFromSheet() {
+            const statusText = document.getElementById('sheetStatusText');
+            const badge = document.getElementById('userCountBadge');
+            
+            try {
+                const res = await fetch(`${USER_SHEETS_URL}?action=getUsers&t=${Date.now()}`, { redirect: 'follow' });
+                if (res.ok) {
+                    const text = await res.text();
+                    if (text.trim().startsWith('{') || text.trim().startsWith('[')) {
+                        const parsed = JSON.parse(text);
+                        let rawList = Array.isArray(parsed) ? parsed : (parsed.users || parsed.data || []);
+                        
+                        if (rawList.length > 0) {
+                            usersData = rawList.map(u => ({
+                                nama: String(u.nama || u.Nama || u.user || u.User || '').trim(),
+                                teamid: String(u.teamid || u.TEAMID || u.TeamID || 'T-01').trim()
+                            })).filter(u => u.nama !== '');
+                            
+                            statusText.textContent = "Data pengurus berhasil tersambung secara real-time dari Spreadsheet.";
+                            badge.textContent = `${usersData.length} Pengurus`;
+                            populateUserDropdowns();
+                            return;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn("Menggunakan fallback pengurus:", err);
+            }
+
+            // Fallback jika fetch gagal
+            usersData = fallbackUsers;
+            statusText.textContent = "Menggunakan data pengurus terdaftar (Offline Mode).";
+            badge.textContent = `${usersData.length} Pengurus`;
+            populateUserDropdowns();
+        }
+
+        function populateUserDropdowns() {
+            const ketuaSelect = document.getElementById('selectKetua');
+            const notulisSelect = document.getElementById('selectNotulis');
+            const pesertaContainer = document.getElementById('pesertaCheckboxContainer');
+
+            ketuaSelect.innerHTML = '<option value="" disabled selected>-- Pilih Ketua --</option>';
+            notulisSelect.innerHTML = '<option value="" disabled selected>-- Pilih Notulis --</option>';
+            pesertaContainer.innerHTML = '';
+
+            usersData.forEach((u, i) => {
+                // Populate Selects
+                const opt1 = document.createElement('option');
+                opt1.value = u.nama;
+                opt1.textContent = `${u.nama} (${u.teamid})`;
+                ketuaSelect.appendChild(opt1);
+
+                const opt2 = document.createElement('option');
+                opt2.value = u.nama;
+                opt2.textContent = `${u.nama} (${u.teamid})`;
+                notulisSelect.appendChild(opt2);
+
+                // Populate Checkboxes for Peserta
+                const checkLabel = document.createElement('label');
+                checkLabel.className = "flex items-center space-x-2 text-xs bg-white dark:bg-slate-800 p-2 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all";
+                checkLabel.innerHTML = `
+                    <input type="checkbox" name="pesertaHadir" value="${u.nama}" class="rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
+                    <span class="font-medium text-slate-800 dark:text-slate-200">${u.nama}</span>
+                `;
+                pesertaContainer.appendChild(checkLabel);
+            });
+
+            // Update existing Action Item PIC dropdowns
+            document.querySelectorAll('.select-pic-dynamic').forEach(sel => {
+                const currentVal = sel.value;
+                sel.innerHTML = '<option value="" disabled selected>-- Pilih PIC --</option>';
+                usersData.forEach(u => {
+                    const opt = document.createElement('option');
+                    opt.value = u.nama;
+                    opt.textContent = `${u.nama} (${u.teamid})`;
+                    if (currentVal === u.nama) opt.selected = true;
+                    sel.appendChild(opt);
+                });
+            });
+        }
+
+        // ACTION ITEM CARD MANAGEMENT
+        function addActionItemCard(data = null) {
+            actionItemCounter++;
+            const charCode = String.fromCharCode(64 + actionItemCounter); // A, B, C...
+            const actionId = `${currentMeetingId}-${charCode}`;
+            
+            const container = document.getElementById('actionItemsDynamicContainer');
+            const card = document.createElement('div');
+            card.className = "action-item-card bg-slate-50 dark:bg-slate-900/60 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 space-y-3 relative";
+            card.setAttribute('data-action-index', actionItemCounter);
+
+            card.innerHTML = `
+                <div class="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-700">
+                    <span class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950 px-2 py-0.5 rounded-md">
+                        Action ID: <span class="action-id-text">${actionId}</span>
+                    </span>
+                    <button type="button" onclick="removeActionItemCard(this)" class="text-slate-400 hover:text-rose-500 text-xs font-bold flex items-center gap-1 transition-all">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Hapus
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Pokok Bahasan <span class="text-rose-500">*</span></label>
+                        <input type="text" class="input-pokokbahasan w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none" required placeholder="Pokok bahasan musyawarah..." value="${data ? data.pokokbahasan : ''}">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Detail Bahasan</label>
+                        <input type="text" class="input-detailbahasan w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Rincian / latar belakang bahasan..." value="${data ? data.detailbahasan : ''}">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Hasil Keputusan <span class="text-rose-500">*</span></label>
+                        <textarea rows="2" class="input-hasilkeputusan w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none" required placeholder="Keputusan akhir yang disepakati...">${data ? data.hasilkeputusan : ''}</textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">PIC (Penanggung Jawab) <span class="text-rose-500">*</span></label>
+                        <select onchange="updateTeamIdFromPic(this)" class="select-pic-dynamic w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none" required>
+                            <option value="" disabled selected>-- Pilih PIC --</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Team ID</label>
+                            <input type="text" readonly class="input-teamid w-full bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2 text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400" value="${data ? data.teamid : 'T-01'}">
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Deadline <span class="text-rose-500">*</span></label>
+                            <input type="date" class="input-deadline w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none" required value="${data ? data.deadline : ''}">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Status Progres</label>
+                        <select class="select-status w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            <option value="Belum Dimulai" ${data && data.status === 'Belum Dimulai' ? 'selected' : ''}>Belum Dimulai</option>
+                            <option value="Dalam Proses" ${data && data.status === 'Dalam Proses' ? 'selected' : ''}>Dalam Proses</option>
+                            <option value="Tertunda" ${data && data.status === 'Tertunda' ? 'selected' : ''}>Tertunda</option>
+                            <option value="Selesai" ${data && data.status === 'Selesai' ? 'selected' : ''}>Selesai</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300">Progres (%)</label>
+                            <span class="text-xs font-mono font-bold text-emerald-600 display-progress-val">${data ? data.persentaseprogres : 0}%</span>
+                        </div>
+                        <input type="range" min="0" max="100" value="${data ? data.persentaseprogres : 0}" oninput="this.previousElementSibling.querySelector('.display-progress-val').textContent = this.value + '%'" class="input-progres w-full accent-emerald-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Catatan Terakhir</label>
+                        <input type="text" class="input-catatan w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Catatan perkembangan..." value="${data ? data.catatanterakhir : ''}">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Kendala Lapangan</label>
+                        <input type="text" class="input-kendala w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Kendala eksekusi..." value="${data ? data.kendala : ''}">
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(card);
+            
+            // Populate PIC Dropdown for this card
+            const sel = card.querySelector('.select-pic-dynamic');
+            usersData.forEach(u => {
+                const opt = document.createElement('option');
+                opt.value = u.nama;
+                opt.textContent = `${u.nama} (${u.teamid})`;
+                if (data && data.pic === u.nama) opt.selected = true;
+                sel.appendChild(opt);
+            });
+
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function removeActionItemCard(btn) {
+            const container = document.getElementById('actionItemsDynamicContainer');
+            if (container.children.length <= 1) {
+                showToast("Minimal harus ada 1 Action Item dalam musyawarah!");
+                return;
+            }
+            btn.closest('.action-item-card').remove();
+            reindexActionIds();
+        }
+
+        function reindexActionIds() {
+            const cards = document.querySelectorAll('.action-item-card');
+            cards.forEach((card, idx) => {
+                const charCode = String.fromCharCode(65 + idx);
+                card.querySelector('.action-id-text').textContent = `${currentMeetingId}-${charCode}`;
+            });
+        }
+
+        function updateTeamIdFromPic(selectEl) {
+            const selectedPic = selectEl.value;
+            const foundUser = usersData.find(u => u.nama === selectedPic);
+            const teamIdInput = selectEl.closest('.action-item-card').querySelector('.input-teamid');
+            if (foundUser && teamIdInput) {
+                teamIdInput.value = foundUser.teamid;
+            }
+        }
+
+        // SUBMIT FORM DATA
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const checkedPeserta = Array.from(document.querySelectorAll('input[name="pesertaHadir"]:checked')).map(cb => cb.value);
+            if (checkedPeserta.length === 0) {
+                showToast("Pilih minimal 1 peserta yang hadir!");
+                return;
+            }
+
+            const meetingid = editingMeetingId || currentMeetingId;
+            const judul = document.getElementById('inputJudul').value.trim();
+            const tanggal = document.getElementById('inputTanggal').value;
+            const lokasi = document.getElementById('inputLokasi').value.trim();
+            const ketua = document.getElementById('selectKetua').value;
+            const notulis = document.getElementById('selectNotulis').value;
+
+            // Collect Action Items
+            const actionCards = document.querySelectorAll('.action-item-card');
+            const actionItems = [];
+
+            actionCards.forEach((card, idx) => {
+                const charCode = String.fromCharCode(65 + idx);
+                actionItems.push({
+                    actionid: `${meetingid}-${charCode}`,
+                    pokokbahasan: card.querySelector('.input-pokokbahasan').value.trim(),
+                    detailbahasan: card.querySelector('.input-detailbahasan').value.trim(),
+                    hasilkeputusan: card.querySelector('.input-hasilkeputusan').value.trim(),
+                    pic: card.querySelector('.select-pic-dynamic').value,
+                    teamid: card.querySelector('.input-teamid').value,
+                    deadline: card.querySelector('.input-deadline').value,
+                    status: card.querySelector('.select-status').value,
+                    persentaseprogres: parseInt(card.querySelector('.input-progres').value) || 0,
+                    catatanterakhir: card.querySelector('.input-catatan').value.trim(),
+                    kendala: card.querySelector('.input-kendala').value.trim()
+                });
+            });
+
+            const payload = {
+                meetingid,
+                judul,
+                tanggal,
+                lokasi,
+                ketua,
+                notulis,
+                peserta: checkedPeserta,
+                actionItems
+            };
+
+            const submitBtn = document.getElementById('submitFormBtn');
+            const submitBtnText = document.getElementById('submitFormBtnText');
+            submitBtn.disabled = true;
+            submitBtnText.textContent = "Menyimpan ke Spreadsheet...";
+
+            try {
+                if (MUSYAWARAH_SHEETS_URL) {
+                    await fetch(MUSYAWARAH_SHEETS_URL, {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify({ action: "saveMusyawarah", data: payload })
+                    });
+                }
+            } catch (err) {
+                console.warn("Spreadsheet POST error, saving locally:", err);
+            }
+
+            // Local State Save / Update
+            const existingIdx = musyawarahData.findIndex(m => m.meetingid === meetingid);
+            if (existingIdx !== -1) {
+                musyawarahData[existingIdx] = payload;
+            } else {
+                musyawarahData.unshift(payload);
+            }
+
+            showToast("Notulensi musyawarah berhasil disimpan!");
+            resetMusyawarahForm();
+            switchTab('list');
+            
+            submitBtn.disabled = false;
+            submitBtnText.textContent = "Simpan Notulensi Musyawarah";
+        }
+
+        function resetMusyawarahForm() {
+            document.getElementById('musyawarahForm').reset();
+            document.getElementById('pesertaCheckboxContainer').querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            document.getElementById('actionItemsDynamicContainer').innerHTML = '';
+            
+            editingMeetingId = null;
+            actionItemCounter = 0;
+            document.getElementById('formTitleText').textContent = "Input Hasil Musyawarah Baru";
+            generateNewMeetingId();
+            addActionItemCard();
+        }
+
+        // FETCH & RENDER MUSYAWARAH DATA
+        async function fetchMusyawarahData() {
+            try {
+                const res = await fetch(`${MUSYAWARAH_SHEETS_URL}?action=getData&t=${Date.now()}`, { redirect: 'follow' });
+                if (res.ok) {
+                    const text = await res.text();
+                    if (text.trim().startsWith('{')) {
+                        const parsed = JSON.parse(text);
+                        if (parsed.status === 'success' && Array.isArray(parsed.data)) {
+                            musyawarahData = parsed.data;
+                            updateStats();
+                            renderMusyawarahList();
+                            renderKanbanBoard();
+                            return;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn("Gagal memuat data musyawarah dari Apps Script:", err);
+            }
+
+            updateStats();
+            renderMusyawarahList();
+            renderKanbanBoard();
+        }
+
+        function updateStats() {
+            document.getElementById('totalMusyawarahCount').textContent = musyawarahData.length;
+            let totalActions = 0;
+            musyawarahData.forEach(m => totalActions += (m.actionItems ? m.actionItems.length : 0));
+            document.getElementById('totalActionItemCount').textContent = totalActions;
+        }
+
+        function renderMusyawarahList() {
+            const container = document.getElementById('musyawarahCardsList');
+            const searchVal = (document.getElementById('searchMusyawarahInput')?.value || '').toLowerCase();
+            container.innerHTML = '';
+
+            const filtered = musyawarahData.filter(m => 
+                m.judul.toLowerCase().includes(searchVal) || 
+                m.meetingid.toLowerCase().includes(searchVal) ||
+                m.ketua.toLowerCase().includes(searchVal)
+            );
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 text-center text-slate-400 space-y-2 border border-slate-200 dark:border-slate-700">
+                        <i data-lucide="inbox" class="w-8 h-8 mx-auto stroke-1"></i>
+                        <p class="text-xs font-medium">Belum ada dokumen musyawarah tercatat.</p>
+                    </div>
+                `;
+                if (window.lucide) lucide.createIcons();
+                return;
+            }
+
+            filtered.forEach(m => {
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-700 space-y-4";
+                
+                const pesertaBadges = Array.isArray(m.peserta) ? m.peserta.map(p => 
+                    `<span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-md text-[10px] font-medium">${p}</span>`
+                ).join(' ') : '';
+
+                let actionsHtml = '';
+                if (Array.isArray(m.actionItems)) {
+                    actionsHtml = m.actionItems.map(act => `
+                        <div class="bg-slate-50 dark:bg-slate-900/60 p-3 rounded-xl border border-slate-100 dark:border-slate-700/60 space-y-1.5 text-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="font-mono font-bold text-emerald-600 dark:text-emerald-400 text-[11px]">${act.actionid}</span>
+                                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold ${getStatusBadgeClass(act.status)}">${act.status}</span>
+                            </div>
+                            <p class="font-bold text-slate-800 dark:text-slate-100">${act.pokokbahasan}</p>
+                            <p class="text-slate-600 dark:text-slate-300 text-[11px]">${act.hasilkeputusan}</p>
+                            <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-200/50 dark:border-slate-800">
+                                <span>PIC: <strong class="text-slate-700 dark:text-slate-200">${act.pic} (${act.teamid})</strong></span>
+                                <span>Deadline: <strong class="text-slate-700 dark:text-slate-200">${act.deadline}</strong></span>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                card.innerHTML = `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-700">
+                        <div>
+                            <span class="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950 px-2 py-0.5 rounded-md">${m.meetingid}</span>
+                            <h3 class="text-sm font-bold text-slate-900 dark:text-white mt-1">${m.judul}</h3>
+                        </div>
+                        <div class="flex items-center space-x-2 shrink-0">
+                            <button onclick="editMusyawarah('${m.meetingid}')" class="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1">
+                                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Edit
+                            </button>
+                            <button onclick="deleteMusyawarah('${m.meetingid}')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Hapus
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                        <div class="bg-slate-50 dark:bg-slate-700/40 p-2 rounded-xl">
+                            <span class="block text-[10px] text-slate-400">Tanggal</span>
+                            <span class="font-semibold">${m.tanggal}</span>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-700/40 p-2 rounded-xl">
+                            <span class="block text-[10px] text-slate-400">Lokasi</span>
+                            <span class="font-semibold truncate block">${m.lokasi}</span>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-700/40 p-2 rounded-xl">
+                            <span class="block text-[10px] text-slate-400">Ketua</span>
+                            <span class="font-semibold">${m.ketua}</span>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-700/40 p-2 rounded-xl">
+                            <span class="block text-[10px] text-slate-400">Notulis</span>
+                            <span class="font-semibold">${m.notulis}</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Peserta Hadir:</span>
+                        <div class="flex flex-wrap gap-1">${pesertaBadges}</div>
+                    </div>
+
+                    <div class="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-700">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Action Items (${m.actionItems ? m.actionItems.length : 0}):</span>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">${actionsHtml}</div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function getStatusBadgeClass(status) {
+            switch(status) {
+                case 'Selesai': return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300';
+                case 'Dalam Proses': return 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300';
+                case 'Tertunda': return 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300';
+                default: return 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300';
+            }
+        }
+
+        function renderKanbanBoard() {
+            const cols = {
+                'Belum Dimulai': document.getElementById('kanbanBelumDimulai'),
+                'Dalam Proses': document.getElementById('kanbanDalamProses'),
+                'Tertunda': document.getElementById('kanbanTertunda'),
+                'Selesai': document.getElementById('kanbanSelesai')
+            };
+
+            const counts = { 'Belum Dimulai': 0, 'Dalam Proses': 0, 'Tertunda': 0, 'Selesai': 0 };
+
+            Object.keys(cols).forEach(k => cols[k].innerHTML = '');
+
+            musyawarahData.forEach(m => {
+                if (Array.isArray(m.actionItems)) {
+                    m.actionItems.forEach(act => {
+                        const statusKey = cols[act.status] ? act.status : 'Belum Dimulai';
+                        counts[statusKey]++;
+
+                        const itemCard = document.createElement('div');
+                        itemCard.className = "bg-white dark:bg-slate-800 p-3 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 space-y-2 text-xs";
+                        itemCard.innerHTML = `
+                            <div class="flex justify-between items-center text-[10px] text-slate-400 font-mono">
+                                <span class="font-bold text-emerald-600 dark:text-emerald-400">${act.actionid}</span>
+                                <span>${act.deadline}</span>
+                            </div>
+                            <h4 class="font-bold text-slate-900 dark:text-white leading-snug">${act.pokokbahasan}</h4>
+                            <p class="text-[11px] text-slate-500 line-clamp-2">${act.hasilkeputusan}</p>
+                            <div class="pt-2 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center text-[10px]">
+                                <span class="font-medium text-slate-600 dark:text-slate-300">PIC: <strong>${act.pic}</strong></span>
+                                <span class="font-mono font-bold text-emerald-600">${act.persentaseprogres}%</span>
+                            </div>
+                        `;
+
+                        cols[statusKey].appendChild(itemCard);
+                    });
+                }
+            });
+
+            document.getElementById('countBelumDimulai').textContent = counts['Belum Dimulai'];
+            document.getElementById('countDalamProses').textContent = counts['Dalam Proses'];
+            document.getElementById('countTertunda').textContent = counts['Tertunda'];
+            document.getElementById('countSelesai').textContent = counts['Selesai'];
+        }
+
+        function editMusyawarah(meetingid) {
+            const item = musyawarahData.find(m => m.meetingid === meetingid);
+            if (!item) return;
+
+            editingMeetingId = meetingid;
+            document.getElementById('formTitleText').textContent = `Edit Musyawarah (${meetingid})`;
+            document.getElementById('displayMeetingId').textContent = meetingid;
+
+            document.getElementById('inputJudul').value = item.judul;
+            document.getElementById('inputTanggal').value = item.tanggal;
+            document.getElementById('inputLokasi').value = item.lokasi;
+            document.getElementById('selectKetua').value = item.ketua;
+            document.getElementById('selectNotulis').value = item.notulis;
+
+            // Check Peserta
+            const checkboxes = document.querySelectorAll('input[name="pesertaHadir"]');
+            checkboxes.forEach(cb => {
+                cb.checked = Array.isArray(item.peserta) && item.peserta.includes(cb.value);
+            });
+
+            // Populate Action Items
+            document.getElementById('actionItemsDynamicContainer').innerHTML = '';
+            actionItemCounter = 0;
+            if (Array.isArray(item.actionItems)) {
+                item.actionItems.forEach(act => addActionItemCard(act));
+            } else {
+                addActionItemCard();
+            }
+
+            switchTab('input');
+        }
+
+        async function deleteMusyawarah(meetingid) {
+            if (!confirm(`Apakah Anda yakin ingin menghapus Musyawarah ${meetingid}?`)) return;
+
+            musyawarahData = musyawarahData.filter(m => m.meetingid !== meetingid);
+            updateStats();
+            renderMusyawarahList();
+            renderKanbanBoard();
+            showToast("Menghapus musyawarah...");
+
+            try {
+                if (MUSYAWARAH_SHEETS_URL) {
+                    await fetch(MUSYAWARAH_SHEETS_URL, {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify({ action: "deleteMusyawarah", meetingid })
+                    });
+                }
+            } catch (err) {
+                console.warn("Delete request error:", err);
+            }
+
+            showToast("Musyawarah berhasil dihapus.");
+        }
+
+        function switchTab(tab) {
+            const inputSec = document.getElementById('inputTabSection');
+            const listSec = document.getElementById('listTabSection');
+            const boardSec = document.getElementById('boardTabSection');
+
+            const btnInput = document.getElementById('tabInputBtn');
+            const btnList = document.getElementById('tabListBtn');
+            const btnBoard = document.getElementById('tabBoardBtn');
+
+            inputSec.classList.add('hidden');
+            listSec.classList.add('hidden');
+            boardSec.classList.add('hidden');
+
+            const inactiveClass = "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50";
+            const activeClass = "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all bg-emerald-600 text-white shadow-sm";
+
+            btnInput.className = inactiveClass;
+            btnList.className = inactiveClass;
+            btnBoard.className = inactiveClass;
+
+            if (tab === 'input') {
+                inputSec.classList.remove('hidden');
+                btnInput.className = activeClass;
+            } else if (tab === 'list') {
+                listSec.classList.remove('hidden');
+                btnList.className = activeClass;
+            } else if (tab === 'board') {
+                boardSec.classList.remove('hidden');
+                btnBoard.className = activeClass;
+            }
+        }
+
+        async function syncDataFromSpreadsheet() {
+            const icon = document.getElementById('syncIcon');
+            if (icon) icon.classList.add('animate-spin');
+            await fetchUsersFromSheet();
+            await fetchMusyawarahData();
+            if (icon) icon.classList.remove('animate-spin');
+            showToast("Sinkronisasi data selesai!");
+        }
+    </script>
 </body>
 </html>
