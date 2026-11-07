@@ -1,995 +1,1219 @@
 <!DOCTYPE html>
 <html lang="id" class="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Musyawarah Taklim System — Dokumentasi & Progress Monitoring</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'Plus Jakarta Sans', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'Fira Code', 'monospace']
-                    },
-                    colors: {
-                        brand: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
-                            900: '#14532d'
-                        }
-                    }
-                }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Musyawarah Taklim System</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b'
             }
+          }
         }
-    </script>
-    
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
-    
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 99px;
-        }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #334155;
-        }
-    </style>
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fafc;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 99px;
+    }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+    }
+  </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-white">
 
-    <!-- HEADER / NAVIGATION -->
-    <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16 gap-4">
-                
-                <!-- Logo & Title -->
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 font-bold">
-                        <i data-lucide="users"></i>
-                    </div>
-                    <div>
-                        <h1 class="font-bold text-base sm:text-lg text-slate-900 dark:text-white tracking-tight leading-tight">
-                            Musyawarah Taklim
-                        </h1>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Sistem Dokumen & Monitoring Progress Hasil Musyawarah</p>
-                    </div>
-                </div>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen antialiased flex flex-col">
 
-                <!-- Right Actions -->
-                <div class="flex items-center space-x-2 sm:space-x-3">
-                    <button onclick="syncDataFromSpreadsheet()" class="flex items-center space-x-2 px-3.5 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl transition-all" title="Refresh Data">
-                        <i id="syncIcon" data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-                        <span class="hidden md:inline">Sinkronisasi</span>
-                    </button>
-                    <button onclick="toggleDarkMode()" class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all" title="Toggle Theme">
-                        <i data-lucide="moon" id="themeIcon" class="w-4 h-4"></i>
-                    </button>
-                </div>
+  <!-- ==================== MODAL LOGIN ==================== -->
+  <div id="loginModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-md p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-700 space-y-6 text-center relative overflow-hidden">
+      
+      <div class="w-16 h-16 bg-brand-100 dark:bg-brand-900/50 text-brand-600 dark:text-brand-400 rounded-2xl flex items-center justify-center mx-auto text-2xl shadow-inner">
+        <i data-lucide="lock" class="w-8 h-8"></i>
+      </div>
 
-            </div>
+      <div class="space-y-2">
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Login Musyawarah Taklim</h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400">Silakan masukkan username dan kata sandi pengurus.</p>
+      </div>
+
+      <form onsubmit="handleLoginSubmit(event)" class="space-y-4 text-left">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 ml-1">Username / Nama <span class="text-rose-500">*</span></label>
+          <div class="relative">
+            <input type="text" id="loginUsername" placeholder="Contoh: ariffir / nur / nursahid" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-bold focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white transition-all">
+          </div>
         </div>
-    </header>
 
-    <!-- MAIN CONTAINER -->
-    <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row gap-6">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 ml-1">Password / Kata Sandi <span class="text-rose-500">*</span></label>
+          <div class="relative">
+            <input type="password" id="loginPassword" placeholder="Masukkan kata sandi..." required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-bold focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white transition-all pr-10">
+            <button type="button" onclick="toggleShowPassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 focus:outline-none">
+              <i id="passwordEyeIcon" data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
 
-        <!-- SIDEBAR NAVIGATION & STATS -->
-        <aside class="w-full md:w-64 shrink-0 space-y-4">
-            
-            <!-- Navigation Card -->
-            <div class="bg-white dark:bg-slate-800 rounded-2xl p-3 shadow-sm border border-slate-200 dark:border-slate-700 space-y-1">
-                <button onclick="switchTab('input')" id="tabInputBtn" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all bg-emerald-600 text-white shadow-sm">
-                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                    <span>Input Musyawarah</span>
-                </button>
-                <button onclick="switchTab('list')" id="tabListBtn" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
-                    <i data-lucide="file-text" class="w-4 h-4"></i>
-                    <span>Daftar Notulensi</span>
-                </button>
-                <button onclick="switchTab('board')" id="tabBoardBtn" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
-                    <i data-lucide="kanban" class="w-4 h-4"></i>
-                    <span>Progress Board</span>
-                </button>
-            </div>
+        <div id="loginErrorMsg" class="hidden text-xs text-rose-600 font-bold text-center bg-rose-50 dark:bg-rose-950/40 p-3 rounded-xl border border-rose-200 dark:border-rose-900">
+          Username atau Password salah!
+        </div>
 
-            <!-- Spreadsheet Info Card -->
-            <div class="bg-emerald-50 dark:bg-emerald-950/40 rounded-2xl p-4 border border-emerald-200/60 dark:border-emerald-800/60 space-y-2 text-xs">
-                <div class="flex items-center space-x-2 font-bold text-emerald-900 dark:text-emerald-300">
-                    <i data-lucide="database" class="w-4 h-4"></i>
-                    <span>Manajemen User Status</span>
-                </div>
-                <div id="sheetStatusText" class="text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-                    Memuat daftar pengurus dari spreadsheet...
-                </div>
-                <div class="pt-2 border-t border-emerald-200 dark:border-emerald-800/50 flex justify-between items-center text-[11px] font-mono">
-                    <span class="text-slate-500 dark:text-slate-400">Total User:</span>
-                    <span id="userCountBadge" class="font-bold text-emerald-700 dark:text-emerald-400 bg-white dark:bg-slate-800 px-2 py-0.5 rounded-md">0 Pengurus</span>
-                </div>
-            </div>
+        <button type="submit" id="loginBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-extrabold py-3.5 px-4 rounded-xl shadow-lg shadow-brand-600/30 active:scale-[0.98] transition-all flex items-center justify-center space-x-2 text-xs">
+          <i data-lucide="log-in" class="w-4 h-4"></i>
+          <span>Masuk ke Aplikasi</span>
+        </button>
+      </form>
 
-            <!-- Quick Metrics -->
-            <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
-                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Statistik Musyawarah</h3>
-                <div class="grid grid-cols-2 gap-2 text-center">
-                    <div class="bg-slate-50 dark:bg-slate-700/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-700">
-                        <span id="totalMusyawarahCount" class="block text-lg font-extrabold text-slate-900 dark:text-white font-mono">0</span>
-                        <span class="text-[10px] text-slate-400 font-medium">Musyawarah</span>
-                    </div>
-                    <div class="bg-slate-50 dark:bg-slate-700/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-700">
-                        <span id="totalActionItemCount" class="block text-lg font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">0</span>
-                        <span class="text-[10px] text-slate-400 font-medium">Action Items</span>
-                    </div>
-                </div>
-            </div>
-
-        </aside>
-
-        <!-- CONTENT AREA -->
-        <main class="flex-1 min-w-0">
-
-            <!-- TAB 1: FORM INPUT MUSYAWARAH -->
-            <section id="inputTabSection" class="space-y-6">
-                
-                <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 space-y-6">
-                    
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100 dark:border-slate-700">
-                        <div>
-                            <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                                <i data-lucide="file-plus" class="w-5 h-5 text-emerald-600"></i>
-                                <span id="formTitleText">Input Hasil Musyawarah Baru</span>
-                            </h2>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Lengkapi notulensi utama musyawarah serta perincian action items yang disepakati.</p>
-                        </div>
-                        <div class="inline-flex items-center px-3 py-1 bg-slate-100 dark:bg-slate-700 rounded-lg text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 self-start sm:self-auto">
-                            ID: <span id="displayMeetingId" class="ml-1">MT-YYYYMM-001</span>
-                        </div>
-                    </div>
-
-                    <form id="musyawarahForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
-                        
-                        <!-- Section 1: Informasi Utama Musyawarah -->
-                        <div class="space-y-4">
-                            <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-wider flex items-center gap-1.5">
-                                <i data-lucide="info" class="w-4 h-4"></i> Informasi Umum Musyawarah
-                            </h3>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="md:col-span-2">
-                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Judul Musyawarah <span class="text-rose-500">*</span></label>
-                                    <input type="text" id="inputJudul" required placeholder="Contoh: Musyawarah Persiapan Tabligh Akbar Ramadhan 1448 H" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                                </div>
-
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Tanggal Musyawarah <span class="text-rose-500">*</span></label>
-                                    <input type="date" id="inputTanggal" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                                </div>
-
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Lokasi Pelaksanaan <span class="text-rose-500">*</span></label>
-                                    <input type="text" id="inputLokasi" required placeholder="Contoh: Ruang Utama Masjid Al-Ikhlas / Sekretariat" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                                </div>
-
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Ketua Musyawarah <span class="text-rose-500">*</span></label>
-                                    <select id="selectKetua" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                                        <option value="" disabled selected>-- Memuat Daftar Pengurus... --</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Notulis Musyawarah <span class="text-rose-500">*</span></label>
-                                    <select id="selectNotulis" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                                        <option value="" disabled selected>-- Memuat Daftar Pengurus... --</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Peserta Checkbox List -->
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                                    Peserta Yang Hadir <span class="text-rose-500">*</span> <span class="text-[10px] text-slate-400 font-normal ml-1">(Centang pengurus yang hadir)</span>
-                                </label>
-                                <div id="pesertaCheckboxContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 bg-slate-50 dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 max-h-48 overflow-y-auto custom-scrollbar">
-                                    <span class="text-xs text-slate-400 italic col-span-full">Memuat daftar peserta...</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Section 2: Action Items Dynamic List -->
-                        <div class="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-700">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-wider flex items-center gap-1.5">
-                                        <i data-lucide="check-square" class="w-4 h-4"></i> Pokok Bahasan & Action Items
-                                    </h3>
-                                    <p class="text-[11px] text-slate-400 mt-0.5">Satu ID Musyawarah dapat memiliki beberapa pokok bahasan/action items sekaligus.</p>
-                                </div>
-                                <button type="button" onclick="addActionItemCard()" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1 border border-emerald-200 dark:border-emerald-800">
-                                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Tambah Action Item
-                                </button>
-                            </div>
-
-                            <!-- Container Kartu Dynamic Action Items -->
-                            <div id="actionItemsDynamicContainer" class="space-y-4">
-                                <!-- Card item akan di-render secara otomatis oleh JS -->
-                            </div>
-                        </div>
-
-                        <!-- Submit Buttons -->
-                        <div class="flex items-center justify-end space-x-3 pt-4 border-t border-slate-100 dark:border-slate-700">
-                            <button type="button" onclick="resetMusyawarahForm()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-semibold transition-all">
-                                Batal / Reset
-                            </button>
-                            <button type="submit" id="submitFormBtn" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md shadow-emerald-500/20 active:scale-95 transition-all flex items-center space-x-2">
-                                <i data-lucide="save" class="w-4 h-4"></i>
-                                <span id="submitFormBtnText">Simpan Notulensi Musyawarah</span>
-                            </button>
-                        </div>
-
-                    </form>
-
-                </div>
-
-            </section>
-
-            <!-- TAB 2: DAFTAR NOTULENSI MUSYAWARAH -->
-            <section id="listTabSection" class="hidden space-y-4">
-                <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-3">
-                    <h2 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                        <i data-lucide="list" class="w-4 h-4 text-emerald-600"></i>
-                        <span>Daftar Musyawarah Tercipta</span>
-                    </h2>
-                    <div class="relative w-full sm:w-64">
-                        <input type="text" id="searchMusyawarahInput" onkeyup="renderMusyawarahList()" placeholder="Cari musyawarah..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl pl-8 pr-3 py-1.5 text-xs font-medium focus:outline-none">
-                        <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
-                    </div>
-                </div>
-
-                <div id="musyawarahCardsList" class="space-y-4">
-                    <!-- Dynamic List Musyawarah Cards -->
-                </div>
-            </section>
-
-            <!-- TAB 3: PROGRESS BOARD (KANBAN) -->
-            <section id="boardTabSection" class="hidden space-y-4">
-                <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-3">
-                    <div>
-                        <h2 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                            <i data-lucide="kanban" class="w-4 h-4 text-emerald-600"></i>
-                            <span>Progress Board Hasil Musyawarah</span>
-                        </h2>
-                        <p class="text-xs text-slate-400">Monitoring status eksekusi action items berdasarkan PIC & Deadline</p>
-                    </div>
-                </div>
-
-                <!-- 4 Columns Kanban -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    
-                    <!-- Belum Dimulai -->
-                    <div class="bg-slate-100 dark:bg-slate-800/60 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
-                        <div class="flex items-center justify-between text-xs font-bold text-slate-500 dark:text-slate-400">
-                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span> Belum Dimulai</span>
-                            <span id="countBelumDimulai" class="bg-white dark:bg-slate-700 px-2 py-0.5 rounded-md text-[10px]">0</span>
-                        </div>
-                        <div id="kanbanBelumDimulai" class="space-y-2.5 min-h-[150px]"></div>
-                    </div>
-
-                    <!-- Dalam Proses -->
-                    <div class="bg-blue-50/60 dark:bg-slate-800/60 p-3.5 rounded-2xl border border-blue-100 dark:border-slate-700 space-y-3">
-                        <div class="flex items-center justify-between text-xs font-bold text-blue-600 dark:text-blue-400">
-                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Dalam Proses</span>
-                            <span id="countDalamProses" class="bg-white dark:bg-slate-700 px-2 py-0.5 rounded-md text-[10px]">0</span>
-                        </div>
-                        <div id="kanbanDalamProses" class="space-y-2.5 min-h-[150px]"></div>
-                    </div>
-
-                    <!-- Tertunda -->
-                    <div class="bg-amber-50/60 dark:bg-slate-800/60 p-3.5 rounded-2xl border border-amber-100 dark:border-slate-700 space-y-3">
-                        <div class="flex items-center justify-between text-xs font-bold text-amber-600 dark:text-amber-400">
-                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Tertunda</span>
-                            <span id="countTertunda" class="bg-white dark:bg-slate-700 px-2 py-0.5 rounded-md text-[10px]">0</span>
-                        </div>
-                        <div id="kanbanTertunda" class="space-y-2.5 min-h-[150px]"></div>
-                    </div>
-
-                    <!-- Selesai -->
-                    <div class="bg-emerald-50/60 dark:bg-slate-800/60 p-3.5 rounded-2xl border border-emerald-100 dark:border-slate-700 space-y-3">
-                        <div class="flex items-center justify-between text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Selesai</span>
-                            <span id="countSelesai" class="bg-white dark:bg-slate-700 px-2 py-0.5 rounded-md text-[10px]">0</span>
-                        </div>
-                        <div id="kanbanSelesai" class="space-y-2.5 min-h-[150px]"></div>
-                    </div>
-
-                </div>
-            </section>
-
-        </main>
-
+      <div class="pt-2 border-t border-slate-100 dark:border-slate-700 text-[11px] text-slate-400">
+        Musyawarah Taklim Management System
+      </div>
     </div>
+  </div>
 
-    <!-- TOAST NOTIFICATION -->
-    <div id="toastNotification" class="hidden fixed bottom-5 right-5 z-50 bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 px-4 py-3 rounded-xl text-xs font-semibold shadow-lg flex items-center space-x-2">
-        <i data-lucide="check-circle" class="w-4 h-4"></i>
-        <span id="toastMsg">Pesan sukses...</span>
-    </div>
-
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        // CONFIG & STATE
-        const USER_SHEETS_URL = "https://script.google.com/macros/s/AKfycbxFWquCku8RTLpoQmgsfiHt6BTkN1zcXWEg5JWYaTbUSRcON8u1fP7bF5YhuD6ZtAmUsA/exec";
-        const MUSYAWARAH_SHEETS_URL = "https://script.google.com/macros/s/AKfycbyKP-pootHFvcd5qYA1PDStJIbTTfqchUiNR2A95wWeltv8pLoq9VLeBpr5dVB9sFi_9g/exec"; 
+  <!-- ==================== MAIN APPLICATION HEADER ==================== -->
+  <header id="mainHeader" class="hidden sticky top-0 z-40 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
         
-        let usersData = [];
-        let musyawarahData = [];
-        let currentMeetingId = "";
-        let actionItemCounter = 0;
-        let editingMeetingId = null;
+        <div class="flex items-center space-x-3">
+          <button onclick="toggleMobileSidebar(true)" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 lg:hidden">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+          <div class="w-9 h-9 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold">
+            <i data-lucide="users" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h1 class="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white leading-tight">Musyawarah Taklim</h1>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400">Sistem Notulensi & Progress Monitoring</p>
+          </div>
+        </div>
 
-        // Fallback pengurus sesuai daftar pengguna
-        const fallbackUsers = [
-            { nama: "Arif Firmansyah", teamid: "T-02" },
-            { nama: "Nur Rachman", teamid: "T-02" },
-            { nama: "Nursahid Yanurianto", teamid: "T-01" },
-            { nama: "Eko Setyo Budi Purnomo", teamid: "T-03" },
-            { nama: "Fandi Akhmad", teamid: "T-03" },
-            { nama: "David Adi Prayoga", teamid: "T-04" },
-            { nama: "H. Priyanto", teamid: "T-05" },
-            { nama: "Maryono", teamid: "T-01" }
-        ];
+        <div class="flex items-center space-x-3">
+          <button onclick="fetchMusyawarahData()" class="px-3 py-1.5 bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 rounded-xl text-xs font-bold flex items-center space-x-1 hover:bg-brand-100 transition-all">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            <span class="hidden sm:inline">Refresh Data</span>
+          </button>
 
-        // INIT APPLICATION
-        window.addEventListener('DOMContentLoaded', () => {
-            if (window.lucide) lucide.createIcons();
-            
-            // Set Default Date
-            document.getElementById('inputTanggal').value = new Date().toISOString().split('T')[0];
-            
-            generateNewMeetingId();
-            fetchUsersFromSheet();
-            fetchMusyawarahData();
-            
-            // Initial Action Item Card
-            addActionItemCard();
+          <div class="hidden sm:flex flex-col text-right">
+            <span id="headerUserName" class="text-xs font-bold text-slate-900 dark:text-white">-</span>
+            <span id="headerUserRole" class="text-[10px] text-brand-600 dark:text-brand-400 font-semibold uppercase">Pengurus</span>
+          </div>
+
+          <button onclick="logoutUser()" class="p-2.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 border border-rose-200/60 dark:border-rose-900/50" title="Keluar Sesi">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+            <span class="hidden sm:inline">Keluar</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN APPLICATION WRAPPER ==================== -->
+  <div id="appWrapper" class="hidden flex-1 flex w-full max-w-7xl mx-auto">
+
+    <!-- Sidebar Backdrop Mobile -->
+    <div id="sidebarBackdrop" onclick="toggleMobileSidebar(false)" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden lg:hidden"></div>
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside id="mainSidebar" class="fixed lg:sticky top-0 lg:top-16 left-0 h-screen lg:h-[calc(100vh-4rem)] z-40 w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col justify-between transition-transform duration-300 -translate-x-full lg:translate-x-0 shadow-lg lg:shadow-none">
+      
+      <div class="p-4 space-y-1.5">
+        <div class="flex items-center justify-between px-3 py-2 text-[10px] font-black uppercase text-slate-400 tracking-wider">
+          Navigasi Utama
+          <button onclick="toggleMobileSidebar(false)" class="lg:hidden text-slate-400 hover:text-slate-600">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <button id="navDashBtn" onclick="switchTab('dashboard')" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl font-bold text-xs transition-all bg-brand-600 text-white">
+          <div class="flex items-center space-x-3">
+            <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+            <span>Dashboard & Stats</span>
+          </div>
+        </button>
+
+        <button id="navTasksBtn" onclick="switchTab('tasks')" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl font-bold text-xs transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+          <div class="flex items-center space-x-3">
+            <i data-lucide="check-square" class="w-4 h-4 text-brand-600 dark:text-brand-400"></i>
+            <span>Tugas Saya</span>
+          </div>
+          <span id="myTasksCountBadge" class="px-2 py-0.5 rounded-full text-[10px] font-black bg-brand-100 text-brand-800 dark:bg-brand-900 dark:text-brand-300">0</span>
+        </button>
+
+        <button id="navInputBtn" onclick="switchTab('input')" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl font-bold text-xs transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+          <div class="flex items-center space-x-3">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Input Musyawarah</span>
+          </div>
+        </button>
+
+        <button id="navListBtn" onclick="switchTab('list')" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl font-bold text-xs transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+          <div class="flex items-center space-x-3">
+            <i data-lucide="file-text" class="w-4 h-4"></i>
+            <span>Daftar Notulensi</span>
+          </div>
+        </button>
+
+        <button id="navBoardBtn" onclick="switchTab('board')" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl font-bold text-xs transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+          <div class="flex items-center space-x-3">
+            <i data-lucide="kanban" class="w-4 h-4"></i>
+            <span>Progress Board</span>
+          </div>
+        </button>
+      </div>
+
+      <div class="p-4 border-t border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/30 text-xs text-slate-400 space-y-2">
+        <button onclick="toggleDarkMode()" class="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold">
+          <span class="flex items-center space-x-2">
+            <i data-lucide="moon" class="w-4 h-4 text-purple-500"></i>
+            <span>Mode Tampilan</span>
+          </span>
+          <span class="text-[10px] bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded-md">Switch</span>
+        </button>
+      </div>
+
+    </aside>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main id="appContent" class="flex-1 px-4 sm:px-6 lg:px-8 py-6 min-w-0">
+
+      <!-- SECTION 1: DASHBOARD & STATS -->
+      <section id="secDashboard" class="space-y-6">
+        <div class="bg-gradient-to-r from-brand-700 to-brand-900 rounded-3xl p-6 text-white shadow-lg space-y-2">
+          <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase bg-white/20 text-white border border-white/30">
+            📊 Ringkasan Musyawarah
+          </span>
+          <h2 class="text-xl sm:text-2xl font-black">Monitoring Notulensi & Action Items</h2>
+          <p class="text-xs text-brand-100 leading-relaxed max-w-xl">
+            Pantau status eksekusi hasil musyawarah Majelis Taklim secara real-time dan terukur.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
+            <p class="text-xs font-bold text-slate-400 uppercase">Total Musyawarah</p>
+            <h3 id="dashTotalMusyawarah" class="text-2xl font-black text-slate-900 dark:text-white font-mono">0</h3>
+          </div>
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
+            <p class="text-xs font-bold text-slate-400 uppercase">Total Action Items</p>
+            <h3 id="dashTotalActions" class="text-2xl font-black text-slate-900 dark:text-white font-mono">0</h3>
+          </div>
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
+            <p class="text-xs font-bold text-slate-400 uppercase">Dalam Proses</p>
+            <h3 id="dashInProgresActions" class="text-2xl font-black text-amber-500 font-mono">0</h3>
+          </div>
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
+            <p class="text-xs font-bold text-slate-400 uppercase">Selesai</p>
+            <h3 id="dashCompletedActions" class="text-2xl font-black text-brand-600 font-mono">0</h3>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: TUGAS SAYA -->
+      <section id="secTasks" class="hidden space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-4">
+          <div>
+            <h2 class="text-lg font-black text-slate-900 dark:text-white uppercase">Tugas Saya (PIC)</h2>
+            <p class="text-xs text-slate-500">Daftar Action Item yang ditugaskan kepada Anda</p>
+          </div>
+        </div>
+
+        <div id="myTasksContainer" class="space-y-4"></div>
+      </section>
+
+      <!-- SECTION 3: INPUT MUSYAWARAH -->
+      <section id="secInput" class="hidden max-w-4xl mx-auto space-y-6">
+        <div class="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+          <div class="border-b border-slate-100 dark:border-slate-700 pb-4">
+            <h2 class="text-lg font-black text-slate-900 dark:text-white uppercase">Input Musyawarah Baru</h2>
+            <p class="text-xs text-slate-500">Dokumentasikan musyawarah dan penunjukan PIC action items</p>
+          </div>
+
+          <form onsubmit="handleMusyawarahSubmit(event)" class="space-y-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Meeting ID</label>
+                <input type="text" id="inputMeetingId" readonly class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs font-mono font-bold text-slate-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Jenis Musyawarah <span class="text-rose-500">*</span></label>
+                <select id="inputJenis" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs font-bold focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white">
+                  <option value="Musyawarah 4S">Musyawarah 4S</option>
+                  <option value="Musyawarah Pengurus">Musyawarah Pengurus</option>
+                  <option value="Musyawarah 5 Unsur">Musyawarah 5 Unsur</option>
+                  <option value="Musyawarah KBM">Musyawarah KBM (Kegiatan Belajar Mengajar)</option>
+                  <option value="Musyawarah Muda-mudi">Musyawarah Muda-mudi</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Judul Musyawarah <span class="text-rose-500">*</span></label>
+                <input type="text" id="inputJudul" placeholder="Contoh: Musyawarah Persiapan Qurban & Pengajian" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Lokasi Pelaksanaan <span class="text-rose-500">*</span></label>
+                <input type="text" id="inputLokasi" placeholder="Contoh: Masjid Baitul Haq Lantai 1" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Tanggal <span class="text-rose-500">*</span></label>
+                <input type="date" id="inputTanggal" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Ketua <span class="text-rose-500">*</span></label>
+                <select id="inputKetua" required class="user-select-dropdown w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs font-bold dark:text-white"></select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Notulis <span class="text-rose-500">*</span></label>
+                <select id="inputNotulis" required class="user-select-dropdown w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs font-bold dark:text-white"></select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Peserta Hadir (Centang Nama)</label>
+              <div id="pesertaCheckboxContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 max-h-48 overflow-y-auto custom-scrollbar"></div>
+            </div>
+
+            <!-- ACTION ITEMS BUILDER -->
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-700 space-y-4">
+              <div class="flex items-center justify-between">
+                <h3 class="text-sm font-black text-slate-900 dark:text-white uppercase">Daftar Action Items</h3>
+                <button type="button" onclick="addActionItemRow()" class="px-3 py-1.5 bg-brand-100 text-brand-700 dark:bg-brand-900 dark:text-brand-300 rounded-xl text-xs font-bold hover:bg-brand-200 transition-all">
+                  + Tambah Action Item
+                </button>
+              </div>
+
+              <div id="actionItemsContainer" class="space-y-4"></div>
+            </div>
+
+            <button type="submit" id="submitFormBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-black py-4 rounded-2xl shadow-lg transition-all text-xs">
+              Simpan Notulensi Musyawarah
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- SECTION 4: DAFTAR NOTULENSI -->
+      <section id="secList" class="hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-700 pb-4">
+          <div>
+            <h2 class="text-lg font-black text-slate-900 dark:text-white uppercase">Daftar Notulensi Musyawarah</h2>
+            <p class="text-xs text-slate-500">Arsip pencatatan rapat, daftar peserta, dan detail rincian action items</p>
+          </div>
+          
+          <!-- Filter Kategori Musyawarah -->
+          <div class="flex flex-wrap gap-1.5" id="categoryFilterContainer">
+            <button onclick="filterNotulensiCategory('Semua')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-600 text-white shadow-sm">Semua</button>
+            <button onclick="filterNotulensiCategory('Musyawarah 4S')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">4S</button>
+            <button onclick="filterNotulensiCategory('Musyawarah Pengurus')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Pengurus</button>
+            <button onclick="filterNotulensiCategory('Musyawarah 5 Unsur')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">5 Unsur</button>
+            <button onclick="filterNotulensiCategory('Musyawarah KBM')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">KBM</button>
+            <button onclick="filterNotulensiCategory('Musyawarah Muda-mudi')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Muda-mudi</button>
+          </div>
+        </div>
+
+        <div id="musyawarahListContainer" class="space-y-4"></div>
+      </section>
+
+      <!-- SECTION 5: PROGRESS BOARD (KANBAN) -->
+      <section id="secBoard" class="hidden space-y-6">
+        <div class="border-b border-slate-200 dark:border-slate-700 pb-4">
+          <h2 class="text-lg font-black text-slate-900 dark:text-white uppercase">Progress Board Action Items</h2>
+          <p class="text-xs text-slate-500">Pantau status Pokok Bahasan, PIC, Deadline, dan Capaian Progress (%)</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="bg-slate-100 dark:bg-slate-800/50 p-4 rounded-2xl space-y-3">
+            <div class="font-black text-xs uppercase text-slate-500">Belum Dimulai</div>
+            <div id="colBelum" class="space-y-3"></div>
+          </div>
+          <div class="bg-slate-100 dark:bg-slate-800/50 p-4 rounded-2xl space-y-3">
+            <div class="font-black text-xs uppercase text-amber-600">Dalam Proses</div>
+            <div id="colProgres" class="space-y-3"></div>
+          </div>
+          <div class="bg-slate-100 dark:bg-slate-800/50 p-4 rounded-2xl space-y-3">
+            <div class="font-black text-xs uppercase text-rose-500">Tertunda</div>
+            <div id="colTertunda" class="space-y-3"></div>
+          </div>
+          <div class="bg-slate-100 dark:bg-slate-800/50 p-4 rounded-2xl space-y-3">
+            <div class="font-black text-xs uppercase text-brand-600">Selesai</div>
+            <div id="colSelesai" class="space-y-3"></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- MODAL FULL DETAIL NOTULENSI -->
+  <div id="detailNotulensiModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden">
+      <div class="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+        <div>
+          <span id="mdCategory" class="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-brand-100 text-brand-800 dark:bg-brand-900 dark:text-brand-300">Jenis Musyawarah</span>
+          <h3 id="mdTitle" class="font-black text-lg text-slate-900 dark:text-white mt-1">Judul Musyawarah</h3>
+        </div>
+        <button onclick="closeDetailModal()" class="text-slate-400 hover:text-slate-600 p-2"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+
+      <div id="mdBody" class="p-6 overflow-y-auto space-y-6 text-xs custom-scrollbar">
+        <!-- Content dynamically populated -->
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK EDIT ACTION ITEM MODAL -->
+  <div id="quickEditModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-700 space-y-4 text-left">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-3">
+        <h3 class="font-black text-sm text-slate-900 dark:text-white">Update Progress Action Item</h3>
+        <button onclick="closeQuickEditModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+
+      <form onsubmit="handleQuickEditSubmit(event)" class="space-y-4">
+        <input type="hidden" id="qeMeetingId">
+        <input type="hidden" id="qeActionId">
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Status</label>
+          <select id="qeStatus" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold dark:text-white">
+            <option value="Belum Dimulai">Belum Dimulai</option>
+            <option value="Dalam Proses">Dalam Proses</option>
+            <option value="Tertunda">Tertunda</option>
+            <option value="Selesai">Selesai</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Persentase Progres (%)</label>
+          <input type="number" id="qeProgres" min="0" max="100" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold font-mono dark:text-white">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Catatan Terakhir</label>
+          <textarea id="qeCatatan" rows="2" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-xs dark:text-white"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Kendala Lapangan</label>
+          <textarea id="qeKendala" rows="2" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-xs dark:text-white"></textarea>
+        </div>
+
+        <button type="submit" class="w-full bg-brand-600 text-white font-bold py-3 rounded-xl text-xs">Simpan Perubahan</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="hidden fixed bottom-6 right-6 z-50 bg-slate-900 text-white p-4 rounded-2xl text-xs font-bold shadow-xl border border-slate-700">
+    <span id="toastMsg">Pesan notifikasi...</span>
+  </div>
+
+  <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+  <script>
+    const MUSYAWARAH_SHEETS_URL = "https://script.google.com/macros/s/AKfycbyKP-pootHFvcd5qYA1PDStJIbTTfqchUiNR2A95wWeltv8pLoq9VLeBpr5dVB9sFi_9g/exec";
+
+    const defaultUsers = [
+      { nama: "Arif Firmansyah", username: "ariffir", password: "@Riffir313", teamid: "T-02" },
+      { nama: "Nur Rachman", username: "nur", password: "skb1#1234", teamid: "T-02" },
+      { nama: "Nursahid Yanurianto", username: "nursahid", password: "noer313", teamid: "T-01" },
+      { nama: "Eko Setyo Budi Purnomo", username: "ekoset", password: "123456", teamid: "T-03" },
+      { nama: "Fandi Akhmad", username: "fandi", password: "123456", teamid: "T-03" },
+      { nama: "David Adi Prayoga", username: "yoga", password: "123456", teamid: "T-04" },
+      { nama: "H. Priyanto", username: "priyanto", password: "123456", teamid: "T-05" },
+      { nama: "Maryono", username: "maryono", password: "123456", teamid: "T-01" }
+    ];
+
+    let musyawarahData = [];
+    let currentUser = null;
+    let selectedCategoryFilter = "Semua";
+
+    function initLucideIcons() {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      if (toast && toastMsg) {
+        toastMsg.textContent = msg;
+        toast.classList.remove('hidden');
+        setTimeout(() => toast.classList.add('hidden'), 3500);
+      }
+    }
+
+    function getActionProgress(act) {
+      if (!act) return 0;
+      const raw = act.persentaseprogres !== undefined ? act.persentaseprogres :
+                  (act.progres !== undefined ? act.progres :
+                  (act.progress !== undefined ? act.progress : 0));
+      const parsed = parseInt(raw, 10);
+      return isNaN(parsed) ? 0 : Math.min(100, Math.max(0, parsed));
+    }
+
+    function checkUserSession() {
+      const savedUser = localStorage.getItem('currentUser');
+      const loginModal = document.getElementById('loginModal');
+      const mainHeader = document.getElementById('mainHeader');
+      const appWrapper = document.getElementById('appWrapper');
+
+      if (!savedUser) {
+        loginModal.classList.remove('hidden');
+        mainHeader.classList.add('hidden');
+        appWrapper.classList.add('hidden');
+      } else {
+        currentUser = JSON.parse(savedUser);
+        loginModal.classList.add('hidden');
+        mainHeader.classList.remove('hidden');
+        appWrapper.classList.remove('hidden');
+        
+        document.getElementById('headerUserName').textContent = currentUser.nama;
+        switchTab('dashboard');
+        fetchMusyawarahData();
+      }
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const userVal = document.getElementById('loginUsername').value.trim();
+      const passVal = document.getElementById('loginPassword').value.trim();
+      const errorMsg = document.getElementById('loginErrorMsg');
+
+      const found = defaultUsers.find(u => 
+        (u.username.toLowerCase() === userVal.toLowerCase() || u.nama.toLowerCase() === userVal.toLowerCase()) &&
+        u.password === passVal
+      );
+
+      if (found) {
+        localStorage.setItem('currentUser', JSON.stringify(found));
+        errorMsg.classList.add('hidden');
+        checkUserSession();
+        showToast(`Selamat datang, ${found.nama}!`);
+      } else {
+        errorMsg.classList.remove('hidden');
+      }
+    }
+
+    function logoutUser() {
+      localStorage.removeItem('currentUser');
+      currentUser = null;
+      checkUserSession();
+    }
+
+    function toggleShowPassword() {
+      const passInput = document.getElementById('loginPassword');
+      passInput.type = passInput.type === 'password' ? 'text' : 'password';
+    }
+
+    function toggleMobileSidebar(show) {
+      const sidebar = document.getElementById('mainSidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      if (show) {
+        sidebar.classList.remove('-translate-x-full');
+        backdrop.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('-translate-x-full');
+        backdrop.classList.add('hidden');
+      }
+    }
+
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+    }
+
+    function switchTab(tabName) {
+      const sections = {
+        dashboard: 'secDashboard',
+        tasks: 'secTasks',
+        input: 'secInput',
+        list: 'secList',
+        board: 'secBoard'
+      };
+
+      const navBtns = {
+        dashboard: 'navDashBtn',
+        tasks: 'navTasksBtn',
+        input: 'navInputBtn',
+        list: 'navListBtn',
+        board: 'navBoardBtn'
+      };
+
+      Object.keys(sections).forEach(key => {
+        const sec = document.getElementById(sections[key]);
+        const btn = document.getElementById(navBtns[key]);
+        if (sec) {
+          if (key === tabName) sec.classList.remove('hidden');
+          else sec.classList.add('hidden');
+        }
+        if (btn) {
+          if (key === tabName) {
+            btn.className = "w-full flex items-center justify-between px-3.5 py-3 rounded-xl font-bold text-xs transition-all bg-brand-600 text-white";
+          } else {
+            btn.className = "w-full flex items-center justify-between px-3.5 py-3 rounded-xl font-bold text-xs transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50";
+          }
+        }
+      });
+
+      toggleMobileSidebar(false);
+
+      if (tabName === 'input') resetMusyawarahForm();
+      if (tabName === 'tasks') renderMyTasks();
+      if (tabName === 'board') renderKanbanBoard();
+      if (tabName === 'list') renderMusyawarahList();
+    }
+
+    function populateUserSelects() {
+      const selects = document.querySelectorAll('.user-select-dropdown');
+      selects.forEach(select => {
+        select.innerHTML = '';
+        defaultUsers.forEach(u => {
+          const opt = document.createElement('option');
+          opt.value = u.nama;
+          opt.textContent = `${u.nama} (${u.teamid})`;
+          select.appendChild(opt);
         });
+      });
 
-        function toggleDarkMode() {
-            const html = document.documentElement;
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                html.classList.add('light');
-            } else {
-                html.classList.remove('light');
-                html.classList.add('dark');
+      const container = document.getElementById('pesertaCheckboxContainer');
+      if (container) {
+        container.innerHTML = '';
+        defaultUsers.forEach(u => {
+          const lbl = document.createElement('label');
+          lbl.className = "flex items-center space-x-2 text-xs font-semibold cursor-pointer p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800";
+          lbl.innerHTML = `
+            <input type="checkbox" value="${u.nama}" class="peserta-checkbox rounded text-brand-600 focus:ring-brand-500">
+            <span class="truncate dark:text-slate-200">${u.nama}</span>
+          `;
+          container.appendChild(lbl);
+        });
+      }
+    }
+
+    function resetMusyawarahForm() {
+      const today = new Date().toISOString().split('T')[0];
+      const meetingId = 'MT-' + new Date().getFullYear() + String(new Date().getMonth()+1).padStart(2,'0') + '-' + Math.floor(100 + Math.random() * 900);
+      
+      document.getElementById('inputMeetingId').value = meetingId;
+      document.getElementById('inputJudul').value = '';
+      document.getElementById('inputLokasi').value = '';
+      document.getElementById('inputTanggal').value = today;
+
+      const container = document.getElementById('actionItemsContainer');
+      if (container) {
+        container.innerHTML = '';
+        addActionItemRow();
+      }
+    }
+
+    function addActionItemRow() {
+      const container = document.getElementById('actionItemsContainer');
+      if (!container) return;
+
+      const meetingId = document.getElementById('inputMeetingId').value || 'MT-NEW';
+      const index = container.children.length;
+      const letter = String.fromCharCode(65 + index);
+      const actionId = `ACT-${meetingId.replace('MT-', '')}-${letter}`;
+
+      const card = document.createElement('div');
+      card.className = "bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3 relative";
+
+      card.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-mono font-bold text-brand-600 dark:text-brand-400">${actionId}</span>
+          ${index > 0 ? `<button type="button" onclick="this.parentElement.parentElement.remove()" class="text-rose-500 text-xs font-bold">Hapus</button>` : ''}
+        </div>
+
+        <input type="hidden" class="act-id" value="${actionId}">
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-500 mb-1">Pokok Bahasan <span class="text-rose-500">*</span></label>
+          <input type="text" class="act-pokok w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white" required>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-500 mb-1">Detail Bahasan</label>
+            <textarea class="act-detail w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white" rows="2"></textarea>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-500 mb-1">Hasil Keputusan</label>
+            <textarea class="act-hasil w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white" rows="2"></textarea>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-500 mb-1">PIC <span class="text-rose-500">*</span></label>
+            <select class="act-pic user-select-dropdown w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold dark:text-white" onchange="autoFillTeamId(this)"></select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-500 mb-1">Deadline</label>
+            <input type="date" class="act-deadline w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-semibold dark:text-white">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-500 mb-1">Status</label>
+            <select class="act-status w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold dark:text-white">
+              <option value="Belum Dimulai">Belum Dimulai</option>
+              <option value="Dalam Proses">Dalam Proses</option>
+              <option value="Tertunda">Tertunda</option>
+              <option value="Selesai">Selesai</option>
+            </select>
+          </div>
+        </div>
+      `;
+
+      container.appendChild(card);
+      populateUserSelects();
+    }
+
+    function autoFillTeamId(selectEl) {
+      const selectedNama = selectEl.value;
+      const found = defaultUsers.find(u => u.nama === selectedNama);
+      if (found) {
+        selectEl.setAttribute('data-teamid', found.teamid);
+      }
+    }
+
+    async function fetchMusyawarahData() {
+      showToast("Mengambil data musyawarah...");
+      try {
+        const res = await fetch(`${MUSYAWARAH_SHEETS_URL}?action=getData`, { redirect: 'follow' });
+        if (res.ok) {
+          const json = await res.json();
+          if (json && json.data) {
+            musyawarahData = json.data.map(m => ({
+              ...m,
+              jenismusyawarah: m.jenismusyawarah || m.jenis_musyawarah || 'Musyawarah Pengurus'
+            }));
+            updateStats();
+            renderMyTasks();
+            renderMusyawarahList();
+            renderKanbanBoard();
+            showToast("Data musyawarah berhasil dimuat!");
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn("Fetch Error via Web App API:", err);
+      }
+
+      musyawarahData = [
+        {
+          meetingid: "MT-202611-001",
+          jenismusyawarah: "Musyawarah Pengurus",
+          judul: "Persiapan Pelaksanaan Qurban & Kebersihan TPA",
+          tanggal: "2026-11-05",
+          lokasi: "Masjid Baitul Haq Lantai 1",
+          ketua: "Nursahid Yanurianto",
+          notulis: "Nur Rachman",
+          peserta: ["Arif Firmansyah", "Nur Rachman", "Eko Setyo Budi Purnomo", "Fandi Akhmad"],
+          actionItems: [
+            {
+              actionid: "ACT-202611-001-A",
+              pokokbahasan: "Pengadaan Alat Kebersihan Halaman TPA",
+              detailbahasan: "Membeli perlengkapan kebersihan dan tempat sampah outdoor baru.",
+              hasilkeputusan: "Disetujui anggaran sebesar Rp 500.000 dari kas pengurus.",
+              pic: "Arif Firmansyah",
+              teamid: "T-02",
+              deadline: "2026-11-12",
+              status: "Dalam Proses",
+              persentaseprogres: 50,
+              catatanterakhir: "Sudah koordinasi vendor toko alat bangunan",
+              kendala: "Pilihan ukuran tempat sampah outdoor 100L masih kosong"
+            },
+            {
+              actionid: "ACT-202611-001-B",
+              pokokbahasan: "Penyusunan Kepanitiaan hewan Qurban",
+              detailbahasan: "Mendata jumlah shohibul qurban dan pembagian tim jagal.",
+              hasilkeputusan: "Fandi Akhmad ditunjuk sebagai penanggung jawab panitia lapangan.",
+              pic: "Fandi Akhmad",
+              teamid: "T-03",
+              deadline: "2026-11-15",
+              status: "Belum Dimulai",
+              persentaseprogres: 0,
+              catatanterakhir: "Menunggu data final dari bendahara",
+              kendala: ""
             }
+          ]
+        }
+      ];
+
+      updateStats();
+      renderMyTasks();
+      renderMusyawarahList();
+      renderKanbanBoard();
+    }
+
+    async function handleMusyawarahSubmit(e) {
+      e.preventDefault();
+      const meetingid = document.getElementById('inputMeetingId').value;
+      const jenis = document.getElementById('inputJenis').value;
+      const judul = document.getElementById('inputJudul').value;
+      const lokasi = document.getElementById('inputLokasi').value;
+      const tanggal = document.getElementById('inputTanggal').value;
+      const ketua = document.getElementById('inputKetua').value;
+      const notulis = document.getElementById('inputNotulis').value;
+
+      const checkedPeserta = Array.from(document.querySelectorAll('.peserta-checkbox:checked')).map(cb => cb.value);
+
+      const actionRows = document.querySelectorAll('#actionItemsContainer > div');
+      const actionItems = Array.from(actionRows).map(row => {
+        const picName = row.querySelector('.act-pic').value;
+        const foundUser = defaultUsers.find(u => u.nama === picName);
+        return {
+          actionid: row.querySelector('.act-id').value,
+          pokokbahasan: row.querySelector('.act-pokok').value,
+          detailbahasan: row.querySelector('.act-detail').value,
+          hasilkeputusan: row.querySelector('.act-hasil').value,
+          pic: picName,
+          teamid: foundUser ? foundUser.teamid : 'T-01',
+          deadline: row.querySelector('.act-deadline').value,
+          status: row.querySelector('.act-status').value,
+          persentaseprogres: row.querySelector('.act-status').value === 'Selesai' ? 100 : 0,
+          catatanterakhir: '',
+          kendala: ''
+        };
+      });
+
+      const payload = {
+        meetingid, jenismusyawarah: jenis, judul, lokasi, tanggal, ketua, notulis, peserta: checkedPeserta, actionItems
+      };
+
+      showToast("Menyimpan notulensi...");
+
+      try {
+        await fetch(MUSYAWARAH_SHEETS_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'saveMusyawarah', data: payload })
+        });
+      } catch (err) {
+        console.warn("Save Error:", err);
+      }
+
+      musyawarahData.unshift(payload);
+      updateStats();
+      switchTab('list');
+      showToast("Notulensi berhasil disimpan!");
+    }
+
+    function updateStats() {
+      let totalActions = 0;
+      let inProgress = 0;
+      let completed = 0;
+
+      musyawarahData.forEach(m => {
+        if (Array.isArray(m.actionItems)) {
+          totalActions += m.actionItems.length;
+          m.actionItems.forEach(a => {
+            if (a.status === 'Dalam Proses') inProgress++;
+            if (a.status === 'Selesai') completed++;
+          });
+        }
+      });
+
+      document.getElementById('dashTotalMusyawarah').textContent = musyawarahData.length;
+      document.getElementById('dashTotalActions').textContent = totalActions;
+      document.getElementById('dashInProgresActions').textContent = inProgress;
+      document.getElementById('dashCompletedActions').textContent = completed;
+    }
+
+    function filterNotulensiCategory(catName) {
+      selectedCategoryFilter = catName;
+      const btns = document.querySelectorAll('.filter-cat-btn');
+      btns.forEach(btn => {
+        if (btn.textContent.includes(catName) || (catName === 'Semua' && btn.textContent === 'Semua')) {
+          btn.className = "filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-600 text-white shadow-sm";
+        } else {
+          btn.className = "filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300";
+        }
+      });
+      renderMusyawarahList();
+    }
+
+    function renderMusyawarahList() {
+      const container = document.getElementById('musyawarahListContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      let filtered = musyawarahData;
+      if (selectedCategoryFilter !== "Semua") {
+        filtered = musyawarahData.filter(m => (m.jenismusyawarah || '').includes(selectedCategoryFilter));
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">Belum ada notulensi musyawarah untuk kategori ini.</div>`;
+        return;
+      }
+
+      filtered.forEach((m, idx) => {
+        const actionCount = Array.isArray(m.actionItems) ? m.actionItems.length : 0;
+        const pesertaList = Array.isArray(m.peserta) ? m.peserta : [];
+
+        const card = document.createElement('div');
+        card.className = "bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4";
+        
+        let actionItemsHTML = '';
+        if (actionCount > 0) {
+          actionItemsHTML = m.actionItems.map(a => {
+            const prog = getActionProgress(a);
+            return `
+              <div class="bg-slate-50 dark:bg-slate-900/60 p-3.5 rounded-xl border border-slate-200/80 dark:border-slate-700/80 space-y-2">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-2">
+                    <span class="font-mono text-[10px] font-bold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950 px-2 py-0.5 rounded">${a.actionid}</span>
+                    <span class="font-bold text-slate-900 dark:text-white text-xs">${a.pokokbahasan}</span>
+                  </div>
+                  <button onclick="openQuickEditModal('${m.meetingid}', '${a.actionid}')" class="px-2 py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-[10px] font-bold hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center space-x-1">
+                    <i data-lucide="edit-3" class="w-3 h-3 text-slate-500"></i>
+                    <span>Edit Progress</span>
+                  </button>
+                </div>
+
+                ${a.detailbahasan ? `<p class="text-[11px] text-slate-600 dark:text-slate-300"><strong>Detail:</strong> ${a.detailbahasan}</p>` : ''}
+                ${a.hasilkeputusan ? `<p class="text-[11px] text-emerald-700 dark:text-emerald-400"><strong>Keputusan:</strong> ${a.hasilkeputusan}</p>` : ''}
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px] pt-1 text-slate-500 border-t border-slate-200/50 dark:border-slate-800">
+                  <div><strong>PIC:</strong> ${a.pic} (${a.teamid || '-'})</div>
+                  <div><strong>Status:</strong> <span class="font-bold text-amber-600">${a.status}</span> (${prog}%)</div>
+                  <div><strong>Deadline:</strong> ${a.deadline || '-'}</div>
+                  <div><strong>Kendala:</strong> ${a.kendala || 'Tidak ada'}</div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          actionItemsHTML = `<div class="text-[11px] text-slate-400 italic">Tidak ada action item tercatat.</div>`;
         }
 
-        function showToast(msg) {
-            const toast = document.getElementById('toastNotification');
-            const toastMsg = document.getElementById('toastMsg');
-            toastMsg.textContent = msg;
-            toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 3500);
-        }
+        const pesertaBadges = pesertaList.map(p => 
+          `<span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300">${p}</span>`
+        ).join(' ');
 
-        function generateNewMeetingId() {
-            const now = new Date();
-            const yyyy = now.getFullYear();
-            const mm = String(now.getMonth() + 1).padStart(2, '0');
-            const randomNum = String(musyawarahData.length + 1).padStart(3, '0');
-            currentMeetingId = `MT-${yyyy}${mm}-${randomNum}`;
-            document.getElementById('displayMeetingId').textContent = currentMeetingId;
-        }
+        card.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-700 pb-3">
+            <div>
+              <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-brand-100 text-brand-800 dark:bg-brand-900 dark:text-brand-300">${m.jenismusyawarah || 'Musyawarah'}</span>
+              <h3 class="font-black text-base text-slate-900 dark:text-white mt-1">${m.judul}</h3>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-mono font-bold text-slate-400 bg-slate-100 dark:bg-slate-900 px-2.5 py-1 rounded-xl">${m.tanggal} | ${m.meetingid}</span>
+              <button onclick="openDetailModal('${m.meetingid}')" class="p-1.5 bg-brand-50 hover:bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-300 rounded-xl" title="Lihat Pratinjau Lengkap">
+                <i data-lucide="external-link" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
 
-        // FETCH USERS FROM SPREADSHEET
-        async function fetchUsersFromSheet() {
-            const statusText = document.getElementById('sheetStatusText');
-            const badge = document.getElementById('userCountBadge');
-            
-            try {
-                const res = await fetch(`${USER_SHEETS_URL}?action=getUsers&t=${Date.now()}`, { redirect: 'follow' });
-                if (res.ok) {
-                    const text = await res.text();
-                    if (text.trim().startsWith('{') || text.trim().startsWith('[')) {
-                        const parsed = JSON.parse(text);
-                        let rawList = Array.isArray(parsed) ? parsed : (parsed.users || parsed.data || []);
-                        
-                        if (rawList.length > 0) {
-                            usersData = rawList.map(u => ({
-                                nama: String(u.nama || u.Nama || u.user || u.User || '').trim(),
-                                teamid: String(u.teamid || u.TEAMID || u.TeamID || 'T-01').trim()
-                            })).filter(u => u.nama !== '');
-                            
-                            statusText.textContent = "Data pengurus berhasil tersambung secara real-time dari Spreadsheet.";
-                            badge.textContent = `${usersData.length} Pengurus`;
-                            populateUserDropdowns();
-                            return;
-                        }
-                    }
-                }
-            } catch (err) {
-                console.warn("Menggunakan fallback pengurus:", err);
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs text-slate-600 dark:text-slate-300">
+            <div><strong>Lokasi:</strong> ${m.lokasi || '-'}</div>
+            <div><strong>Ketua:</strong> ${m.ketua}</div>
+            <div><strong>Notulis:</strong> ${m.notulis}</div>
+          </div>
+
+          <div>
+            <div class="text-[11px] font-bold text-slate-400 uppercase mb-1">Peserta Hadir (${pesertaList.length} Pengurus):</div>
+            <div class="flex flex-wrap gap-1">${pesertaBadges || '<span class="text-slate-400">-</span>'}</div>
+          </div>
+
+          <!-- Accordion Collapsible Action Items -->
+          <div class="pt-2">
+            <button onclick="toggleCardAccordion('acc-${idx}')" class="w-full flex items-center justify-between p-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl font-bold text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+              <span class="flex items-center space-x-2">
+                <i data-lucide="list-checks" class="w-4 h-4 text-brand-600"></i>
+                <span>Detail Action Items & Pokok Bahasan (${actionCount})</span>
+              </span>
+              <i id="icon-acc-${idx}" data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200"></i>
+            </button>
+
+            <div id="acc-${idx}" class="hidden mt-3 space-y-3">
+              ${actionItemsHTML}
+            </div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      initLucideIcons();
+    }
+
+    function toggleCardAccordion(accId) {
+      const el = document.getElementById(accId);
+      const icon = document.getElementById('icon-' + accId);
+      if (el) {
+        if (el.classList.contains('hidden')) {
+          el.classList.remove('hidden');
+          if (icon) icon.style.transform = 'rotate(180deg)';
+        } else {
+          el.classList.add('hidden');
+          if (icon) icon.style.transform = 'rotate(0deg)';
+        }
+      }
+    }
+
+    function openDetailModal(meetingId) {
+      const found = musyawarahData.find(m => m.meetingid === meetingId);
+      if (!found) return;
+
+      document.getElementById('mdCategory').textContent = found.jenismusyawarah || 'Musyawarah';
+      document.getElementById('mdTitle').textContent = found.judul;
+
+      const body = document.getElementById('mdBody');
+      const pesertaList = Array.isArray(found.peserta) ? found.peserta.join(', ') : '-';
+      
+      let actionsHTML = '';
+      if (Array.isArray(found.actionItems) && found.actionItems.length > 0) {
+        actionsHTML = found.actionItems.map(a => `
+          <div class="p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2">
+            <div class="flex justify-between font-bold text-brand-600">
+              <span>${a.actionid} - ${a.pokokbahasan}</span>
+              <span>${a.status} (${getActionProgress(a)}%)</span>
+            </div>
+            ${a.detailbahasan ? `<p><strong>Detail:</strong> ${a.detailbahasan}</p>` : ''}
+            ${a.hasilkeputusan ? `<p class="text-emerald-700 dark:text-emerald-400"><strong>Keputusan:</strong> ${a.hasilkeputusan}</p>` : ''}
+            <div class="grid grid-cols-2 gap-2 text-slate-500 text-[11px] pt-2 border-t border-slate-200/50">
+              <div>PIC: ${a.pic} (${a.teamid || '-'})</div>
+              <div>Deadline: ${a.deadline || '-'}</div>
+              <div>Catatan: ${a.catatanterakhir || '-'}</div>
+              <div>Kendala: ${a.kendala || '-'}</div>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        actionsHTML = `<p class="text-slate-400 italic">Tidak ada action items.</p>`;
+      }
+
+      body.innerHTML = `
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl">
+          <div><span class="text-slate-400 block text-[10px]">MEETING ID</span> <strong>${found.meetingid}</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">TANGGAL</span> <strong>${found.tanggal}</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">LOKASI</span> <strong>${found.lokasi || '-'}</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">KETUA / NOTULIS</span> <strong>${found.ketua} / ${found.notulis}</strong></div>
+        </div>
+
+        <div>
+          <span class="text-slate-400 block text-[10px] mb-1">PESERTA HADIR</span>
+          <p class="font-semibold text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-700">${pesertaList}</p>
+        </div>
+
+        <div class="space-y-3">
+          <h4 class="font-black uppercase text-slate-900 dark:text-white">Rincian Action Items & Keputusan</h4>
+          ${actionsHTML}
+        </div>
+      `;
+
+      document.getElementById('detailNotulensiModal').classList.remove('hidden');
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detailNotulensiModal').classList.add('hidden');
+    }
+
+    function renderMyTasks() {
+      const container = document.getElementById('myTasksContainer');
+      const badge = document.getElementById('myTasksCountBadge');
+      if (!container || !currentUser) return;
+
+      container.innerHTML = '';
+      let myTasks = [];
+
+      musyawarahData.forEach(m => {
+        if (Array.isArray(m.actionItems)) {
+          m.actionItems.forEach(a => {
+            if (a.pic && (a.pic.toLowerCase() === currentUser.nama.toLowerCase() || a.pic.toLowerCase().includes(currentUser.username.toLowerCase()))) {
+              myTasks.push({ ...a, meetingid: m.meetingid, judul: m.judul });
             }
-
-            // Fallback jika fetch gagal
-            usersData = fallbackUsers;
-            statusText.textContent = "Menggunakan data pengurus terdaftar (Offline Mode).";
-            badge.textContent = `${usersData.length} Pengurus`;
-            populateUserDropdowns();
+          });
         }
+      });
 
-        function populateUserDropdowns() {
-            const ketuaSelect = document.getElementById('selectKetua');
-            const notulisSelect = document.getElementById('selectNotulis');
-            const pesertaContainer = document.getElementById('pesertaCheckboxContainer');
+      if (badge) badge.textContent = myTasks.length;
 
-            ketuaSelect.innerHTML = '<option value="" disabled selected>-- Pilih Ketua --</option>';
-            notulisSelect.innerHTML = '<option value="" disabled selected>-- Pilih Notulis --</option>';
-            pesertaContainer.innerHTML = '';
+      if (myTasks.length === 0) {
+        container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">Belum ada tugas yang ditugaskan kepada Anda.</div>`;
+        return;
+      }
 
-            usersData.forEach((u, i) => {
-                // Populate Selects
-                const opt1 = document.createElement('option');
-                opt1.value = u.nama;
-                opt1.textContent = `${u.nama} (${u.teamid})`;
-                ketuaSelect.appendChild(opt1);
+      myTasks.forEach(t => {
+        const prog = getActionProgress(t);
+        const card = document.createElement('div');
+        card.className = "bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3";
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-brand-600 dark:text-brand-400">${t.actionid}</span>
+            <button onclick="openQuickEditModal('${t.meetingid}', '${t.actionid}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:text-white rounded-lg text-xs font-bold flex items-center space-x-1">
+              <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+              <span>Update</span>
+            </button>
+          </div>
+          <div class="font-bold text-sm text-slate-900 dark:text-white">${t.pokokbahasan}</div>
+          <div class="text-xs text-slate-500">Musyawarah: ${t.judul}</div>
+          <div class="flex items-center justify-between text-xs pt-2 border-t border-slate-100 dark:border-slate-700">
+            <span class="font-bold text-amber-600">${t.status} (${prog}%)</span>
+            <span class="font-mono text-slate-400">Deadline: ${t.deadline || '-'}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
 
-                const opt2 = document.createElement('option');
-                opt2.value = u.nama;
-                opt2.textContent = `${u.nama} (${u.teamid})`;
-                notulisSelect.appendChild(opt2);
+      initLucideIcons();
+    }
 
-                // Populate Checkboxes for Peserta
-                const checkLabel = document.createElement('label');
-                checkLabel.className = "flex items-center space-x-2 text-xs bg-white dark:bg-slate-800 p-2 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all";
-                checkLabel.innerHTML = `
-                    <input type="checkbox" name="pesertaHadir" value="${u.nama}" class="rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
-                    <span class="font-medium text-slate-800 dark:text-slate-200">${u.nama}</span>
-                `;
-                pesertaContainer.appendChild(checkLabel);
-            });
+    function renderKanbanBoard() {
+      const colBelum = document.getElementById('colBelum');
+      const colProgres = document.getElementById('colProgres');
+      const colTertunda = document.getElementById('colTertunda');
+      const colSelesai = document.getElementById('colSelesai');
 
-            // Update existing Action Item PIC dropdowns
-            document.querySelectorAll('.select-pic-dynamic').forEach(sel => {
-                const currentVal = sel.value;
-                sel.innerHTML = '<option value="" disabled selected>-- Pilih PIC --</option>';
-                usersData.forEach(u => {
-                    const opt = document.createElement('option');
-                    opt.value = u.nama;
-                    opt.textContent = `${u.nama} (${u.teamid})`;
-                    if (currentVal === u.nama) opt.selected = true;
-                    sel.appendChild(opt);
-                });
-            });
-        }
+      if (!colBelum || !colProgres || !colTertunda || !colSelesai) return;
 
-        // ACTION ITEM CARD MANAGEMENT
-        function addActionItemCard(data = null) {
-            actionItemCounter++;
-            const charCode = String.fromCharCode(64 + actionItemCounter); // A, B, C...
-            const actionId = `${currentMeetingId}-${charCode}`;
-            
-            const container = document.getElementById('actionItemsDynamicContainer');
+      colBelum.innerHTML = ''; colProgres.innerHTML = ''; colTertunda.innerHTML = ''; colSelesai.innerHTML = '';
+
+      musyawarahData.forEach(m => {
+        if (Array.isArray(m.actionItems)) {
+          m.actionItems.forEach(a => {
+            const prog = getActionProgress(a);
             const card = document.createElement('div');
-            card.className = "action-item-card bg-slate-50 dark:bg-slate-900/60 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 space-y-3 relative";
-            card.setAttribute('data-action-index', actionItemCounter);
-
+            card.className = "bg-white dark:bg-slate-800 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2 text-xs";
             card.innerHTML = `
-                <div class="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-700">
-                    <span class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950 px-2 py-0.5 rounded-md">
-                        Action ID: <span class="action-id-text">${actionId}</span>
-                    </span>
-                    <button type="button" onclick="removeActionItemCard(this)" class="text-slate-400 hover:text-rose-500 text-xs font-bold flex items-center gap-1 transition-all">
-                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Hapus
-                    </button>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Pokok Bahasan <span class="text-rose-500">*</span></label>
-                        <input type="text" class="input-pokokbahasan w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none" required placeholder="Pokok bahasan musyawarah..." value="${data ? data.pokokbahasan : ''}">
-                    </div>
-
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Detail Bahasan</label>
-                        <input type="text" class="input-detailbahasan w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Rincian / latar belakang bahasan..." value="${data ? data.detailbahasan : ''}">
-                    </div>
-
-                    <div class="md:col-span-2">
-                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Hasil Keputusan <span class="text-rose-500">*</span></label>
-                        <textarea rows="2" class="input-hasilkeputusan w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none" required placeholder="Keputusan akhir yang disepakati...">${data ? data.hasilkeputusan : ''}</textarea>
-                    </div>
-
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">PIC (Penanggung Jawab) <span class="text-rose-500">*</span></label>
-                        <select onchange="updateTeamIdFromPic(this)" class="select-pic-dynamic w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none" required>
-                            <option value="" disabled selected>-- Pilih PIC --</option>
-                        </select>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Team ID</label>
-                            <input type="text" readonly class="input-teamid w-full bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2 text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400" value="${data ? data.teamid : 'T-01'}">
-                        </div>
-
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Deadline <span class="text-rose-500">*</span></label>
-                            <input type="date" class="input-deadline w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none" required value="${data ? data.deadline : ''}">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Status Progres</label>
-                        <select class="select-status w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                            <option value="Belum Dimulai" ${data && data.status === 'Belum Dimulai' ? 'selected' : ''}>Belum Dimulai</option>
-                            <option value="Dalam Proses" ${data && data.status === 'Dalam Proses' ? 'selected' : ''}>Dalam Proses</option>
-                            <option value="Tertunda" ${data && data.status === 'Tertunda' ? 'selected' : ''}>Tertunda</option>
-                            <option value="Selesai" ${data && data.status === 'Selesai' ? 'selected' : ''}>Selesai</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-center mb-1">
-                            <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300">Progres (%)</label>
-                            <span class="text-xs font-mono font-bold text-emerald-600 display-progress-val">${data ? data.persentaseprogres : 0}%</span>
-                        </div>
-                        <input type="range" min="0" max="100" value="${data ? data.persentaseprogres : 0}" oninput="this.previousElementSibling.querySelector('.display-progress-val').textContent = this.value + '%'" class="input-progres w-full accent-emerald-600">
-                    </div>
-
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Catatan Terakhir</label>
-                        <input type="text" class="input-catatan w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Catatan perkembangan..." value="${data ? data.catatanterakhir : ''}">
-                    </div>
-
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Kendala Lapangan</label>
-                        <input type="text" class="input-kendala w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Kendala eksekusi..." value="${data ? data.kendala : ''}">
-                    </div>
-                </div>
+              <div class="flex items-center justify-between">
+                <span class="font-mono font-bold text-[10px] text-brand-600 dark:text-brand-400">${a.actionid}</span>
+                <button onclick="openQuickEditModal('${m.meetingid}', '${a.actionid}')" class="text-slate-400 hover:text-slate-600">
+                  <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+              <div class="font-bold text-slate-900 dark:text-white">${a.pokokbahasan}</div>
+              <div class="text-slate-500">PIC: ${a.pic}</div>
+              <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-700">
+                <span>Deadline: ${a.deadline || '-'}</span>
+                <span class="font-bold text-brand-600">${prog}%</span>
+              </div>
             `;
 
-            container.appendChild(card);
-            
-            // Populate PIC Dropdown for this card
-            const sel = card.querySelector('.select-pic-dynamic');
-            usersData.forEach(u => {
-                const opt = document.createElement('option');
-                opt.value = u.nama;
-                opt.textContent = `${u.nama} (${u.teamid})`;
-                if (data && data.pic === u.nama) opt.selected = true;
-                sel.appendChild(opt);
-            });
-
-            if (window.lucide) lucide.createIcons();
+            if (a.status === 'Belum Dimulai') colBelum.appendChild(card);
+            else if (a.status === 'Dalam Proses') colProgres.appendChild(card);
+            else if (a.status === 'Tertunda') colTertunda.appendChild(card);
+            else if (a.status === 'Selesai') colSelesai.appendChild(card);
+          });
         }
+      });
 
-        function removeActionItemCard(btn) {
-            const container = document.getElementById('actionItemsDynamicContainer');
-            if (container.children.length <= 1) {
-                showToast("Minimal harus ada 1 Action Item dalam musyawarah!");
-                return;
+      initLucideIcons();
+    }
+
+    function openQuickEditModal(meetingId, actionId) {
+      let foundAct = null;
+      musyawarahData.forEach(m => {
+        if (m.meetingid === meetingId && Array.isArray(m.actionItems)) {
+          m.actionItems.forEach(a => {
+            if (a.actionid === actionId) foundAct = a;
+          });
+        }
+      });
+
+      if (!foundAct) return;
+
+      document.getElementById('qeMeetingId').value = meetingId;
+      document.getElementById('qeActionId').value = actionId;
+      document.getElementById('qeStatus').value = foundAct.status || 'Belum Dimulai';
+      document.getElementById('qeProgres').value = getActionProgress(foundAct);
+      document.getElementById('qeCatatan').value = foundAct.catatanterakhir || '';
+      document.getElementById('qeKendala').value = foundAct.kendala || '';
+
+      document.getElementById('quickEditModal').classList.remove('hidden');
+    }
+
+    function closeQuickEditModal() {
+      document.getElementById('quickEditModal').classList.add('hidden');
+    }
+
+    async function handleQuickEditSubmit(e) {
+      e.preventDefault();
+      const meetingId = document.getElementById('qeMeetingId').value;
+      const actionId = document.getElementById('qeActionId').value;
+      const status = document.getElementById('qeStatus').value;
+      const progres = parseInt(document.getElementById('qeProgres').value, 10) || 0;
+      const catatan = document.getElementById('qeCatatan').value;
+      const kendala = document.getElementById('qeKendala').value;
+
+      musyawarahData.forEach(m => {
+        if (m.meetingid === meetingId && Array.isArray(m.actionItems)) {
+          m.actionItems.forEach(a => {
+            if (a.actionid === actionId) {
+              a.status = status;
+              a.persentaseprogres = progres;
+              a.catatanterakhir = catatan;
+              a.kendala = kendala;
             }
-            btn.closest('.action-item-card').remove();
-            reindexActionIds();
+          });
         }
+      });
 
-        function reindexActionIds() {
-            const cards = document.querySelectorAll('.action-item-card');
-            cards.forEach((card, idx) => {
-                const charCode = String.fromCharCode(65 + idx);
-                card.querySelector('.action-id-text').textContent = `${currentMeetingId}-${charCode}`;
-            });
-        }
+      closeQuickEditModal();
+      updateStats();
+      renderMyTasks();
+      renderMusyawarahList();
+      renderKanbanBoard();
+      showToast("Progress berhasil diperbarui!");
+    }
 
-        function updateTeamIdFromPic(selectEl) {
-            const selectedPic = selectEl.value;
-            const foundUser = usersData.find(u => u.nama === selectedPic);
-            const teamIdInput = selectEl.closest('.action-item-card').querySelector('.input-teamid');
-            if (foundUser && teamIdInput) {
-                teamIdInput.value = foundUser.teamid;
-            }
-        }
-
-        // SUBMIT FORM DATA
-        async function handleFormSubmit(e) {
-            e.preventDefault();
-
-            const checkedPeserta = Array.from(document.querySelectorAll('input[name="pesertaHadir"]:checked')).map(cb => cb.value);
-            if (checkedPeserta.length === 0) {
-                showToast("Pilih minimal 1 peserta yang hadir!");
-                return;
-            }
-
-            const meetingid = editingMeetingId || currentMeetingId;
-            const judul = document.getElementById('inputJudul').value.trim();
-            const tanggal = document.getElementById('inputTanggal').value;
-            const lokasi = document.getElementById('inputLokasi').value.trim();
-            const ketua = document.getElementById('selectKetua').value;
-            const notulis = document.getElementById('selectNotulis').value;
-
-            // Collect Action Items
-            const actionCards = document.querySelectorAll('.action-item-card');
-            const actionItems = [];
-
-            actionCards.forEach((card, idx) => {
-                const charCode = String.fromCharCode(65 + idx);
-                actionItems.push({
-                    actionid: `${meetingid}-${charCode}`,
-                    pokokbahasan: card.querySelector('.input-pokokbahasan').value.trim(),
-                    detailbahasan: card.querySelector('.input-detailbahasan').value.trim(),
-                    hasilkeputusan: card.querySelector('.input-hasilkeputusan').value.trim(),
-                    pic: card.querySelector('.select-pic-dynamic').value,
-                    teamid: card.querySelector('.input-teamid').value,
-                    deadline: card.querySelector('.input-deadline').value,
-                    status: card.querySelector('.select-status').value,
-                    persentaseprogres: parseInt(card.querySelector('.input-progres').value) || 0,
-                    catatanterakhir: card.querySelector('.input-catatan').value.trim(),
-                    kendala: card.querySelector('.input-kendala').value.trim()
-                });
-            });
-
-            const payload = {
-                meetingid,
-                judul,
-                tanggal,
-                lokasi,
-                ketua,
-                notulis,
-                peserta: checkedPeserta,
-                actionItems
-            };
-
-            const submitBtn = document.getElementById('submitFormBtn');
-            const submitBtnText = document.getElementById('submitFormBtnText');
-            submitBtn.disabled = true;
-            submitBtnText.textContent = "Menyimpan ke Spreadsheet...";
-
-            try {
-                if (MUSYAWARAH_SHEETS_URL) {
-                    await fetch(MUSYAWARAH_SHEETS_URL, {
-                        method: 'POST',
-                        mode: 'cors',
-                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                        body: JSON.stringify({ action: "saveMusyawarah", data: payload })
-                    });
-                }
-            } catch (err) {
-                console.warn("Spreadsheet POST error, saving locally:", err);
-            }
-
-            // Local State Save / Update
-            const existingIdx = musyawarahData.findIndex(m => m.meetingid === meetingid);
-            if (existingIdx !== -1) {
-                musyawarahData[existingIdx] = payload;
-            } else {
-                musyawarahData.unshift(payload);
-            }
-
-            showToast("Notulensi musyawarah berhasil disimpan!");
-            resetMusyawarahForm();
-            switchTab('list');
-            
-            submitBtn.disabled = false;
-            submitBtnText.textContent = "Simpan Notulensi Musyawarah";
-        }
-
-        function resetMusyawarahForm() {
-            document.getElementById('musyawarahForm').reset();
-            document.getElementById('pesertaCheckboxContainer').querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-            document.getElementById('actionItemsDynamicContainer').innerHTML = '';
-            
-            editingMeetingId = null;
-            actionItemCounter = 0;
-            document.getElementById('formTitleText').textContent = "Input Hasil Musyawarah Baru";
-            generateNewMeetingId();
-            addActionItemCard();
-        }
-
-        // FETCH & RENDER MUSYAWARAH DATA
-        async function fetchMusyawarahData() {
-            try {
-                const res = await fetch(`${MUSYAWARAH_SHEETS_URL}?action=getData&t=${Date.now()}`, { redirect: 'follow' });
-                if (res.ok) {
-                    const text = await res.text();
-                    if (text.trim().startsWith('{')) {
-                        const parsed = JSON.parse(text);
-                        if (parsed.status === 'success' && Array.isArray(parsed.data)) {
-                            musyawarahData = parsed.data;
-                            updateStats();
-                            renderMusyawarahList();
-                            renderKanbanBoard();
-                            return;
-                        }
-                    }
-                }
-            } catch (err) {
-                console.warn("Gagal memuat data musyawarah dari Apps Script:", err);
-            }
-
-            updateStats();
-            renderMusyawarahList();
-            renderKanbanBoard();
-        }
-
-        function updateStats() {
-            document.getElementById('totalMusyawarahCount').textContent = musyawarahData.length;
-            let totalActions = 0;
-            musyawarahData.forEach(m => totalActions += (m.actionItems ? m.actionItems.length : 0));
-            document.getElementById('totalActionItemCount').textContent = totalActions;
-        }
-
-        function renderMusyawarahList() {
-            const container = document.getElementById('musyawarahCardsList');
-            const searchVal = (document.getElementById('searchMusyawarahInput')?.value || '').toLowerCase();
-            container.innerHTML = '';
-
-            const filtered = musyawarahData.filter(m => 
-                m.judul.toLowerCase().includes(searchVal) || 
-                m.meetingid.toLowerCase().includes(searchVal) ||
-                m.ketua.toLowerCase().includes(searchVal)
-            );
-
-            if (filtered.length === 0) {
-                container.innerHTML = `
-                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 text-center text-slate-400 space-y-2 border border-slate-200 dark:border-slate-700">
-                        <i data-lucide="inbox" class="w-8 h-8 mx-auto stroke-1"></i>
-                        <p class="text-xs font-medium">Belum ada dokumen musyawarah tercatat.</p>
-                    </div>
-                `;
-                if (window.lucide) lucide.createIcons();
-                return;
-            }
-
-            filtered.forEach(m => {
-                const card = document.createElement('div');
-                card.className = "bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-700 space-y-4";
-                
-                const pesertaBadges = Array.isArray(m.peserta) ? m.peserta.map(p => 
-                    `<span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-md text-[10px] font-medium">${p}</span>`
-                ).join(' ') : '';
-
-                let actionsHtml = '';
-                if (Array.isArray(m.actionItems)) {
-                    actionsHtml = m.actionItems.map(act => `
-                        <div class="bg-slate-50 dark:bg-slate-900/60 p-3 rounded-xl border border-slate-100 dark:border-slate-700/60 space-y-1.5 text-xs">
-                            <div class="flex items-center justify-between">
-                                <span class="font-mono font-bold text-emerald-600 dark:text-emerald-400 text-[11px]">${act.actionid}</span>
-                                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold ${getStatusBadgeClass(act.status)}">${act.status}</span>
-                            </div>
-                            <p class="font-bold text-slate-800 dark:text-slate-100">${act.pokokbahasan}</p>
-                            <p class="text-slate-600 dark:text-slate-300 text-[11px]">${act.hasilkeputusan}</p>
-                            <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-200/50 dark:border-slate-800">
-                                <span>PIC: <strong class="text-slate-700 dark:text-slate-200">${act.pic} (${act.teamid})</strong></span>
-                                <span>Deadline: <strong class="text-slate-700 dark:text-slate-200">${act.deadline}</strong></span>
-                            </div>
-                        </div>
-                    `).join('');
-                }
-
-                card.innerHTML = `
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-700">
-                        <div>
-                            <span class="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950 px-2 py-0.5 rounded-md">${m.meetingid}</span>
-                            <h3 class="text-sm font-bold text-slate-900 dark:text-white mt-1">${m.judul}</h3>
-                        </div>
-                        <div class="flex items-center space-x-2 shrink-0">
-                            <button onclick="editMusyawarah('${m.meetingid}')" class="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1">
-                                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Edit
-                            </button>
-                            <button onclick="deleteMusyawarah('${m.meetingid}')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1">
-                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Hapus
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                        <div class="bg-slate-50 dark:bg-slate-700/40 p-2 rounded-xl">
-                            <span class="block text-[10px] text-slate-400">Tanggal</span>
-                            <span class="font-semibold">${m.tanggal}</span>
-                        </div>
-                        <div class="bg-slate-50 dark:bg-slate-700/40 p-2 rounded-xl">
-                            <span class="block text-[10px] text-slate-400">Lokasi</span>
-                            <span class="font-semibold truncate block">${m.lokasi}</span>
-                        </div>
-                        <div class="bg-slate-50 dark:bg-slate-700/40 p-2 rounded-xl">
-                            <span class="block text-[10px] text-slate-400">Ketua</span>
-                            <span class="font-semibold">${m.ketua}</span>
-                        </div>
-                        <div class="bg-slate-50 dark:bg-slate-700/40 p-2 rounded-xl">
-                            <span class="block text-[10px] text-slate-400">Notulis</span>
-                            <span class="font-semibold">${m.notulis}</span>
-                        </div>
-                    </div>
-
-                    <div class="space-y-1">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase">Peserta Hadir:</span>
-                        <div class="flex flex-wrap gap-1">${pesertaBadges}</div>
-                    </div>
-
-                    <div class="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-700">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase">Action Items (${m.actionItems ? m.actionItems.length : 0}):</span>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">${actionsHtml}</div>
-                    </div>
-                `;
-
-                container.appendChild(card);
-            });
-
-            if (window.lucide) lucide.createIcons();
-        }
-
-        function getStatusBadgeClass(status) {
-            switch(status) {
-                case 'Selesai': return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300';
-                case 'Dalam Proses': return 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300';
-                case 'Tertunda': return 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300';
-                default: return 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300';
-            }
-        }
-
-        function renderKanbanBoard() {
-            const cols = {
-                'Belum Dimulai': document.getElementById('kanbanBelumDimulai'),
-                'Dalam Proses': document.getElementById('kanbanDalamProses'),
-                'Tertunda': document.getElementById('kanbanTertunda'),
-                'Selesai': document.getElementById('kanbanSelesai')
-            };
-
-            const counts = { 'Belum Dimulai': 0, 'Dalam Proses': 0, 'Tertunda': 0, 'Selesai': 0 };
-
-            Object.keys(cols).forEach(k => cols[k].innerHTML = '');
-
-            musyawarahData.forEach(m => {
-                if (Array.isArray(m.actionItems)) {
-                    m.actionItems.forEach(act => {
-                        const statusKey = cols[act.status] ? act.status : 'Belum Dimulai';
-                        counts[statusKey]++;
-
-                        const itemCard = document.createElement('div');
-                        itemCard.className = "bg-white dark:bg-slate-800 p-3 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 space-y-2 text-xs";
-                        itemCard.innerHTML = `
-                            <div class="flex justify-between items-center text-[10px] text-slate-400 font-mono">
-                                <span class="font-bold text-emerald-600 dark:text-emerald-400">${act.actionid}</span>
-                                <span>${act.deadline}</span>
-                            </div>
-                            <h4 class="font-bold text-slate-900 dark:text-white leading-snug">${act.pokokbahasan}</h4>
-                            <p class="text-[11px] text-slate-500 line-clamp-2">${act.hasilkeputusan}</p>
-                            <div class="pt-2 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center text-[10px]">
-                                <span class="font-medium text-slate-600 dark:text-slate-300">PIC: <strong>${act.pic}</strong></span>
-                                <span class="font-mono font-bold text-emerald-600">${act.persentaseprogres}%</span>
-                            </div>
-                        `;
-
-                        cols[statusKey].appendChild(itemCard);
-                    });
-                }
-            });
-
-            document.getElementById('countBelumDimulai').textContent = counts['Belum Dimulai'];
-            document.getElementById('countDalamProses').textContent = counts['Dalam Proses'];
-            document.getElementById('countTertunda').textContent = counts['Tertunda'];
-            document.getElementById('countSelesai').textContent = counts['Selesai'];
-        }
-
-        function editMusyawarah(meetingid) {
-            const item = musyawarahData.find(m => m.meetingid === meetingid);
-            if (!item) return;
-
-            editingMeetingId = meetingid;
-            document.getElementById('formTitleText').textContent = `Edit Musyawarah (${meetingid})`;
-            document.getElementById('displayMeetingId').textContent = meetingid;
-
-            document.getElementById('inputJudul').value = item.judul;
-            document.getElementById('inputTanggal').value = item.tanggal;
-            document.getElementById('inputLokasi').value = item.lokasi;
-            document.getElementById('selectKetua').value = item.ketua;
-            document.getElementById('selectNotulis').value = item.notulis;
-
-            // Check Peserta
-            const checkboxes = document.querySelectorAll('input[name="pesertaHadir"]');
-            checkboxes.forEach(cb => {
-                cb.checked = Array.isArray(item.peserta) && item.peserta.includes(cb.value);
-            });
-
-            // Populate Action Items
-            document.getElementById('actionItemsDynamicContainer').innerHTML = '';
-            actionItemCounter = 0;
-            if (Array.isArray(item.actionItems)) {
-                item.actionItems.forEach(act => addActionItemCard(act));
-            } else {
-                addActionItemCard();
-            }
-
-            switchTab('input');
-        }
-
-        async function deleteMusyawarah(meetingid) {
-            if (!confirm(`Apakah Anda yakin ingin menghapus Musyawarah ${meetingid}?`)) return;
-
-            musyawarahData = musyawarahData.filter(m => m.meetingid !== meetingid);
-            updateStats();
-            renderMusyawarahList();
-            renderKanbanBoard();
-            showToast("Menghapus musyawarah...");
-
-            try {
-                if (MUSYAWARAH_SHEETS_URL) {
-                    await fetch(MUSYAWARAH_SHEETS_URL, {
-                        method: 'POST',
-                        mode: 'cors',
-                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                        body: JSON.stringify({ action: "deleteMusyawarah", meetingid })
-                    });
-                }
-            } catch (err) {
-                console.warn("Delete request error:", err);
-            }
-
-            showToast("Musyawarah berhasil dihapus.");
-        }
-
-        function switchTab(tab) {
-            const inputSec = document.getElementById('inputTabSection');
-            const listSec = document.getElementById('listTabSection');
-            const boardSec = document.getElementById('boardTabSection');
-
-            const btnInput = document.getElementById('tabInputBtn');
-            const btnList = document.getElementById('tabListBtn');
-            const btnBoard = document.getElementById('tabBoardBtn');
-
-            inputSec.classList.add('hidden');
-            listSec.classList.add('hidden');
-            boardSec.classList.add('hidden');
-
-            const inactiveClass = "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50";
-            const activeClass = "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all bg-emerald-600 text-white shadow-sm";
-
-            btnInput.className = inactiveClass;
-            btnList.className = inactiveClass;
-            btnBoard.className = inactiveClass;
-
-            if (tab === 'input') {
-                inputSec.classList.remove('hidden');
-                btnInput.className = activeClass;
-            } else if (tab === 'list') {
-                listSec.classList.remove('hidden');
-                btnList.className = activeClass;
-            } else if (tab === 'board') {
-                boardSec.classList.remove('hidden');
-                btnBoard.className = activeClass;
-            }
-        }
-
-        async function syncDataFromSpreadsheet() {
-            const icon = document.getElementById('syncIcon');
-            if (icon) icon.classList.add('animate-spin');
-            await fetchUsersFromSheet();
-            await fetchMusyawarahData();
-            if (icon) icon.classList.remove('animate-spin');
-            showToast("Sinkronisasi data selesai!");
-        }
-    </script>
+    window.addEventListener('DOMContentLoaded', () => {
+      populateUserSelects();
+      checkUserSession();
+      initLucideIcons();
+    });
+  </script>
 </body>
 </html>
