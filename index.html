@@ -1530,13 +1530,12 @@
       const dateFrom = document.getElementById('dashDateFrom')?.value || '';
       const dateTo = document.getElementById('dashDateTo')?.value || '';
 
+      // Tampilan Dashboard menampilkan semua musyawarah (statistik umum tanpa pembatasan akses user)
       let filtered = musyawarahData.filter(m => {
         let matchDate = true;
         if (dateFrom && m.tanggal < dateFrom) matchDate = false;
         if (dateTo && m.tanggal > dateTo) matchDate = false;
-
-        const matchAccess = userHasAccessToMeetingType(m.jenismusyawarah);
-        return matchDate && matchAccess;
+        return matchDate;
       });
 
       let totalActions = 0;
