@@ -4,27 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aplikasi Musyawarah SKB1</title>
-  
-  <!-- Tailwind CSS -->
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace']
-          },
           colors: {
             brand: {
-              50: '#ecfdf5',
-              100: '#d1fae5',
-              500: '#10b981',
-              600: '#059669',
-              700: '#047857',
-              800: '#065f46',
-              900: '#064e3b'
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+              950: '#052e16',
             }
           }
         }
@@ -75,13 +73,13 @@
 
       <div class="space-y-1.5">
         <h2 class="text-xl font-black text-slate-900 dark:text-white tracking-tight">Aplikasi Musyawarah SKB1</h2>
-        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Selamat datang di aplikasi manajemen musyawarah kelompok. Silahkan masukkan username dan password Anda.</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Silahkan masukkan username dan password Anda untuk masuk.</p>
       </div>
 
       <form onsubmit="handleLoginSubmit(event)" class="space-y-3.5 text-left">
         <div>
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 ml-1">Username / Nama <span class="text-rose-500">*</span></label>
-          <input type="text" id="loginUsername" placeholder="Masukkan username..." required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-bold focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white transition-all">
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 ml-1">Username <span class="text-rose-500">*</span></label>
+          <input type="text" id="loginUsername" placeholder="Ketik username Anda..." required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-bold focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white transition-all">
         </div>
 
         <div>
@@ -129,7 +127,7 @@
         </div>
 
         <div class="flex items-center space-x-3">
-          <button onclick="fetchMusyawarahData()" class="px-3 py-1.5 bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 rounded-xl text-xs font-bold flex items-center space-x-1 hover:bg-brand-100 transition-all">
+          <button onclick="loadAllData()" class="px-3 py-1.5 bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 rounded-xl text-xs font-bold flex items-center space-x-1 hover:bg-brand-100 transition-all">
             <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
             <span class="hidden sm:inline">Refresh Data</span>
           </button>
@@ -213,11 +211,6 @@
           </button>
 
           <div id="settingsSubmenu" class="hidden pl-4 pr-1 py-1 space-y-1">
-            <button onclick="openChangePasswordModal()" class="w-full flex items-center space-x-2 px-3 py-2 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
-              <i data-lucide="key" class="w-3.5 h-3.5 text-amber-500"></i>
-              <span>Ganti Password</span>
-            </button>
-
             <button onclick="toggleDarkMode()" class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
               <span class="flex items-center space-x-2">
                 <i data-lucide="moon" class="w-3.5 h-3.5 text-purple-500"></i>
@@ -247,7 +240,7 @@
           </span>
           <h2 class="text-xl sm:text-2xl font-black">Monitoring Notulensi & Action Items</h2>
           <p class="text-xs text-brand-100 leading-relaxed max-w-xl">
-            Pantau status eksekusi hasil musyawarah Majelis Taklim SKB1 secara real-time dan terukur.
+            Pantau status eksekusi hasil musyawarah Majelis Taklim SKB1 secara real-time langsung dari Spreadsheet.
           </p>
         </div>
 
@@ -266,8 +259,9 @@
             </div>
 
             <div class="flex items-center space-x-1 border-l border-slate-200 dark:border-slate-700 pl-2">
-              <button onclick="setDashPreset('last30')" class="px-2.5 py-1.5 bg-brand-600 text-white rounded-xl text-xs font-bold transition-all shadow-sm">Bulan Terakhir</button>
-              <button onclick="setDashPreset('all')" class="px-2.5 py-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-brand-50 hover:text-brand-700 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold transition-all">Semua</button>
+              <button id="btnPresetLastMonth" onclick="setDashPreset('lastMonth')" class="px-2.5 py-1.5 bg-brand-600 text-white rounded-xl text-xs font-bold transition-all shadow-sm">Bulan Terakhir</button>
+              <button id="btnPresetLast30" onclick="setDashPreset('last30')" class="px-2.5 py-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-brand-50 hover:text-brand-700 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold transition-all">30 Hari Terakhir</button>
+              <button id="btnPresetAll" onclick="setDashPreset('all')" class="px-2.5 py-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-brand-50 hover:text-brand-700 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold transition-all">Semua Periode</button>
             </div>
           </div>
         </div>
@@ -400,10 +394,10 @@
         <div class="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
           <div class="border-b border-slate-100 dark:border-slate-700 pb-4">
             <h2 class="text-lg font-black text-slate-900 dark:text-white uppercase">Input Musyawarah Baru</h2>
-            <p class="text-xs text-slate-500">Dokumentasikan musyawarah dan penunjukan PIC action items</p>
+            <p class="text-xs text-slate-500">Dokumentasikan musyawarah dan penunjukan PIC action items langsung ke spreadsheet</p>
           </div>
 
-          <form onsubmit="handleMusyawarahSubmit(event)" class="space-y-6">
+          <form onsubmit="handleMusyawarahFormSubmit(event)" class="space-y-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Meeting ID</label>
@@ -453,7 +447,7 @@
             </div>
 
             <div>
-              <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Peserta Hadir (Centang Nama)</label>
+              <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Peserta Hadir (Centang Nama - Minimal 2 Orang) <span class="text-rose-500">*</span></label>
               <div id="pesertaCheckboxContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 max-h-48 overflow-y-auto custom-scrollbar"></div>
             </div>
 
@@ -469,9 +463,18 @@
               <div id="actionItemsContainer" class="space-y-4"></div>
             </div>
 
-            <button type="submit" id="submitFormBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-black py-4 rounded-2xl shadow-lg transition-all text-xs">
-              Simpan Notulensi Musyawarah
-            </button>
+            <!-- TOMBOL SIMPAN DRAFT & SUBMIT MUSYAWARAH -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              <button type="button" onclick="handleSimpanDraft()" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-white font-black py-4 rounded-2xl shadow-sm transition-all text-xs flex items-center justify-center space-x-2">
+                <i data-lucide="save" class="w-4 h-4"></i>
+                <span>Simpan Draft</span>
+              </button>
+
+              <button type="submit" id="submitFormBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-black py-4 rounded-2xl shadow-lg transition-all text-xs flex items-center justify-center space-x-2">
+                <i data-lucide="send" class="w-4 h-4"></i>
+                <span>Submit Musyawarah</span>
+              </button>
+            </div>
           </form>
         </div>
       </section>
@@ -499,12 +502,12 @@
 
         <!-- Filter Kategori Tag Musyawarah -->
         <div class="flex flex-wrap gap-1.5" id="categoryFilterContainer">
-          <button onclick="filterNotulensiCategory('Semua')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-600 text-white shadow-sm transition-all">Semua</button>
-          <button onclick="filterNotulensiCategory('Musyawarah 4S')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">4S</button>
-          <button onclick="filterNotulensiCategory('Musyawarah Pengurus')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">Pengurus</button>
-          <button onclick="filterNotulensiCategory('Musyawarah 5 Unsur')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">5 Unsur</button>
-          <button onclick="filterNotulensiCategory('Musyawarah KBM')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">KBM</button>
-          <button onclick="filterNotulensiCategory('Musyawarah Muda-mudi')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">Muda-mudi</button>
+          <button data-cat="Semua" onclick="filterNotulensiCategory('Semua')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-600 text-white shadow-sm transition-all">Semua</button>
+          <button data-cat="Musyawarah 4S" onclick="filterNotulensiCategory('Musyawarah 4S')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">4S</button>
+          <button data-cat="Musyawarah Pengurus" onclick="filterNotulensiCategory('Musyawarah Pengurus')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">Pengurus</button>
+          <button data-cat="Musyawarah 5 Unsur" onclick="filterNotulensiCategory('Musyawarah 5 Unsur')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">5 Unsur</button>
+          <button data-cat="Musyawarah KBM" onclick="filterNotulensiCategory('Musyawarah KBM')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">KBM</button>
+          <button data-cat="Musyawarah Muda-mudi" onclick="filterNotulensiCategory('Musyawarah Muda-mudi')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">Muda-mudi</button>
         </div>
 
         <div id="musyawarahListContainer" class="space-y-4"></div>
@@ -556,73 +559,114 @@
     </div>
   </div>
 
-  <!-- MODAL GANTI PASSWORD -->
-  <div id="changePasswordModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-700 space-y-4 text-left">
-      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-3">
-        <h3 class="font-black text-sm text-slate-900 dark:text-white">Ganti Password Akun</h3>
-        <button onclick="closeChangePasswordModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-4 h-4"></i></button>
-      </div>
-
-      <form onsubmit="handleChangePasswordSubmit(event)" class="space-y-3.5">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Password Lama</label>
-          <input type="password" id="cpOldPassword" required placeholder="Masukkan password saat ini..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold dark:text-white">
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Password Baru</label>
-          <input type="password" id="cpNewPassword" required placeholder="Masukkan password baru..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold dark:text-white">
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Konfirmasi Password Baru</label>
-          <input type="password" id="cpConfirmPassword" required placeholder="Ulangi password baru..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold dark:text-white">
-        </div>
-
-        <button type="submit" class="w-full bg-brand-600 text-white font-bold py-3 rounded-xl text-xs">Simpan Password Baru</button>
-      </form>
-    </div>
-  </div>
-
   <!-- QUICK EDIT ACTION ITEM MODAL -->
   <div id="quickEditModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-700 space-y-4 text-left">
-      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-3">
-        <h3 class="font-black text-sm text-slate-900 dark:text-white">Update Progress Action Item</h3>
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden">
+      <div class="p-5 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+        <h3 class="font-black text-sm text-slate-900 dark:text-white">Update Action Item & Progress</h3>
         <button onclick="closeQuickEditModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
 
-      <form onsubmit="handleQuickEditSubmit(event)" class="space-y-4">
+      <form onsubmit="handleQuickEditSubmit(event)" class="p-6 overflow-y-auto space-y-4 text-xs custom-scrollbar">
         <input type="hidden" id="qeMeetingId">
         <input type="hidden" id="qeActionId">
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Status</label>
-          <select id="qeStatus" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold dark:text-white">
-            <option value="Belum Dimulai">Belum Dimulai</option>
-            <option value="Dalam Proses">Dalam Proses</option>
-            <option value="Tertunda">Tertunda</option>
-            <option value="Selesai">Selesai</option>
-          </select>
+          <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Detail Bahasan <span class="text-rose-500">*</span></label>
+          <textarea id="qeDetailBahasan" rows="2" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-3 dark:text-white"></textarea>
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Persentase Progres (%)</label>
-          <input type="number" id="qeProgres" min="0" max="100" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold font-mono dark:text-white">
+          <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Hasil Keputusan <span class="text-rose-500">*</span></label>
+          <textarea id="qeHasilKeputusan" rows="2" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-3 dark:text-white"></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Status</label>
+            <select id="qeStatus" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 font-bold dark:text-white">
+              <option value="Belum Dimulai">Belum Dimulai</option>
+              <option value="Dalam Proses">Dalam Proses</option>
+              <option value="Tertunda">Tertunda</option>
+              <option value="Selesai">Selesai</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Persentase Progres (%)</label>
+            <input type="number" id="qeProgres" min="0" max="100" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 font-mono font-bold dark:text-white">
+          </div>
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Catatan Terakhir</label>
-          <textarea id="qeCatatan" rows="2" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-xs dark:text-white"></textarea>
+          <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Catatan Terakhir</label>
+          <textarea id="qeCatatan" rows="2" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-3 dark:text-white"></textarea>
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Kendala Lapangan</label>
-          <textarea id="qeKendala" rows="2" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-xs dark:text-white"></textarea>
+          <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Kendala Lapangan</label>
+          <textarea id="qeKendala" rows="2" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-3 dark:text-white"></textarea>
         </div>
 
-        <button type="submit" class="w-full bg-brand-600 text-white font-bold py-3 rounded-xl text-xs">Simpan Perubahan</button>
+        <button type="submit" class="w-full bg-brand-600 text-white font-bold py-3 rounded-xl mt-2">Simpan Perubahan Action Item</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- EDIT MUSYAWARAH MODAL -->
+  <div id="editMusyawarahModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden">
+      <div class="p-5 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+        <h3 class="font-black text-sm text-slate-900 dark:text-white">Edit Informasi Musyawarah & Peserta</h3>
+        <button onclick="closeEditMusyawarahModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+
+      <form onsubmit="handleEditMusyawarahSubmit(event)" class="p-6 overflow-y-auto space-y-4 text-xs custom-scrollbar">
+        <input type="hidden" id="emMeetingId">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Jenis Musyawarah <span class="text-rose-500">*</span></label>
+            <select id="emJenis" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 font-bold dark:text-white">
+              <option value="Musyawarah 4S">Musyawarah 4S</option>
+              <option value="Musyawarah Pengurus">Musyawarah Pengurus</option>
+              <option value="Musyawarah 5 Unsur">Musyawarah 5 Unsur</option>
+              <option value="Musyawarah KBM">Musyawarah KBM</option>
+              <option value="Musyawarah Muda-mudi">Musyawarah Muda-mudi</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Tanggal <span class="text-rose-500">*</span></label>
+            <input type="date" id="emTanggal" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 font-semibold dark:text-white">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Judul Musyawarah <span class="text-rose-500">*</span></label>
+          <input type="text" id="emJudul" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 font-semibold dark:text-white">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Lokasi Pelaksanaan <span class="text-rose-500">*</span></label>
+          <input type="text" id="emLokasi" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 font-semibold dark:text-white">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Ketua <span class="text-rose-500">*</span></label>
+            <select id="emKetua" required class="user-select-dropdown w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 font-bold dark:text-white"></select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Notulis <span class="text-rose-500">*</span></label>
+            <select id="emNotulis" required class="user-select-dropdown w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 font-bold dark:text-white"></select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Peserta Hadir (Centang Nama) <span class="text-rose-500">*</span></label>
+          <div id="emPesertaCheckboxContainer" class="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-700 max-h-40 overflow-y-auto custom-scrollbar"></div>
+        </div>
+
+        <button type="submit" class="w-full bg-brand-600 text-white font-bold py-3 rounded-xl mt-4">Simpan Perubahan Musyawarah</button>
       </form>
     </div>
   </div>
@@ -634,24 +678,14 @@
 
   <!-- ==================== JAVASCRIPT LOGIC ==================== -->
   <script>
+    const USER_MANAGEMENT_URL = "https://script.google.com/macros/s/AKfycbxFWquCku8RTLpoQmgsfiHt6BTkN1zcXWEg5JWYaTbUSRcON8u1fP7bF5YhuD6ZtAmUsA/exec";
     const MUSYAWARAH_SHEETS_URL = "https://script.google.com/macros/s/AKfycbyKP-pootHFvcd5qYA1PDStJIbTTfqchUiNR2A95wWeltv8pLoq9VLeBpr5dVB9sFi_9g/exec";
 
-    let defaultUsers = [
-      { nama: "Arif Firmansyah", username: "ariffir", password: "@Riffir313", teamid: "T-02", akses_musyawarah: ["4S", "Pengurus", "KBM", "Muda-mudi", "5 Unsur"] },
-      { nama: "Nur Rachman", username: "nur", password: "skb1#1234", teamid: "T-02", akses_musyawarah: ["4S", "Pengurus", "KBM", "Muda-mudi", "5 Unsur"] },
-      { nama: "Nursahid Yanurianto", username: "nursahid", password: "noer313", teamid: "T-01", akses_musyawarah: ["4S", "Pengurus", "KBM", "Muda-mudi", "5 Unsur"] },
-      { nama: "Eko Setyo Budi Purnomo", username: "ekoset", password: "123456", teamid: "T-03", akses_musyawarah: ["4S", "Pengurus", "KBM", "Muda-mudi", "5 Unsur"] },
-      { nama: "Fandi Akhmad", username: "fandi", password: "123456", teamid: "T-03", akses_musyawarah: ["4S", "Pengurus"] },
-      { nama: "David Adi Prayoga", username: "yoga", password: "123456", teamid: "T-04", akses_musyawarah: ["4S", "Pengurus", "KBM", "5 Unsur"] },
-      { nama: "H. Priyanto", username: "priyanto", password: "123456", teamid: "T-05", akses_musyawarah: ["4S", "Pengurus", "KBM", "5 Unsur"] },
-      { nama: "Maryono", username: "maryono", password: "123456", teamid: "T-01", akses_musyawarah: ["4S", "Pengurus", "KBM", "5 Unsur"] }
-    ];
-
+    let spreadsheetUsers = [];
     let musyawarahData = [];
     let currentUser = null;
     let selectedCategoryFilter = "Semua";
 
-    // Chart.js instance trackers
     let typeChartInstance = null;
     let statusChartInstance = null;
 
@@ -761,44 +795,36 @@
       });
     }
 
-    function userHasAccessToMeetingType(jenisMusyawarah) {
-      if (!currentUser) return true;
-      if (!currentUser.akses_musyawarah || !Array.isArray(currentUser.akses_musyawarah) || currentUser.akses_musyawarah.length === 0) {
-        return true;
-      }
-
-      const jenis = (jenisMusyawarah || '').toLowerCase();
-      return currentUser.akses_musyawarah.some(akses => jenis.includes(akses.toLowerCase().trim()));
-    }
-
     async function fetchUsersFromSheet() {
       try {
-        const res = await fetch(`${MUSYAWARAH_SHEETS_URL}?action=getUsers`, { redirect: 'follow' });
+        const res = await fetch(`${USER_MANAGEMENT_URL}?action=getUsers&t=${Date.now()}`, { redirect: 'follow' });
         if (res.ok) {
-          const json = await res.json();
-          if (json && json.status === "success" && Array.isArray(json.users) && json.users.length > 0) {
-            defaultUsers = json.users.map(u => ({
-              nama: u.nama || u.user,
-              username: u.user || u.username,
-              password: u.password,
-              role: u.role || 'Pengurus',
-              teamid: u.teamid || 'T-01',
-              akses_musyawarah: Array.isArray(u.akses_musyawarah) ? u.akses_musyawarah : []
-            }));
+          const text = await res.text();
+          if (text.trim().startsWith('{') || text.trim().startsWith('[')) {
+            const json = JSON.parse(text);
+            let usersArray = [];
+            if (Array.isArray(json)) usersArray = json;
+            else if (Array.isArray(json.users)) usersArray = json.users;
+            else if (Array.isArray(json.data)) usersArray = json.data;
 
-            if (currentUser) {
-              const updated = defaultUsers.find(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
-              if (updated) {
-                currentUser = updated;
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-              }
+            if (usersArray.length > 0) {
+              spreadsheetUsers = usersArray.map(u => ({
+                user: String(u.user || u.username || '').trim(),
+                password: String(u.password || '').trim(),
+                nama: String(u.nama || '').trim(),
+                role: String(u.role || 'Pengurus').trim(),
+                dapukan: String(u.dapukan || '').trim(),
+                teamid: String(u.teamid || 'T-01').trim()
+              }));
+              populateUserSelects();
+              return true;
             }
-            populateUserSelects();
           }
         }
       } catch (err) {
-        console.warn("Gagal mengambil data user dari Apps Script:", err);
+        console.warn("Gagal mengambil data user dari Apps Script Manajemen User:", err);
       }
+      return false;
     }
 
     function showToast(msg) {
@@ -827,17 +853,58 @@
         mainHeader.classList.remove('hidden');
         appWrapper.classList.remove('hidden');
         
-        document.getElementById('headerUserName').textContent = currentUser.nama;
+        document.getElementById('headerUserName').textContent = currentUser.nama || currentUser.user;
+        const roleEl = document.getElementById('headerUserRole');
+        if (roleEl) roleEl.textContent = currentUser.role || 'Pengurus';
+
         switchTab('dashboard');
-        fetchMusyawarahData();
+        loadAllData();
       }
+    }
+
+    async function loadAllData() {
+      showToast("Mengambil data real dari spreadsheet...");
+      await fetchUsersFromSheet();
+      await fetchMusyawarahData();
+    }
+
+    async function fetchMusyawarahData() {
+      try {
+        const res = await fetch(`${MUSYAWARAH_SHEETS_URL}?action=getData&t=${Date.now()}`, { redirect: 'follow' });
+        if (res.ok) {
+          const text = await res.text();
+          if (text.trim().startsWith('{') || text.trim().startsWith('[')) {
+            const json = JSON.parse(text);
+            let remoteData = null;
+            if (Array.isArray(json)) remoteData = json;
+            else if (Array.isArray(json.data)) remoteData = json.data;
+
+            if (remoteData) {
+              musyawarahData = remoteData.map(m => ({
+                ...m,
+                jenismusyawarah: m.jenismusyawarah || 'Musyawarah Pengurus',
+                actionItems: Array.isArray(m.actionItems) ? m.actionItems : []
+              }));
+              
+              setDashPreset('all');
+              updateDashboardStatsAndCharts();
+              showToast("Data spreadsheet berhasil dimuat!");
+              return;
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("Fetch Error via Web App API:", err);
+      }
+      showToast("Gagal memuat data musyawarah dari spreadsheet.");
     }
 
     function filterNotulensiCategory(catName) {
       selectedCategoryFilter = catName;
       const btns = document.querySelectorAll('.filter-cat-btn');
       btns.forEach(btn => {
-        if (btn.textContent.includes(catName) || (catName === 'Semua' && btn.textContent === 'Semua')) {
+        const btnCat = btn.getAttribute('data-cat') || btn.textContent.trim();
+        if (btnCat === catName || (catName === 'Semua' && btnCat === 'Semua')) {
           btn.className = "filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-600 text-white shadow-sm transition-all";
         } else {
           btn.className = "filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all";
@@ -854,10 +921,8 @@
       const searchVal = (document.getElementById('listSearchInput')?.value || '').toLowerCase().trim();
       const dateFrom = document.getElementById('listDateFrom')?.value || '';
       const dateTo = document.getElementById('listDateTo')?.value || '';
-      const isT01 = currentUser && currentUser.teamid === 'T-01';
 
       let filtered = musyawarahData.filter(m => {
-        const matchAccess = userHasAccessToMeetingType(m.jenismusyawarah);
         const matchCategory = (selectedCategoryFilter === "Semua") || (m.jenismusyawarah || '').includes(selectedCategoryFilter);
         const matchSearch = !searchVal || 
           (m.judul || '').toLowerCase().includes(searchVal) ||
@@ -869,11 +934,11 @@
         if (dateFrom && m.tanggal < dateFrom) matchDate = false;
         if (dateTo && m.tanggal > dateTo) matchDate = false;
 
-        return matchAccess && matchCategory && matchSearch && matchDate;
+        return matchCategory && matchSearch && matchDate;
       });
 
       if (filtered.length === 0) {
-        container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">Belum ada notulensi musyawarah yang sesuai dengan filter dan hak akses Anda.</div>`;
+        container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">Belum ada notulensi musyawarah di spreadsheet yang sesuai filter.</div>`;
         return;
       }
 
@@ -900,9 +965,9 @@
                   <div class="flex items-center space-x-2">
                     <button onclick="openQuickEditModal('${m.meetingid}', '${a.actionid}')" class="px-2 py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-[10px] font-bold hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center space-x-1">
                       <i data-lucide="edit-3" class="w-3 h-3 text-slate-500"></i>
-                      <span>Edit Progress</span>
+                      <span>Edit Progress & Detail</span>
                     </button>
-                    ${isT01 ? `<button onclick="deleteSingleActionItem('${m.meetingid}', '${a.actionid}')" class="p-1 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100" title="Hapus Action Item"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>` : ''}
+                    <button onclick="deleteSingleActionItem('${m.meetingid}', '${a.actionid}')" class="p-1 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100" title="Hapus Action Item"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                   </div>
                 </div>
 
@@ -934,10 +999,13 @@
             </div>
             <div class="flex items-center space-x-2">
               <span class="text-xs font-mono font-bold text-slate-400 bg-slate-100 dark:bg-slate-900 px-2.5 py-1 rounded-xl">${m.tanggal} | ${m.meetingid}</span>
+              <button onclick="openEditMusyawarahModal('${m.meetingid}')" class="p-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 rounded-xl" title="Edit Musyawarah & Peserta">
+                <i data-lucide="edit" class="w-4 h-4"></i>
+              </button>
               <button onclick="openDetailModal('${m.meetingid}')" class="p-1.5 bg-brand-50 hover:bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-300 rounded-xl" title="Lihat Pratinjau Lengkap">
                 <i data-lucide="external-link" class="w-4 h-4"></i>
               </button>
-              ${isT01 ? `<button onclick="deleteMusyawarahRecord('${m.meetingid}')" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl" title="Hapus Musyawarah"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ''}
+              <button onclick="deleteMusyawarahRecord('${m.meetingid}')" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl" title="Hapus Musyawarah"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
             </div>
           </div>
 
@@ -973,6 +1041,84 @@
       initLucideIcons();
     }
 
+    function openEditMusyawarahModal(meetingId) {
+      const found = musyawarahData.find(m => m.meetingid === meetingId);
+      if (!found) return;
+
+      document.getElementById('emMeetingId').value = found.meetingid;
+      document.getElementById('emJenis').value = found.jenismusyawarah || 'Musyawarah Pengurus';
+      document.getElementById('emTanggal').value = found.tanggal || '';
+      document.getElementById('emJudul').value = found.judul || '';
+      document.getElementById('emLokasi').value = found.lokasi || '';
+      document.getElementById('emKetua').value = found.ketua || '';
+      document.getElementById('emNotulis').value = found.notulis || '';
+
+      const pesertaArr = Array.isArray(found.peserta) ? found.peserta : (typeof found.peserta === 'string' ? found.peserta.split(',').map(s=>s.trim()).filter(Boolean) : []);
+      const container = document.getElementById('emPesertaCheckboxContainer');
+      if (container) {
+        container.innerHTML = '';
+        spreadsheetUsers.forEach(u => {
+          const isChecked = pesertaArr.includes(u.nama);
+          const lbl = document.createElement('label');
+          lbl.className = "flex items-center space-x-2 text-xs font-semibold cursor-pointer p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800";
+          lbl.innerHTML = `
+            <input type="checkbox" value="${u.nama}" ${isChecked ? 'checked' : ''} class="em-peserta-checkbox rounded text-brand-600 focus:ring-brand-500">
+            <span class="truncate dark:text-slate-200">${u.nama} (${u.dapukan || u.role})</span>
+          `;
+          container.appendChild(lbl);
+        });
+      }
+
+      document.getElementById('editMusyawarahModal').classList.remove('hidden');
+    }
+
+    function closeEditMusyawarahModal() {
+      document.getElementById('editMusyawarahModal').classList.add('hidden');
+    }
+
+    async function handleEditMusyawarahSubmit(e) {
+      e.preventDefault();
+      const meetingid = document.getElementById('emMeetingId').value;
+      const jenis = document.getElementById('emJenis').value;
+      const tanggal = document.getElementById('emTanggal').value;
+      const judul = document.getElementById('emJudul').value;
+      const lokasi = document.getElementById('emLokasi').value;
+      const ketua = document.getElementById('emKetua').value;
+      const notulis = document.getElementById('emNotulis').value;
+      const checkedPeserta = Array.from(document.querySelectorAll('.em-peserta-checkbox:checked')).map(cb => cb.value);
+
+      if (checkedPeserta.length < 2) {
+        showToast("Peserta hadir wajib dicentang minimal 2 orang!");
+        return;
+      }
+
+      let targetMeet = musyawarahData.find(m => m.meetingid === meetingid);
+      if (!targetMeet) return;
+
+      targetMeet.jenismusyawarah = jenis;
+      targetMeet.tanggal = tanggal;
+      targetMeet.judul = judul;
+      targetMeet.lokasi = lokasi;
+      targetMeet.ketua = ketua;
+      targetMeet.notulis = notulis;
+      targetMeet.peserta = checkedPeserta;
+
+      showToast("Menyimpan pembaruan musyawarah ke spreadsheet...");
+      try {
+        await fetch(MUSYAWARAH_SHEETS_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'saveMusyawarah', data: targetMeet })
+        });
+      } catch (err) {
+        console.warn("Edit Musyawarah Save Error:", err);
+      }
+
+      closeEditMusyawarahModal();
+      await fetchMusyawarahData();
+      showToast("Musyawarah & peserta berhasil diperbarui!");
+    }
+
     function renderMyTasks() {
       const container = document.getElementById('myTasksContainer');
       const badge = document.getElementById('myTasksCountBadge');
@@ -986,8 +1132,6 @@
       let myTasks = [];
 
       musyawarahData.forEach(m => {
-        if (!userHasAccessToMeetingType(m.jenismusyawarah)) return;
-
         if (Array.isArray(m.actionItems)) {
           m.actionItems.forEach(a => {
             if (a.pic && a.pic.toLowerCase() === currentUser.nama.toLowerCase()) {
@@ -1011,7 +1155,7 @@
       if (badge) badge.textContent = myTasks.length;
 
       if (myTasks.length === 0) {
-        container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">Belum ada tugas yang ditugaskan kepada Anda sesuai filter ini.</div>`;
+        container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">Belum ada tugas PIC yang ditugaskan kepada Anda (${currentUser.nama}) di spreadsheet.</div>`;
         return;
       }
 
@@ -1119,27 +1263,47 @@
     }
 
     async function handleLoginSubmit(e) {
-      e.preventDefault();
-      await fetchUsersFromSheet();
-
-      const userVal = document.getElementById('loginUsername').value.trim();
+      if (e && e.preventDefault) e.preventDefault();
+      showToast("Memeriksa akun ke server Manajemen User...");
+      
+      const userVal = document.getElementById('loginUsername').value.trim().toLowerCase();
       const passVal = document.getElementById('loginPassword').value.trim();
       const errorMsg = document.getElementById('loginErrorMsg');
 
-      const found = defaultUsers.find(u => 
-        (u.username.toLowerCase() === userVal.toLowerCase() || u.nama.toLowerCase() === userVal.toLowerCase()) &&
-        u.password === passVal
-      );
+      if (!userVal || !passVal) {
+        if (errorMsg) {
+          errorMsg.textContent = "Username dan password wajib diisi!";
+          errorMsg.classList.remove('hidden');
+        }
+        return false;
+      }
 
-      if (found) {
-        currentUser = found;
-        localStorage.setItem('currentUser', JSON.stringify(found));
-        errorMsg.classList.add('hidden');
+      await fetchUsersFromSheet();
+
+      const matched = spreadsheetUsers.find(u => u.user.toLowerCase() === userVal && u.password === passVal);
+
+      if (matched) {
+        currentUser = {
+          user: matched.user,
+          nama: matched.nama || matched.user,
+          role: matched.role || 'Pengurus',
+          teamid: matched.teamid || 'T-01',
+          dapukan: matched.dapukan || ''
+        };
+
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        if (errorMsg) errorMsg.classList.add('hidden');
         checkUserSession();
-        showToast(`Selamat datang, ${found.nama}!`);
-      } else {
+        showToast(`Selamat datang, ${currentUser.nama}!`);
+        return false;
+      }
+
+      if (errorMsg) {
+        errorMsg.textContent = "Username atau Password salah!";
         errorMsg.classList.remove('hidden');
       }
+      showToast("Login gagal. Periksa kembali username & password Anda.");
+      return false;
     }
 
     function logoutUser() {
@@ -1179,42 +1343,6 @@
           if (chevron) chevron.style.transform = 'rotate(0deg)';
         }
       }
-    }
-
-    function openChangePasswordModal() {
-      document.getElementById('changePasswordModal').classList.remove('hidden');
-    }
-
-    function closeChangePasswordModal() {
-      document.getElementById('changePasswordModal').classList.add('hidden');
-    }
-
-    function handleChangePasswordSubmit(e) {
-      e.preventDefault();
-      const oldPass = document.getElementById('cpOldPassword').value;
-      const newPass = document.getElementById('cpNewPassword').value;
-      const confirmPass = document.getElementById('cpConfirmPassword').value;
-
-      if (!currentUser) return;
-
-      if (currentUser.password !== oldPass) {
-        showToast("Password lama tidak sesuai!");
-        return;
-      }
-
-      if (newPass !== confirmPass) {
-        showToast("Konfirmasi password baru tidak cocok!");
-        return;
-      }
-
-      currentUser.password = newPass;
-      localStorage.setItem('currentUser', JSON.stringify(currentUser));
-      
-      const foundIdx = defaultUsers.findIndex(u => u.username === currentUser.username);
-      if (foundIdx !== -1) defaultUsers[foundIdx].password = newPass;
-
-      closeChangePasswordModal();
-      showToast("Password berhasil diperbarui!");
     }
 
     function toggleDarkMode() {
@@ -1268,10 +1396,10 @@
       const selects = document.querySelectorAll('.user-select-dropdown');
       selects.forEach(select => {
         select.innerHTML = '<option value="">-- Pilih Pengurus --</option>';
-        defaultUsers.forEach(u => {
+        spreadsheetUsers.forEach(u => {
           const opt = document.createElement('option');
           opt.value = u.nama;
-          opt.textContent = `${u.nama} (${u.teamid})`;
+          opt.textContent = `${u.nama} (${u.teamid || 'T-01'})`;
           select.appendChild(opt);
         });
       });
@@ -1279,12 +1407,12 @@
       const container = document.getElementById('pesertaCheckboxContainer');
       if (container) {
         container.innerHTML = '';
-        defaultUsers.forEach(u => {
+        spreadsheetUsers.forEach(u => {
           const lbl = document.createElement('label');
           lbl.className = "flex items-center space-x-2 text-xs font-semibold cursor-pointer p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800";
           lbl.innerHTML = `
             <input type="checkbox" value="${u.nama}" class="peserta-checkbox rounded text-brand-600 focus:ring-brand-500">
-            <span class="truncate dark:text-slate-200">${u.nama}</span>
+            <span class="truncate dark:text-slate-200">${u.nama} (${u.dapukan || u.role})</span>
           `;
           container.appendChild(lbl);
         });
@@ -1293,7 +1421,7 @@
 
     function autoFillTeamId(selectEl) {
       const selectedNama = selectEl.value;
-      const found = defaultUsers.find(u => u.nama === selectedNama);
+      const found = spreadsheetUsers.find(u => u.nama === selectedNama);
       if (found) {
         selectEl.setAttribute('data-teamid', found.teamid);
       }
@@ -1345,23 +1473,23 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block text-[11px] font-bold text-slate-500 mb-1">Detail Bahasan</label>
-            <textarea class="act-detail w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white" rows="2"></textarea>
+            <label class="block text-[11px] font-bold text-slate-500 mb-1">Detail Bahasan <span class="text-rose-500">*</span></label>
+            <textarea class="act-detail w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white" rows="2" required></textarea>
           </div>
           <div>
-            <label class="block text-[11px] font-bold text-slate-500 mb-1">Hasil Keputusan</label>
-            <textarea class="act-hasil w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white" rows="2"></textarea>
+            <label class="block text-[11px] font-bold text-slate-500 mb-1">Hasil Keputusan <span class="text-rose-500">*</span></label>
+            <textarea class="act-hasil w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white" rows="2" required></textarea>
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
             <label class="block text-[11px] font-bold text-slate-500 mb-1">PIC <span class="text-rose-500">*</span></label>
-            <select class="act-pic user-select-dropdown w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold dark:text-white" onchange="autoFillTeamId(this)"></select>
+            <select class="act-pic user-select-dropdown w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold dark:text-white" onchange="autoFillTeamId(this)" required></select>
           </div>
           <div>
-            <label class="block text-[11px] font-bold text-slate-500 mb-1">Deadline</label>
-            <input type="date" class="act-deadline w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-semibold dark:text-white">
+            <label class="block text-[11px] font-bold text-slate-500 mb-1">Deadline <span class="text-rose-500">*</span></label>
+            <input type="date" class="act-deadline w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-semibold dark:text-white" required>
           </div>
           <div>
             <label class="block text-[11px] font-bold text-slate-500 mb-1">Status</label>
@@ -1379,96 +1507,41 @@
       populateUserSelects();
     }
 
-    async function fetchMusyawarahData() {
-      showToast("Mengambil data musyawarah...");
-      try {
-        const res = await fetch(`${MUSYAWARAH_SHEETS_URL}?action=getData`, { redirect: 'follow' });
-        if (res.ok) {
-          const json = await res.json();
-          if (json && json.data) {
-            musyawarahData = json.data.map(m => ({
-              ...m,
-              jenismusyawarah: m.jenismusyawarah || m.jenis_musyawarah || 'Musyawarah Pengurus'
-            }));
-            
-            // Set default periode ke "Bulan Terakhir" saat data pertama kali dimuat
-            const today = new Date();
-            const past = new Date();
-            past.setDate(today.getDate() - 30);
-            if (document.getElementById('dashDateFrom') && !document.getElementById('dashDateFrom').value) {
-              document.getElementById('dashDateFrom').value = past.toISOString().split('T')[0];
-            }
-            if (document.getElementById('dashDateTo') && !document.getElementById('dashDateTo').value) {
-              document.getElementById('dashDateTo').value = today.toISOString().split('T')[0];
-            }
-
-            updateDashboardStatsAndCharts();
-            renderMyTasks();
-            renderMusyawarahList();
-            renderKanbanBoard();
-            showToast("Data musyawarah berhasil dimuat!");
-            return;
-          }
-        }
-      } catch (err) {
-        console.warn("Fetch Error via Web App API:", err);
-      }
-
-      musyawarahData = [
-        {
-          meetingid: "MT-202611-001",
-          jenismusyawarah: "Musyawarah Pengurus",
-          judul: "Persiapan Pelaksanaan Qurban & Kebersihan TPA",
-          lokasi: "Ruang Utama Masjid Baitul Haq",
-          tanggal: "2026-11-05",
-          ketua: "Nursahid Yanurianto",
-          notulis: "Nur Rachman",
-          peserta: ["Arif Firmansyah", "Nur Rachman", "Eko Setyo Budi Purnomo", "Fandi Akhmad"],
-          actionItems: [
-            {
-              actionid: "ACT-202611-001-A",
-              pokokbahasan: "Pengadaan Alat Kebersihan Halaman TPA",
-              detailbahasan: "Membeli perlengkapan kebersihan dan tempat sampah outdoor baru.",
-              hasilkeputusan: "Disetujui anggaran sebesar Rp 500.000 dari kas pengurus.",
-              pic: "Arif Firmansyah",
-              teamid: "T-02",
-              deadline: "2026-11-12",
-              status: "Dalam Proses",
-              persentaseprogres: 50,
-              catatanterakhir: "Sudah koordinasi vendor toko alat bangunan",
-              kendala: "Pilihan ukuran tempat sampah outdoor 100L masih kosong"
-            },
-            {
-              actionid: "ACT-202611-001-B",
-              pokokbahasan: "Penyusunan Kepanitiaan hewan Qurban",
-              detailbahasan: "Mendata jumlah shohibul qurban dan pembagian tim jagal.",
-              hasilkeputusan: "Fandi Akhmad ditunjuk sebagai penanggung jawab panitia lapangan.",
-              pic: "Fandi Akhmad",
-              teamid: "T-03",
-              deadline: "2026-11-15",
-              status: "Belum Dimulai",
-              persentaseprogres: 0,
-              catatanterakhir: "Menunggu data final dari bendahara",
-              kendala: ""
-            }
-          ]
-        }
-      ];
-
-      const today = new Date();
-      const past = new Date();
-      past.setDate(today.getDate() - 30);
-      if (document.getElementById('dashDateFrom')) document.getElementById('dashDateFrom').value = past.toISOString().split('T')[0];
-      if (document.getElementById('dashDateTo')) document.getElementById('dashDateTo').value = today.toISOString().split('T')[0];
-
-      updateDashboardStatsAndCharts();
-      renderMyTasks();
-      renderMusyawarahList();
-      renderKanbanBoard();
+    function handleSimpanDraft() {
+      processMusyawarahSubmit(true);
     }
 
-    async function handleMusyawarahSubmit(e) {
-      e.preventDefault();
+    async function handleMusyawarahFormSubmit(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      
+      const checkedPeserta = Array.from(document.querySelectorAll('.peserta-checkbox:checked')).map(cb => cb.value);
+      if (checkedPeserta.length < 2) {
+        showToast("Peserta hadir wajib diisi minimal 2 orang!");
+        return;
+      }
+
+      const actionRows = document.querySelectorAll('#actionItemsContainer > div');
+      for (let i = 0; i < actionRows.length; i++) {
+        const row = actionRows[i];
+        const detail = row.querySelector('.act-detail').value.trim();
+        const hasil = row.querySelector('.act-hasil').value.trim();
+        const deadline = row.querySelector('.act-deadline').value.trim();
+        const pokok = row.querySelector('.act-pokok').value.trim();
+
+        if (!pokok) {
+          showToast(`Action Item #${i+1}: Pokok Bahasan wajib diisi!`);
+          return;
+        }
+        if (!detail || !hasil || !deadline) {
+          showToast(`Action Item #${i+1} (${pokok}): Detail Bahasan, Hasil Keputusan, dan Deadline wajib diisi!`);
+          return;
+        }
+      }
+
+      await processMusyawarahSubmit(false);
+    }
+
+    async function processMusyawarahSubmit(isDraft = false) {
       const meetingid = document.getElementById('inputMeetingId').value;
       const jenis = document.getElementById('inputJenis').value;
       const judul = document.getElementById('inputJudul').value;
@@ -1477,12 +1550,17 @@
       const ketua = document.getElementById('inputKetua').value;
       const notulis = document.getElementById('inputNotulis').value;
 
-      const checkedPeserta = Array.from(document.querySelectorAll('.peserta-checkbox:checked')).map(cb => cb.value);
+      if (!jenis || !judul || !lokasi || !tanggal || !ketua || !notulis) {
+        showToast("Lengkapi semua field informasi umum musyawarah!");
+        return;
+      }
 
+      const checkedPeserta = Array.from(document.querySelectorAll('.peserta-checkbox:checked')).map(cb => cb.value);
       const actionRows = document.querySelectorAll('#actionItemsContainer > div');
+
       const actionItems = Array.from(actionRows).map(row => {
         const picName = row.querySelector('.act-pic').value;
-        const foundUser = defaultUsers.find(u => u.nama === picName);
+        const foundUser = spreadsheetUsers.find(u => u.nama === picName);
         return {
           actionid: row.querySelector('.act-id').value,
           pokokbahasan: row.querySelector('.act-pokok').value,
@@ -1502,23 +1580,26 @@
         meetingid, jenismusyawarah: jenis, judul, lokasi, tanggal, ketua, notulis, peserta: checkedPeserta, actionItems
       };
 
-      showToast("Menyimpan notulensi...");
+      showToast(isDraft ? "Menyimpan draft..." : "Menyimpan ke spreadsheet...");
 
       try {
         await fetch(MUSYAWARAH_SHEETS_URL, {
           method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({ action: 'saveMusyawarah', data: payload })
         });
       } catch (err) {
         console.warn("Save Error:", err);
       }
 
-      musyawarahData.unshift(payload);
-      updateDashboardStatsAndCharts();
-      switchTab('list');
-      showToast("Notulensi berhasil disimpan!");
+      await fetchMusyawarahData();
+
+      if (isDraft) {
+        showToast("Draft berhasil disimpan ke spreadsheet!");
+      } else {
+        switchTab('list');
+        showToast("Musyawarah berhasil disubmit ke spreadsheet!");
+      }
     }
 
     function setDashPreset(type) {
@@ -1526,14 +1607,32 @@
       const dateTo = document.getElementById('dashDateTo');
       const today = new Date();
 
-      if (type === 'last30') {
+      const btnLastMonth = document.getElementById('btnPresetLastMonth');
+      const btnLast30 = document.getElementById('btnPresetLast30');
+      const btnAll = document.getElementById('btnPresetAll');
+
+      const inactiveClass = "px-2.5 py-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-brand-50 hover:text-brand-700 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold transition-all";
+      const activeClass = "px-2.5 py-1.5 bg-brand-600 text-white rounded-xl text-xs font-bold transition-all shadow-sm";
+
+      if (btnLastMonth) btnLastMonth.className = inactiveClass;
+      if (btnLast30) btnLast30.className = inactiveClass;
+      if (btnAll) btnAll.className = inactiveClass;
+
+      if (type === 'lastMonth') {
+        const past = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+        dateFrom.value = past.toISOString().split('T')[0];
+        dateTo.value = today.toISOString().split('T')[0];
+        if (btnLastMonth) btnLastMonth.className = activeClass;
+      } else if (type === 'last30') {
         const past = new Date();
         past.setDate(today.getDate() - 30);
         dateFrom.value = past.toISOString().split('T')[0];
         dateTo.value = today.toISOString().split('T')[0];
+        if (btnLast30) btnLast30.className = activeClass;
       } else if (type === 'all') {
         dateFrom.value = '';
         dateTo.value = '';
+        if (btnAll) btnAll.className = activeClass;
       }
 
       updateDashboardStatsAndCharts();
@@ -1543,13 +1642,11 @@
       const dateFrom = document.getElementById('dashDateFrom')?.value || '';
       const dateTo = document.getElementById('dashDateTo')?.value || '';
 
-      // Tampilan Dashboard disaring sesuai otorisasi hak akses user (akses_musyawarah)
       let filtered = musyawarahData.filter(m => {
-        const matchAccess = userHasAccessToMeetingType(m.jenismusyawarah);
         let matchDate = true;
         if (dateFrom && m.tanggal < dateFrom) matchDate = false;
         if (dateTo && m.tanggal > dateTo) matchDate = false;
-        return matchAccess && matchDate;
+        return matchDate;
       });
 
       let totalActions = 0;
@@ -1609,8 +1706,6 @@
       colBelum.innerHTML = ''; colProgres.innerHTML = ''; colTertunda.innerHTML = ''; colSelesai.innerHTML = '';
 
       musyawarahData.forEach(m => {
-        if (!userHasAccessToMeetingType(m.jenismusyawarah)) return;
-
         if (Array.isArray(m.actionItems)) {
           m.actionItems.forEach(a => {
             const prog = getActionProgress(a);
@@ -1657,6 +1752,8 @@
 
       document.getElementById('qeMeetingId').value = meetingId;
       document.getElementById('qeActionId').value = actionId;
+      document.getElementById('qeDetailBahasan').value = foundAct.detailbahasan || '';
+      document.getElementById('qeHasilKeputusan').value = foundAct.hasilkeputusan || '';
       document.getElementById('qeStatus').value = foundAct.status || 'Belum Dimulai';
       document.getElementById('qeProgres').value = getActionProgress(foundAct);
       document.getElementById('qeCatatan').value = foundAct.catatanterakhir || '';
@@ -1673,6 +1770,8 @@
       e.preventDefault();
       const meetingId = document.getElementById('qeMeetingId').value;
       const actionId = document.getElementById('qeActionId').value;
+      const detailBahasan = document.getElementById('qeDetailBahasan').value;
+      const hasilKeputusan = document.getElementById('qeHasilKeputusan').value;
       const status = document.getElementById('qeStatus').value;
       const progres = parseInt(document.getElementById('qeProgres').value, 10) || 0;
       const catatan = document.getElementById('qeCatatan').value;
@@ -1684,6 +1783,8 @@
         if (m.meetingid === meetingId && Array.isArray(m.actionItems)) {
           m.actionItems.forEach(a => {
             if (a.actionid === actionId) {
+              a.detailbahasan = detailBahasan;
+              a.hasilkeputusan = hasilKeputusan;
               a.status = status;
               a.persentaseprogres = progres;
               a.catatanterakhir = catatan;
@@ -1699,8 +1800,7 @@
         try {
           await fetch(MUSYAWARAH_SHEETS_URL, {
             method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify({ action: 'saveMusyawarah', data: targetMeeting })
           });
         } catch (err) {
@@ -1709,11 +1809,8 @@
       }
 
       closeQuickEditModal();
-      updateDashboardStatsAndCharts();
-      renderMyTasks();
-      renderMusyawarahList();
-      renderKanbanBoard();
-      showToast("Progress berhasil diperbarui!");
+      await fetchMusyawarahData();
+      showToast("Action item & detail berhasil diperbarui di spreadsheet!");
     }
 
     function openDetailModal(meetingId) {
@@ -1792,26 +1889,21 @@
     }
 
     async function deleteMusyawarahRecord(meetingId) {
-      if (!confirm(`Apakah Anda yakin ingin menghapus Musyawarah ${meetingId}? Data yang dihapus tidak dapat dikembalikan.`)) return;
-      showToast("Menghapus musyawarah...");
+      if (!confirm(`Apakah Anda yakin ingin menghapus Musyawarah ${meetingId} dari spreadsheet?`)) return;
+      showToast("Menghapus musyawarah dari spreadsheet...");
 
       try {
         await fetch(MUSYAWARAH_SHEETS_URL, {
           method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({ action: 'deleteMusyawarah', meetingid: meetingId })
         });
       } catch (err) {
         console.warn("Delete Error:", err);
       }
 
-      musyawarahData = musyawarahData.filter(m => m.meetingid !== meetingId);
-      updateDashboardStatsAndCharts();
-      renderMyTasks();
-      renderMusyawarahList();
-      renderKanbanBoard();
-      showToast("Musyawarah berhasil dihapus!");
+      await fetchMusyawarahData();
+      showToast("Musyawarah berhasil dihapus dari spreadsheet!");
     }
 
     async function deleteSingleActionItem(meetingId, actionId) {
@@ -1830,8 +1922,7 @@
         try {
           await fetch(MUSYAWARAH_SHEETS_URL, {
             method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify({ action: 'saveMusyawarah', data: targetMeet })
           });
         } catch (err) {
@@ -1839,16 +1930,12 @@
         }
       }
 
-      updateDashboardStatsAndCharts();
-      renderMyTasks();
-      renderMusyawarahList();
-      renderKanbanBoard();
+      await fetchMusyawarahData();
       showToast("Action item berhasil dihapus!");
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      fetchUsersFromSheet();
-      populateUserSelects();
+      loadAllData();
       checkUserSession();
       initLucideIcons();
     });
