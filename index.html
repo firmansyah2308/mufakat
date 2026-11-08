@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Musyawarah Taklim System</title>
+  <title>Aplikasi Musyawarah SKB1</title>
   
-  <!-- Tailwind CSS CDN -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -32,7 +32,7 @@
     }
   </script>
 
-  <!-- Lucide Icons CDN -->
+  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- Google Fonts -->
@@ -64,52 +64,50 @@
 
   <!-- ==================== MODAL LOGIN ==================== -->
   <div id="loginModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-md p-4">
-    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-700 space-y-6 text-center relative overflow-hidden">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-700 space-y-5 text-center relative overflow-hidden">
       
-      <div class="w-16 h-16 bg-brand-100 dark:bg-brand-900/50 text-brand-600 dark:text-brand-400 rounded-2xl flex items-center justify-center mx-auto text-2xl shadow-inner">
-        <i data-lucide="lock" class="w-8 h-8"></i>
+      <div class="w-14 h-14 bg-brand-100 dark:bg-brand-900/50 text-brand-600 dark:text-brand-400 rounded-2xl flex items-center justify-center mx-auto text-2xl shadow-inner">
+        <i data-lucide="lock" class="w-7 h-7"></i>
       </div>
 
-      <div class="space-y-2">
-        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Login Musyawarah Taklim</h2>
-        <p class="text-xs text-slate-500 dark:text-slate-400">Silakan masukkan username dan kata sandi pengurus.</p>
+      <div class="space-y-1.5">
+        <h2 class="text-xl font-black text-slate-900 dark:text-white tracking-tight">Aplikasi Musyawarah SKB1</h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Selamat datang di aplikasi manajemen musyawarah kelompok. Silahkan masukkan username dan password Anda.</p>
       </div>
 
-      <form onsubmit="handleLoginSubmit(event)" class="space-y-4 text-left">
+      <form onsubmit="handleLoginSubmit(event)" class="space-y-3.5 text-left">
         <div>
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 ml-1">Username / Nama <span class="text-rose-500">*</span></label>
-          <div class="relative">
-            <input type="text" id="loginUsername" placeholder="Contoh: ariffir / nur / nursahid" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-bold focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white transition-all">
-          </div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 ml-1">Username / Nama <span class="text-rose-500">*</span></label>
+          <input type="text" id="loginUsername" placeholder="Masukkan username..." required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-bold focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white transition-all">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 ml-1">Password / Kata Sandi <span class="text-rose-500">*</span></label>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 ml-1">Password <span class="text-rose-500">*</span></label>
           <div class="relative">
-            <input type="password" id="loginPassword" placeholder="Masukkan kata sandi..." required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-bold focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white transition-all pr-10">
-            <button type="button" onclick="toggleShowPassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 focus:outline-none">
+            <input type="password" id="loginPassword" placeholder="Masukkan kata sandi..." required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-bold focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white transition-all pr-10">
+            <button type="button" onclick="toggleShowPassword('loginPassword', 'passwordEyeIcon')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 focus:outline-none">
               <i id="passwordEyeIcon" data-lucide="eye" class="w-4 h-4"></i>
             </button>
           </div>
         </div>
 
-        <div id="loginErrorMsg" class="hidden text-xs text-rose-600 font-bold text-center bg-rose-50 dark:bg-rose-950/40 p-3 rounded-xl border border-rose-200 dark:border-rose-900">
+        <div id="loginErrorMsg" class="hidden text-xs text-rose-600 font-bold text-center bg-rose-50 dark:bg-rose-950/40 p-2.5 rounded-xl border border-rose-200 dark:border-rose-900">
           Username atau Password salah!
         </div>
 
-        <button type="submit" id="loginBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-extrabold py-3.5 px-4 rounded-xl shadow-lg shadow-brand-600/30 active:scale-[0.98] transition-all flex items-center justify-center space-x-2 text-xs">
+        <button type="submit" id="loginBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-extrabold py-3 px-4 rounded-xl shadow-lg shadow-brand-600/30 active:scale-[0.98] transition-all flex items-center justify-center space-x-2 text-xs">
           <i data-lucide="log-in" class="w-4 h-4"></i>
           <span>Masuk ke Aplikasi</span>
         </button>
       </form>
 
-      <div class="pt-2 border-t border-slate-100 dark:border-slate-700 text-[11px] text-slate-400">
-        Musyawarah Taklim Management System
+      <div class="pt-3 border-t border-slate-100 dark:border-slate-700 text-[11px] font-semibold text-slate-400">
+        © 2026 Kelompok Srengseng Kalibata 1
       </div>
     </div>
   </div>
 
-  <!-- ==================== MAIN APPLICATION HEADER ==================== -->
+  <!-- ==================== HEADER APLIKASI ==================== -->
   <header id="mainHeader" class="hidden sticky top-0 z-40 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
@@ -122,8 +120,8 @@
             <i data-lucide="users" class="w-5 h-5"></i>
           </div>
           <div>
-            <h1 class="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white leading-tight">Musyawarah Taklim</h1>
-            <p class="text-[11px] text-slate-500 dark:text-slate-400">Sistem Notulensi & Progress Monitoring</p>
+            <h1 class="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white leading-tight">Aplikasi Musyawarah SKB1</h1>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400">Sistem Notulensi & Progress Monitoring Musyawarah</p>
           </div>
         </div>
 
@@ -148,7 +146,7 @@
     </div>
   </header>
 
-  <!-- ==================== MAIN APPLICATION WRAPPER ==================== -->
+  <!-- ==================== MAIN WRAPPER ==================== -->
   <div id="appWrapper" class="hidden flex-1 flex w-full max-w-7xl mx-auto">
 
     <!-- Sidebar Backdrop Mobile -->
@@ -157,7 +155,7 @@
     <!-- SIDEBAR NAVIGATION -->
     <aside id="mainSidebar" class="fixed lg:sticky top-0 lg:top-16 left-0 h-screen lg:h-[calc(100vh-4rem)] z-40 w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col justify-between transition-transform duration-300 -translate-x-full lg:translate-x-0 shadow-lg lg:shadow-none">
       
-      <div class="p-4 space-y-1.5">
+      <div class="p-4 space-y-1.5 overflow-y-auto custom-scrollbar">
         <div class="flex items-center justify-between px-3 py-2 text-[10px] font-black uppercase text-slate-400 tracking-wider">
           Navigasi Utama
           <button onclick="toggleMobileSidebar(false)" class="lg:hidden text-slate-400 hover:text-slate-600">
@@ -200,21 +198,42 @@
             <span>Progress Board</span>
           </div>
         </button>
+
+        <!-- SUBMENU PENGATURAN -->
+        <div class="pt-2 border-t border-slate-100 dark:border-slate-700">
+          <button onclick="toggleSettingsAccordion()" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl font-bold text-xs text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all">
+            <div class="flex items-center space-x-3">
+              <i data-lucide="settings" class="w-4 h-4"></i>
+              <span>Pengaturan</span>
+            </div>
+            <i id="settingsChevron" data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200"></i>
+          </button>
+
+          <div id="settingsSubmenu" class="hidden pl-4 pr-1 py-1 space-y-1">
+            <button onclick="openChangePasswordModal()" class="w-full flex items-center space-x-2 px-3 py-2 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+              <i data-lucide="key" class="w-3.5 h-3.5 text-amber-500"></i>
+              <span>Ganti Password</span>
+            </button>
+
+            <button onclick="toggleDarkMode()" class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+              <span class="flex items-center space-x-2">
+                <i data-lucide="moon" class="w-3.5 h-3.5 text-purple-500"></i>
+                <span>Mode Tampilan</span>
+              </span>
+              <span id="themeLabel" class="text-[10px] bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 rounded font-mono">Dark/Light</span>
+            </button>
+          </div>
+        </div>
+
       </div>
 
-      <div class="p-4 border-t border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/30 text-xs text-slate-400 space-y-2">
-        <button onclick="toggleDarkMode()" class="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold">
-          <span class="flex items-center space-x-2">
-            <i data-lucide="moon" class="w-4 h-4 text-purple-500"></i>
-            <span>Mode Tampilan</span>
-          </span>
-          <span class="text-[10px] bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded-md">Switch</span>
-        </button>
+      <div class="p-4 border-t border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/30 text-[11px] text-slate-400 text-center">
+        © 2026 Srengseng Kalibata 1
       </div>
 
     </aside>
 
-    <!-- MAIN CONTENT CONTAINER -->
+    <!-- MAIN CONTENT -->
     <main id="appContent" class="flex-1 px-4 sm:px-6 lg:px-8 py-6 min-w-0">
 
       <!-- SECTION 1: DASHBOARD & STATS -->
@@ -225,25 +244,52 @@
           </span>
           <h2 class="text-xl sm:text-2xl font-black">Monitoring Notulensi & Action Items</h2>
           <p class="text-xs text-brand-100 leading-relaxed max-w-xl">
-            Pantau status eksekusi hasil musyawarah Majelis Taklim secara real-time dan terukur.
+            Pantau status eksekusi hasil musyawarah Majelis Taklim SKB1 secara real-time dan terukur.
           </p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
-            <p class="text-xs font-bold text-slate-400 uppercase">Total Musyawarah</p>
+          <!-- CARD 1 -->
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <p class="text-xs font-bold text-slate-400 uppercase">Total Musyawarah</p>
+              <div class="p-2.5 bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 rounded-xl">
+                <i data-lucide="file-text" class="w-5 h-5"></i>
+              </div>
+            </div>
             <h3 id="dashTotalMusyawarah" class="text-2xl font-black text-slate-900 dark:text-white font-mono">0</h3>
           </div>
-          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
-            <p class="text-xs font-bold text-slate-400 uppercase">Total Action Items</p>
+
+          <!-- CARD 2 -->
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <p class="text-xs font-bold text-slate-400 uppercase">Total Action Items</p>
+              <div class="p-2.5 bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 rounded-xl">
+                <i data-lucide="list-checks" class="w-5 h-5"></i>
+              </div>
+            </div>
             <h3 id="dashTotalActions" class="text-2xl font-black text-slate-900 dark:text-white font-mono">0</h3>
           </div>
-          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
-            <p class="text-xs font-bold text-slate-400 uppercase">Dalam Proses</p>
+
+          <!-- CARD 3 -->
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <p class="text-xs font-bold text-slate-400 uppercase">Dalam Proses</p>
+              <div class="p-2.5 bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 rounded-xl">
+                <i data-lucide="loader-2" class="w-5 h-5"></i>
+              </div>
+            </div>
             <h3 id="dashInProgresActions" class="text-2xl font-black text-amber-500 font-mono">0</h3>
           </div>
-          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
-            <p class="text-xs font-bold text-slate-400 uppercase">Selesai</p>
+
+          <!-- CARD 4 -->
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <p class="text-xs font-bold text-slate-400 uppercase">Selesai</p>
+              <div class="p-2.5 bg-brand-50 dark:bg-brand-950/50 text-brand-600 dark:text-brand-400 rounded-xl">
+                <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+              </div>
+            </div>
             <h3 id="dashCompletedActions" class="text-2xl font-black text-brand-600 font-mono">0</h3>
           </div>
         </div>
@@ -251,10 +297,22 @@
 
       <!-- SECTION 2: TUGAS SAYA -->
       <section id="secTasks" class="hidden space-y-6">
-        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-700 pb-4">
           <div>
             <h2 class="text-lg font-black text-slate-900 dark:text-white uppercase">Tugas Saya (PIC)</h2>
             <p class="text-xs text-slate-500">Daftar Action Item yang ditugaskan kepada Anda</p>
+          </div>
+          
+          <!-- PENCARIAN & FILTER TANGGAL TUGAS SAYA -->
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="relative min-w-[180px]">
+              <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+              <input type="text" id="taskSearchInput" oninput="renderMyTasks()" placeholder="Cari tugas..." class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-9 pr-3 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white">
+            </div>
+            <input type="date" id="taskDateFrom" onchange="renderMyTasks()" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1.5 text-xs font-semibold dark:text-white" title="Dari Tanggal">
+            <span class="text-xs text-slate-400">-</span>
+            <input type="date" id="taskDateTo" onchange="renderMyTasks()" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1.5 text-xs font-semibold dark:text-white" title="Sampai Tanggal">
+            <button onclick="resetTaskFilters()" class="px-2.5 py-1.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold hover:bg-slate-200">Reset</button>
           </div>
         </div>
 
@@ -279,6 +337,7 @@
               <div>
                 <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Jenis Musyawarah <span class="text-rose-500">*</span></label>
                 <select id="inputJenis" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs font-bold focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white">
+                  <option value="">-- Pilih Jenis Musyawarah --</option>
                   <option value="Musyawarah 4S">Musyawarah 4S</option>
                   <option value="Musyawarah Pengurus">Musyawarah Pengurus</option>
                   <option value="Musyawarah 5 Unsur">Musyawarah 5 Unsur</option>
@@ -296,7 +355,7 @@
 
               <div>
                 <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Lokasi Pelaksanaan <span class="text-rose-500">*</span></label>
-                <input type="text" id="inputLokasi" placeholder="Contoh: Masjid Baitul Haq Lantai 1" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white">
+                <input type="text" id="inputLokasi" placeholder="Contoh: Ruang Utama Masjid Baitul Haq" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white">
               </div>
             </div>
 
@@ -343,21 +402,33 @@
 
       <!-- SECTION 4: DAFTAR NOTULENSI -->
       <section id="secList" class="hidden space-y-6">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-700 pb-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-700 pb-4">
           <div>
             <h2 class="text-lg font-black text-slate-900 dark:text-white uppercase">Daftar Notulensi Musyawarah</h2>
             <p class="text-xs text-slate-500">Arsip pencatatan rapat, daftar peserta, dan detail rincian action items</p>
           </div>
-          
-          <!-- Filter Kategori Musyawarah -->
-          <div class="flex flex-wrap gap-1.5" id="categoryFilterContainer">
-            <button onclick="filterNotulensiCategory('Semua')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-600 text-white shadow-sm">Semua</button>
-            <button onclick="filterNotulensiCategory('Musyawarah 4S')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">4S</button>
-            <button onclick="filterNotulensiCategory('Musyawarah Pengurus')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Pengurus</button>
-            <button onclick="filterNotulensiCategory('Musyawarah 5 Unsur')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">5 Unsur</button>
-            <button onclick="filterNotulensiCategory('Musyawarah KBM')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">KBM</button>
-            <button onclick="filterNotulensiCategory('Musyawarah Muda-mudi')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Muda-mudi</button>
+
+          <!-- PENCARIAN & FILTER TANGGAL DAFTAR NOTULENSI -->
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="relative min-w-[180px]">
+              <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+              <input type="text" id="listSearchInput" oninput="renderMusyawarahList()" placeholder="Cari notulensi..." class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-9 pr-3 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white">
+            </div>
+            <input type="date" id="listDateFrom" onchange="renderMusyawarahList()" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1.5 text-xs font-semibold dark:text-white" title="Dari Tanggal">
+            <span class="text-xs text-slate-400">-</span>
+            <input type="date" id="listDateTo" onchange="renderMusyawarahList()" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1.5 text-xs font-semibold dark:text-white" title="Sampai Tanggal">
+            <button onclick="resetListFilters()" class="px-2.5 py-1.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold hover:bg-slate-200">Reset</button>
           </div>
+        </div>
+
+        <!-- Filter Kategori Tag Musyawarah -->
+        <div class="flex flex-wrap gap-1.5" id="categoryFilterContainer">
+          <button onclick="filterNotulensiCategory('Semua')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-600 text-white shadow-sm transition-all">Semua</button>
+          <button onclick="filterNotulensiCategory('Musyawarah 4S')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">4S</button>
+          <button onclick="filterNotulensiCategory('Musyawarah Pengurus')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">Pengurus</button>
+          <button onclick="filterNotulensiCategory('Musyawarah 5 Unsur')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">5 Unsur</button>
+          <button onclick="filterNotulensiCategory('Musyawarah KBM')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">KBM</button>
+          <button onclick="filterNotulensiCategory('Musyawarah Muda-mudi')" class="filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">Muda-mudi</button>
         </div>
 
         <div id="musyawarahListContainer" class="space-y-4"></div>
@@ -405,9 +476,36 @@
         <button onclick="closeDetailModal()" class="text-slate-400 hover:text-slate-600 p-2"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
 
-      <div id="mdBody" class="p-6 overflow-y-auto space-y-6 text-xs custom-scrollbar">
-        <!-- Content dynamically populated -->
+      <div id="mdBody" class="p-6 overflow-y-auto space-y-6 text-xs custom-scrollbar"></div>
+    </div>
+  </div>
+
+  <!-- MODAL GANTI PASSWORD -->
+  <div id="changePasswordModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-700 space-y-4 text-left">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-3">
+        <h3 class="font-black text-sm text-slate-900 dark:text-white">Ganti Password Akun</h3>
+        <button onclick="closeChangePasswordModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
+
+      <form onsubmit="handleChangePasswordSubmit(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Password Lama</label>
+          <input type="password" id="cpOldPassword" required placeholder="Masukkan password saat ini..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold dark:text-white">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Password Baru</label>
+          <input type="password" id="cpNewPassword" required placeholder="Masukkan password baru..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold dark:text-white">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Konfirmasi Password Baru</label>
+          <input type="password" id="cpConfirmPassword" required placeholder="Ulangi password baru..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold dark:text-white">
+        </div>
+
+        <button type="submit" class="w-full bg-brand-600 text-white font-bold py-3 rounded-xl text-xs">Simpan Password Baru</button>
+      </form>
     </div>
   </div>
 
@@ -455,7 +553,7 @@
 
   <!-- Toast Notification -->
   <div id="toast" class="hidden fixed bottom-6 right-6 z-50 bg-slate-900 text-white p-4 rounded-2xl text-xs font-bold shadow-xl border border-slate-700">
-    <span id="toastMsg">Pesan notifikasi...</span>
+    <span id="toastMsg">Notification message</span>
   </div>
 
   <!-- ==================== JAVASCRIPT LOGIC ==================== -->
@@ -490,6 +588,21 @@
         toastMsg.textContent = msg;
         toast.classList.remove('hidden');
         setTimeout(() => toast.classList.add('hidden'), 3500);
+      }
+    }
+
+    function getStatusBadgeClass(status) {
+      switch (status) {
+        case 'Belum Dimulai':
+          return 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600';
+        case 'Dalam Proses':
+          return 'bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border border-amber-300 dark:border-amber-800';
+        case 'Tertunda':
+          return 'bg-rose-100 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-300 dark:border-rose-800';
+        case 'Selesai':
+          return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800';
+        default:
+          return 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300';
       }
     }
 
@@ -551,9 +664,11 @@
       checkUserSession();
     }
 
-    function toggleShowPassword() {
-      const passInput = document.getElementById('loginPassword');
-      passInput.type = passInput.type === 'password' ? 'text' : 'password';
+    function toggleShowPassword(inputId, iconId) {
+      const passInput = document.getElementById(inputId);
+      if (passInput) {
+        passInput.type = passInput.type === 'password' ? 'text' : 'password';
+      }
     }
 
     function toggleMobileSidebar(show) {
@@ -566,6 +681,56 @@
         sidebar.classList.add('-translate-x-full');
         backdrop.classList.add('hidden');
       }
+    }
+
+    function toggleSettingsAccordion() {
+      const menu = document.getElementById('settingsSubmenu');
+      const chevron = document.getElementById('settingsChevron');
+      if (menu) {
+        if (menu.classList.contains('hidden')) {
+          menu.classList.remove('hidden');
+          if (chevron) chevron.style.transform = 'rotate(180deg)';
+        } else {
+          menu.classList.add('hidden');
+          if (chevron) chevron.style.transform = 'rotate(0deg)';
+        }
+      }
+    }
+
+    function openChangePasswordModal() {
+      document.getElementById('changePasswordModal').classList.remove('hidden');
+    }
+
+    function closeChangePasswordModal() {
+      document.getElementById('changePasswordModal').classList.add('hidden');
+    }
+
+    function handleChangePasswordSubmit(e) {
+      e.preventDefault();
+      const oldPass = document.getElementById('cpOldPassword').value;
+      const newPass = document.getElementById('cpNewPassword').value;
+      const confirmPass = document.getElementById('cpConfirmPassword').value;
+
+      if (!currentUser) return;
+
+      if (currentUser.password !== oldPass) {
+        showToast("Password lama tidak sesuai!");
+        return;
+      }
+
+      if (newPass !== confirmPass) {
+        showToast("Konfirmasi password baru tidak cocok!");
+        return;
+      }
+
+      currentUser.password = newPass;
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      
+      const foundIdx = defaultUsers.findIndex(u => u.username === currentUser.username);
+      if (foundIdx !== -1) defaultUsers[foundIdx].password = newPass;
+
+      closeChangePasswordModal();
+      showToast("Password berhasil diperbarui!");
     }
 
     function toggleDarkMode() {
@@ -616,7 +781,7 @@
     function populateUserSelects() {
       const selects = document.querySelectorAll('.user-select-dropdown');
       selects.forEach(select => {
-        select.innerHTML = '';
+        select.innerHTML = '<option value="">-- Pilih Pengurus --</option>';
         defaultUsers.forEach(u => {
           const opt = document.createElement('option');
           opt.value = u.nama;
@@ -640,14 +805,25 @@
       }
     }
 
+    function autoFillTeamId(selectEl) {
+      const selectedNama = selectEl.value;
+      const found = defaultUsers.find(u => u.nama === selectedNama);
+      if (found) {
+        selectEl.setAttribute('data-teamid', found.teamid);
+      }
+    }
+
     function resetMusyawarahForm() {
       const today = new Date().toISOString().split('T')[0];
       const meetingId = 'MT-' + new Date().getFullYear() + String(new Date().getMonth()+1).padStart(2,'0') + '-' + Math.floor(100 + Math.random() * 900);
       
       document.getElementById('inputMeetingId').value = meetingId;
+      document.getElementById('inputJenis').value = '';
       document.getElementById('inputJudul').value = '';
       document.getElementById('inputLokasi').value = '';
       document.getElementById('inputTanggal').value = today;
+      document.getElementById('inputKetua').value = '';
+      document.getElementById('inputNotulis').value = '';
 
       const container = document.getElementById('actionItemsContainer');
       if (container) {
@@ -717,14 +893,6 @@
       populateUserSelects();
     }
 
-    function autoFillTeamId(selectEl) {
-      const selectedNama = selectEl.value;
-      const found = defaultUsers.find(u => u.nama === selectedNama);
-      if (found) {
-        selectEl.setAttribute('data-teamid', found.teamid);
-      }
-    }
-
     async function fetchMusyawarahData() {
       showToast("Mengambil data musyawarah...");
       try {
@@ -753,8 +921,8 @@
           meetingid: "MT-202611-001",
           jenismusyawarah: "Musyawarah Pengurus",
           judul: "Persiapan Pelaksanaan Qurban & Kebersihan TPA",
+          lokasi: "Ruang Utama Masjid Baitul Haq",
           tanggal: "2026-11-05",
-          lokasi: "Masjid Baitul Haq Lantai 1",
           ketua: "Nursahid Yanurianto",
           notulis: "Nur Rachman",
           peserta: ["Arif Firmansyah", "Nur Rachman", "Eko Setyo Budi Purnomo", "Fandi Akhmad"],
@@ -874,13 +1042,21 @@
       selectedCategoryFilter = catName;
       const btns = document.querySelectorAll('.filter-cat-btn');
       btns.forEach(btn => {
-        if (btn.textContent.includes(catName) || (catName === 'Semua' && btn.textContent === 'Semua')) {
-          btn.className = "filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-600 text-white shadow-sm";
+        const btnText = btn.textContent.trim();
+        if (btnText === catName || (catName === 'Semua' && btnText === 'Semua')) {
+          btn.className = "filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-600 text-white shadow-sm transition-all";
         } else {
-          btn.className = "filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300";
+          btn.className = "filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all";
         }
       });
       renderMusyawarahList();
+    }
+
+    function resetListFilters() {
+      document.getElementById('listSearchInput').value = '';
+      document.getElementById('listDateFrom').value = '';
+      document.getElementById('listDateTo').value = '';
+      filterNotulensiCategory('Semua');
     }
 
     function renderMusyawarahList() {
@@ -888,13 +1064,27 @@
       if (!container) return;
       container.innerHTML = '';
 
-      let filtered = musyawarahData;
-      if (selectedCategoryFilter !== "Semua") {
-        filtered = musyawarahData.filter(m => (m.jenismusyawarah || '').includes(selectedCategoryFilter));
-      }
+      const searchVal = (document.getElementById('listSearchInput')?.value || '').toLowerCase().trim();
+      const dateFrom = document.getElementById('listDateFrom')?.value || '';
+      const dateTo = document.getElementById('listDateTo')?.value || '';
+
+      let filtered = musyawarahData.filter(m => {
+        const matchCategory = (selectedCategoryFilter === "Semua") || (m.jenismusyawarah || '').includes(selectedCategoryFilter);
+        const matchSearch = !searchVal || 
+          (m.judul || '').toLowerCase().includes(searchVal) ||
+          (m.meetingid || '').toLowerCase().includes(searchVal) ||
+          (m.ketua || '').toLowerCase().includes(searchVal) ||
+          (m.notulis || '').toLowerCase().includes(searchVal);
+
+        let matchDate = true;
+        if (dateFrom && m.tanggal < dateFrom) matchDate = false;
+        if (dateTo && m.tanggal > dateTo) matchDate = false;
+
+        return matchCategory && matchSearch && matchDate;
+      });
 
       if (filtered.length === 0) {
-        container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">Belum ada notulensi musyawarah untuk kategori ini.</div>`;
+        container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">Belum ada notulensi musyawarah yang sesuai dengan filter.</div>`;
         return;
       }
 
@@ -909,6 +1099,7 @@
         if (actionCount > 0) {
           actionItemsHTML = m.actionItems.map(a => {
             const prog = getActionProgress(a);
+            const badgeClass = getStatusBadgeClass(a.status);
             return `
               <div class="bg-slate-50 dark:bg-slate-900/60 p-3.5 rounded-xl border border-slate-200/80 dark:border-slate-700/80 space-y-2">
                 <div class="flex items-center justify-between">
@@ -927,7 +1118,7 @@
 
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px] pt-1 text-slate-500 border-t border-slate-200/50 dark:border-slate-800">
                   <div><strong>PIC:</strong> ${a.pic} (${a.teamid || '-'})</div>
-                  <div><strong>Status:</strong> <span class="font-bold text-amber-600">${a.status}</span> (${prog}%)</div>
+                  <div><strong>Status:</strong> <span class="font-bold px-1.5 py-0.5 rounded ${badgeClass}">${a.status}</span> (${prog}%)</div>
                   <div><strong>Deadline:</strong> ${a.deadline || '-'}</div>
                   <div><strong>Kendala:</strong> ${a.kendala || 'Tidak ada'}</div>
                 </div>
@@ -957,9 +1148,9 @@
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs text-slate-600 dark:text-slate-300">
-            <div><strong>Lokasi:</strong> ${m.lokasi || '-'}</div>
             <div><strong>Ketua:</strong> ${m.ketua}</div>
             <div><strong>Notulis:</strong> ${m.notulis}</div>
+            <div><strong>Lokasi:</strong> ${m.lokasi || '-'}</div>
           </div>
 
           <div>
@@ -967,7 +1158,6 @@
             <div class="flex flex-wrap gap-1">${pesertaBadges || '<span class="text-slate-400">-</span>'}</div>
           </div>
 
-          <!-- Accordion Collapsible Action Items -->
           <div class="pt-2">
             <button onclick="toggleCardAccordion('acc-${idx}')" class="w-full flex items-center justify-between p-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl font-bold text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
               <span class="flex items-center space-x-2">
@@ -1015,22 +1205,25 @@
       
       let actionsHTML = '';
       if (Array.isArray(found.actionItems) && found.actionItems.length > 0) {
-        actionsHTML = found.actionItems.map(a => `
-          <div class="p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2">
-            <div class="flex justify-between font-bold text-brand-600">
-              <span>${a.actionid} - ${a.pokokbahasan}</span>
-              <span>${a.status} (${getActionProgress(a)}%)</span>
+        actionsHTML = found.actionItems.map(a => {
+          const badgeClass = getStatusBadgeClass(a.status);
+          return `
+            <div class="p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2">
+              <div class="flex justify-between items-center font-bold">
+                <span class="text-brand-600">${a.actionid} - ${a.pokokbahasan}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] ${badgeClass}">${a.status} (${getActionProgress(a)}%)</span>
+              </div>
+              ${a.detailbahasan ? `<p><strong>Detail:</strong> ${a.detailbahasan}</p>` : ''}
+              ${a.hasilkeputusan ? `<p class="text-emerald-700 dark:text-emerald-400"><strong>Keputusan:</strong> ${a.hasilkeputusan}</p>` : ''}
+              <div class="grid grid-cols-2 gap-2 text-slate-500 text-[11px] pt-2 border-t border-slate-200/50">
+                <div>PIC: ${a.pic} (${a.teamid || '-'})</div>
+                <div>Deadline: ${a.deadline || '-'}</div>
+                <div>Catatan: ${a.catatanterakhir || '-'}</div>
+                <div>Kendala: ${a.kendala || '-'}</div>
+              </div>
             </div>
-            ${a.detailbahasan ? `<p><strong>Detail:</strong> ${a.detailbahasan}</p>` : ''}
-            ${a.hasilkeputusan ? `<p class="text-emerald-700 dark:text-emerald-400"><strong>Keputusan:</strong> ${a.hasilkeputusan}</p>` : ''}
-            <div class="grid grid-cols-2 gap-2 text-slate-500 text-[11px] pt-2 border-t border-slate-200/50">
-              <div>PIC: ${a.pic} (${a.teamid || '-'})</div>
-              <div>Deadline: ${a.deadline || '-'}</div>
-              <div>Catatan: ${a.catatanterakhir || '-'}</div>
-              <div>Kendala: ${a.kendala || '-'}</div>
-            </div>
-          </div>
-        `).join('');
+          `;
+        }).join('');
       } else {
         actionsHTML = `<p class="text-slate-400 italic">Tidak ada action items.</p>`;
       }
@@ -1039,8 +1232,8 @@
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl">
           <div><span class="text-slate-400 block text-[10px]">MEETING ID</span> <strong>${found.meetingid}</strong></div>
           <div><span class="text-slate-400 block text-[10px]">TANGGAL</span> <strong>${found.tanggal}</strong></div>
-          <div><span class="text-slate-400 block text-[10px]">LOKASI</span> <strong>${found.lokasi || '-'}</strong></div>
-          <div><span class="text-slate-400 block text-[10px]">KETUA / NOTULIS</span> <strong>${found.ketua} / ${found.notulis}</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">KETUA</span> <strong>${found.ketua}</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">NOTULIS</span> <strong>${found.notulis}</strong></div>
         </div>
 
         <div>
@@ -1057,8 +1250,68 @@
       document.getElementById('detailNotulensiModal').classList.remove('hidden');
     }
 
+    function openSingleActionDetailModal(meetingId, actionId) {
+      const foundMeeting = musyawarahData.find(m => m.meetingid === meetingId);
+      if (!foundMeeting) return;
+
+      let foundAct = null;
+      if (Array.isArray(foundMeeting.actionItems)) {
+        foundAct = foundMeeting.actionItems.find(a => a.actionid === actionId);
+      }
+      if (!foundAct) return;
+
+      document.getElementById('mdCategory').textContent = foundMeeting.jenismusyawarah || 'Musyawarah';
+      document.getElementById('mdTitle').textContent = foundMeeting.judul;
+
+      const body = document.getElementById('mdBody');
+      const pesertaList = Array.isArray(foundMeeting.peserta) ? foundMeeting.peserta.join(', ') : '-';
+      const badgeClass = getStatusBadgeClass(foundAct.status);
+      const prog = getActionProgress(foundAct);
+
+      body.innerHTML = `
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl">
+          <div><span class="text-slate-400 block text-[10px]">MEETING ID</span> <strong>${foundMeeting.meetingid}</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">TANGGAL</span> <strong>${foundMeeting.tanggal}</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">KETUA</span> <strong>${foundMeeting.ketua}</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">NOTULIS</span> <strong>${foundMeeting.notulis}</strong></div>
+        </div>
+
+        <div>
+          <span class="text-slate-400 block text-[10px] mb-1">PESERTA HADIR</span>
+          <p class="font-semibold text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-700">${pesertaList}</p>
+        </div>
+
+        <div class="space-y-3">
+          <h4 class="font-black uppercase text-slate-900 dark:text-white">Detail Action Item Yang Dipilih</h4>
+          <div class="p-5 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
+            <div class="flex justify-between items-center font-bold">
+              <span class="text-brand-600 text-sm font-mono">${foundAct.actionid} - ${foundAct.pokokbahasan}</span>
+              <span class="px-2.5 py-1 rounded text-xs ${badgeClass}">${foundAct.status} (${prog}%)</span>
+            </div>
+            ${foundAct.detailbahasan ? `<div class="bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><strong class="text-slate-400 block text-[10px]">DETAIL BAHASAN</strong> <p class="text-slate-700 dark:text-slate-200 mt-0.5">${foundAct.detailbahasan}</p></div>` : ''}
+            ${foundAct.hasilkeputusan ? `<div class="bg-emerald-50 dark:bg-emerald-950/40 p-3 rounded-xl border border-emerald-200 dark:border-emerald-800"><strong class="text-emerald-700 dark:text-emerald-400 block text-[10px]">HASIL KEPUTUSAN</strong> <p class="text-emerald-800 dark:text-emerald-300 font-medium mt-0.5">${foundAct.hasilkeputusan}</p></div>` : ''}
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-slate-600 dark:text-slate-300 text-xs pt-2 border-t border-slate-200 dark:border-slate-700">
+              <div><strong class="text-slate-400 block text-[10px]">PIC</strong> ${foundAct.pic} (${foundAct.teamid || '-'})</div>
+              <div><strong class="text-slate-400 block text-[10px]">DEADLINE</strong> ${foundAct.deadline || '-'}</div>
+              <div><strong class="text-slate-400 block text-[10px]">CATATAN TERAKHIR</strong> ${foundAct.catatanterakhir || '-'}</div>
+              <div><strong class="text-slate-400 block text-[10px]">KENDALA LAPANGAN</strong> ${foundAct.kendala || 'Tidak ada'}</div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('detailNotulensiModal').classList.remove('hidden');
+    }
+
     function closeDetailModal() {
       document.getElementById('detailNotulensiModal').classList.add('hidden');
+    }
+
+    function resetTaskFilters() {
+      document.getElementById('taskSearchInput').value = '';
+      document.getElementById('taskDateFrom').value = '';
+      document.getElementById('taskDateTo').value = '';
+      renderMyTasks();
     }
 
     function renderMyTasks() {
@@ -1069,11 +1322,26 @@
       container.innerHTML = '';
       let myTasks = [];
 
+      const searchVal = (document.getElementById('taskSearchInput')?.value || '').toLowerCase().trim();
+      const dateFrom = document.getElementById('taskDateFrom')?.value || '';
+      const dateTo = document.getElementById('taskDateTo')?.value || '';
+
       musyawarahData.forEach(m => {
         if (Array.isArray(m.actionItems)) {
           m.actionItems.forEach(a => {
-            if (a.pic && (a.pic.toLowerCase() === currentUser.nama.toLowerCase() || a.pic.toLowerCase().includes(currentUser.username.toLowerCase()))) {
-              myTasks.push({ ...a, meetingid: m.meetingid, judul: m.judul });
+            if (a.pic && a.pic.toLowerCase() === currentUser.nama.toLowerCase()) {
+              const matchSearch = !searchVal || 
+                (a.pokokbahasan || '').toLowerCase().includes(searchVal) ||
+                (a.actionid || '').toLowerCase().includes(searchVal) ||
+                (m.judul || '').toLowerCase().includes(searchVal);
+
+              let matchDate = true;
+              if (dateFrom && m.tanggal < dateFrom) matchDate = false;
+              if (dateTo && m.tanggal > dateTo) matchDate = false;
+
+              if (matchSearch && matchDate) {
+                myTasks.push({ ...a, meetingid: m.meetingid, judul: m.judul, tanggal: m.tanggal });
+              }
             }
           });
         }
@@ -1082,26 +1350,33 @@
       if (badge) badge.textContent = myTasks.length;
 
       if (myTasks.length === 0) {
-        container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">Belum ada tugas yang ditugaskan kepada Anda.</div>`;
+        container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">Belum ada tugas yang sesuai dengan pencarian / filter Anda.</div>`;
         return;
       }
 
       myTasks.forEach(t => {
         const prog = getActionProgress(t);
+        const badgeClass = getStatusBadgeClass(t.status);
         const card = document.createElement('div');
         card.className = "bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3";
         card.innerHTML = `
           <div class="flex items-center justify-between">
             <span class="text-xs font-mono font-bold text-brand-600 dark:text-brand-400">${t.actionid}</span>
-            <button onclick="openQuickEditModal('${t.meetingid}', '${t.actionid}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:text-white rounded-lg text-xs font-bold flex items-center space-x-1">
-              <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-              <span>Update</span>
-            </button>
+            <div class="flex items-center space-x-2">
+              <button onclick="openSingleActionDetailModal('${t.meetingid}', '${t.actionid}')" class="px-2.5 py-1 bg-brand-50 hover:bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-300 rounded-lg text-xs font-bold flex items-center space-x-1">
+                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                <span>Detail</span>
+              </button>
+              <button onclick="openQuickEditModal('${t.meetingid}', '${t.actionid}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:text-white rounded-lg text-xs font-bold flex items-center space-x-1">
+                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                <span>Update</span>
+              </button>
+            </div>
           </div>
           <div class="font-bold text-sm text-slate-900 dark:text-white">${t.pokokbahasan}</div>
-          <div class="text-xs text-slate-500">Musyawarah: ${t.judul}</div>
+          <div class="text-xs text-slate-500">Musyawarah: ${t.judul} (${t.tanggal})</div>
           <div class="flex items-center justify-between text-xs pt-2 border-t border-slate-100 dark:border-slate-700">
-            <span class="font-bold text-amber-600">${t.status} (${prog}%)</span>
+            <span class="font-bold px-2 py-0.5 rounded text-[11px] ${badgeClass}">${t.status} (${prog}%)</span>
             <span class="font-mono text-slate-400">Deadline: ${t.deadline || '-'}</span>
           </div>
         `;
@@ -1125,6 +1400,7 @@
         if (Array.isArray(m.actionItems)) {
           m.actionItems.forEach(a => {
             const prog = getActionProgress(a);
+            const badgeClass = getStatusBadgeClass(a.status);
             const card = document.createElement('div');
             card.className = "bg-white dark:bg-slate-800 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2 text-xs";
             card.innerHTML = `
@@ -1136,8 +1412,8 @@
               </div>
               <div class="font-bold text-slate-900 dark:text-white">${a.pokokbahasan}</div>
               <div class="text-slate-500">PIC: ${a.pic}</div>
-              <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-700">
-                <span>Deadline: ${a.deadline || '-'}</span>
+              <div class="flex items-center justify-between text-[11px] pt-1 border-t border-slate-100 dark:border-slate-700">
+                <span class="px-1.5 py-0.5 rounded font-semibold ${badgeClass}">${a.status}</span>
                 <span class="font-bold text-brand-600">${prog}%</span>
               </div>
             `;
@@ -1188,6 +1464,7 @@
       const catatan = document.getElementById('qeCatatan').value;
       const kendala = document.getElementById('qeKendala').value;
 
+      let parentMusyawarah = null;
       musyawarahData.forEach(m => {
         if (m.meetingid === meetingId && Array.isArray(m.actionItems)) {
           m.actionItems.forEach(a => {
@@ -1196,6 +1473,7 @@
               a.persentaseprogres = progres;
               a.catatanterakhir = catatan;
               a.kendala = kendala;
+              parentMusyawarah = m;
             }
           });
         }
@@ -1206,7 +1484,21 @@
       renderMyTasks();
       renderMusyawarahList();
       renderKanbanBoard();
-      showToast("Progress berhasil diperbarui!");
+      showToast("Memperbarui status progress...");
+
+      if (parentMusyawarah) {
+        try {
+          await fetch(MUSYAWARAH_SHEETS_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'saveMusyawarah', data: parentMusyawarah })
+          });
+          showToast("Progress tersimpan ke Spreadsheet!");
+        } catch (err) {
+          console.warn("Save Error:", err);
+        }
+      }
     }
 
     window.addEventListener('DOMContentLoaded', () => {
