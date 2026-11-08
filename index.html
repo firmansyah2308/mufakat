@@ -637,28 +637,168 @@
   <script>
     const MUSYAWARAH_SHEETS_URL = "https://script.google.com/macros/s/AKfycbyKP-pootHFvcd5qYA1PDStJIbTTfqchUiNR2A95wWeltv8pLoq9VLeBpr5dVB9sFi_9g/exec";
 
-    const defaultUsers = [
-      { nama: "Arif Firmansyah", username: "ariffir", password: "@Riffir313", teamid: "T-02" },
-      { nama: "Nur Rachman", username: "nur", password: "skb1#1234", teamid: "T-02" },
-      { nama: "Nursahid Yanurianto", username: "nursahid", password: "noer313", teamid: "T-01" },
-      { nama: "Eko Setyo Budi Purnomo", username: "ekoset", password: "123456", teamid: "T-03" },
-      { nama: "Fandi Akhmad", username: "fandi", password: "123456", teamid: "T-03" },
-      { nama: "David Adi Prayoga", username: "yoga", password: "123456", teamid: "T-04" },
-      { nama: "H. Priyanto", username: "priyanto", password: "123456", teamid: "T-05" },
-      { nama: "Maryono", username: "maryono", password: "123456", teamid: "T-01" }
+    let defaultUsers = [
+      { nama: "Arif Firmansyah", username: "ariffir", password: "@Riffir313", teamid: "T-02", akses_musyawarah: ["4S", "Pengurus", "KBM", "Muda-mudi", "5 Unsur"] },
+      { nama: "Nur Rachman", username: "nur", password: "skb1#1234", teamid: "T-02", akses_musyawarah: ["4S", "Pengurus", "KBM", "Muda-mudi", "5 Unsur"] },
+      { nama: "Nursahid Yanurianto", username: "nursahid", password: "noer313", teamid: "T-01", akses_musyawarah: ["4S", "Pengurus", "KBM", "Muda-mudi", "5 Unsur"] },
+      { nama: "Eko Setyo Budi Purnomo", username: "ekoset", password: "123456", teamid: "T-03", akses_musyawarah: ["4S", "Pengurus", "KBM", "Muda-mudi", "5 Unsur"] },
+      { nama: "Fandi Akhmad", username: "fandi", password: "123456", teamid: "T-03", akses_musyawarah: ["4S", "Pengurus"] },
+      { nama: "David Adi Prayoga", username: "yoga", password: "123456", teamid: "T-04", akses_musyawarah: ["4S", "Pengurus", "KBM", "5 Unsur"] },
+      { nama: "H. Priyanto", username: "priyanto", password: "123456", teamid: "T-05", akses_musyawarah: ["4S", "Pengurus", "KBM", "5 Unsur"] },
+      { nama: "Maryono", username: "maryono", password: "123456", teamid: "T-01", akses_musyawarah: ["4S", "Pengurus", "KBM", "5 Unsur"] }
     ];
 
     let musyawarahData = [];
     let currentUser = null;
     let selectedCategoryFilter = "Semua";
 
-    // Chart instances
-    let chartTypeDistribution = null;
-    let chartStatusProgress = null;
+    // Chart.js instance trackers
+    let typeChartInstance = null;
+    let statusChartInstance = null;
 
     function initLucideIcons() {
       if (window.lucide) {
         lucide.createIcons();
+      }
+    }
+
+    function getStatusBadgeClass(status) {
+      const st = (status || '').toLowerCase().trim();
+      if (st.includes('selesai')) {
+        return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900';
+      } else if (st.includes('proses')) {
+        return 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-200 dark:border-amber-900';
+      } else if (st.includes('tertunda')) {
+        return 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-200 dark:border-rose-900';
+      } else {
+        return 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700';
+      }
+    }
+
+    function getActionProgress(act) {
+      if (!act) return 0;
+      const raw = act.persentaseprogres !== undefined ? act.persentaseprogres : (act.progres || 0);
+      const parsed = parseInt(raw, 10);
+      return isNaN(parsed) ? 0 : Math.min(100, Math.max(0, parsed));
+    }
+
+    function renderTypeDistributionChart(counts) {
+      const canvas = document.getElementById('typeDistributionChart');
+      if (!canvas || typeof Chart === 'undefined') return;
+
+      if (typeChartInstance) {
+        typeChartInstance.destroy();
+      }
+
+      const ctx = canvas.getContext('2d');
+      typeChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Musyawarah 4S', 'Pengurus', '5 Unsur', 'KBM', 'Muda-mudi'],
+          datasets: [{
+            data: counts,
+            backgroundColor: ['#10b981', '#3b82f6', '#a855f7', '#f59e0b', '#6366f1'],
+            borderWidth: 2,
+            borderColor: document.documentElement.classList.contains('dark') ? '#1e293b' : '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                boxWidth: 12,
+                font: { size: 10, weight: 'bold' },
+                color: document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#475569'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function renderStatusProgressChart(counts) {
+      const canvas = document.getElementById('statusProgressChart');
+      if (!canvas || typeof Chart === 'undefined') return;
+
+      if (statusChartInstance) {
+        statusChartInstance.destroy();
+      }
+
+      const ctx = canvas.getContext('2d');
+      statusChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Belum Dimulai', 'Dalam Proses', 'Tertunda', 'Selesai'],
+          datasets: [{
+            label: 'Jumlah Action Items',
+            data: counts,
+            backgroundColor: ['#94a3b8', '#f59e0b', '#f43f5e', '#10b981'],
+            borderRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: {
+              ticks: {
+                color: document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#475569',
+                font: { size: 10, weight: 'bold' }
+              }
+            },
+            y: {
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1,
+                color: document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#475569'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function userHasAccessToMeetingType(jenisMusyawarah) {
+      if (!currentUser) return true;
+      if (!currentUser.akses_musyawarah || !Array.isArray(currentUser.akses_musyawarah) || currentUser.akses_musyawarah.length === 0) {
+        return true;
+      }
+
+      const jenis = (jenisMusyawarah || '').toLowerCase();
+      return currentUser.akses_musyawarah.some(akses => jenis.includes(akses.toLowerCase().trim()));
+    }
+
+    async function fetchUsersFromSheet() {
+      try {
+        const res = await fetch(`${MUSYAWARAH_SHEETS_URL}?action=getUsers`, { redirect: 'follow' });
+        if (res.ok) {
+          const json = await res.json();
+          if (json && json.status === "success" && Array.isArray(json.users) && json.users.length > 0) {
+            defaultUsers = json.users.map(u => ({
+              nama: u.nama || u.user,
+              username: u.user || u.username,
+              password: u.password,
+              role: u.role || 'Pengurus',
+              teamid: u.teamid || 'T-01',
+              akses_musyawarah: Array.isArray(u.akses_musyawarah) ? u.akses_musyawarah : []
+            }));
+
+            if (currentUser) {
+              const updated = defaultUsers.find(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
+              if (updated) {
+                currentUser = updated;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+              }
+            }
+            populateUserSelects();
+          }
+        }
+      } catch (err) {
+        console.warn("Gagal mengambil data user dari Apps Script:", err);
       }
     }
 
@@ -670,30 +810,6 @@
         toast.classList.remove('hidden');
         setTimeout(() => toast.classList.add('hidden'), 3500);
       }
-    }
-
-    function getStatusBadgeClass(status) {
-      switch (status) {
-        case 'Belum Dimulai':
-          return 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600';
-        case 'Dalam Proses':
-          return 'bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border border-amber-300 dark:border-amber-800';
-        case 'Tertunda':
-          return 'bg-rose-100 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-300 dark:border-rose-800';
-        case 'Selesai':
-          return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800';
-        default:
-          return 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300';
-      }
-    }
-
-    function getActionProgress(act) {
-      if (!act) return 0;
-      const raw = act.persentaseprogres !== undefined ? act.persentaseprogres :
-                  (act.progres !== undefined ? act.progres :
-                  (act.progress !== undefined ? act.progress : 0));
-      const parsed = parseInt(raw, 10);
-      return isNaN(parsed) ? 0 : Math.min(100, Math.max(0, parsed));
     }
 
     function checkUserSession() {
@@ -718,8 +834,295 @@
       }
     }
 
-    function handleLoginSubmit(e) {
+    function filterNotulensiCategory(catName) {
+      selectedCategoryFilter = catName;
+      const btns = document.querySelectorAll('.filter-cat-btn');
+      btns.forEach(btn => {
+        if (btn.textContent.includes(catName) || (catName === 'Semua' && btn.textContent === 'Semua')) {
+          btn.className = "filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-600 text-white shadow-sm transition-all";
+        } else {
+          btn.className = "filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all";
+        }
+      });
+      renderMusyawarahList();
+    }
+
+    function renderMusyawarahList() {
+      const container = document.getElementById('musyawarahListContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const searchVal = (document.getElementById('listSearchInput')?.value || '').toLowerCase().trim();
+      const dateFrom = document.getElementById('listDateFrom')?.value || '';
+      const dateTo = document.getElementById('listDateTo')?.value || '';
+      const isT01 = currentUser && currentUser.teamid === 'T-01';
+
+      let filtered = musyawarahData.filter(m => {
+        const matchAccess = userHasAccessToMeetingType(m.jenismusyawarah);
+        const matchCategory = (selectedCategoryFilter === "Semua") || (m.jenismusyawarah || '').includes(selectedCategoryFilter);
+        const matchSearch = !searchVal || 
+          (m.judul || '').toLowerCase().includes(searchVal) ||
+          (m.meetingid || '').toLowerCase().includes(searchVal) ||
+          (m.ketua || '').toLowerCase().includes(searchVal) ||
+          (m.notulis || '').toLowerCase().includes(searchVal);
+
+        let matchDate = true;
+        if (dateFrom && m.tanggal < dateFrom) matchDate = false;
+        if (dateTo && m.tanggal > dateTo) matchDate = false;
+
+        return matchAccess && matchCategory && matchSearch && matchDate;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">Belum ada notulensi musyawarah yang sesuai dengan filter dan hak akses Anda.</div>`;
+        return;
+      }
+
+      filtered.forEach((m, idx) => {
+        const actionCount = Array.isArray(m.actionItems) ? m.actionItems.length : 0;
+        const pesertaList = Array.isArray(m.peserta) ? m.peserta : 
+                            (typeof m.peserta === 'string' ? m.peserta.split(',').map(s => s.trim()).filter(Boolean) : []);
+
+        const card = document.createElement('div');
+        card.className = "bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4";
+        
+        let actionItemsHTML = '';
+        if (actionCount > 0) {
+          actionItemsHTML = m.actionItems.map(a => {
+            const prog = getActionProgress(a);
+            const badgeClass = getStatusBadgeClass(a.status);
+            return `
+              <div class="bg-slate-50 dark:bg-slate-900/60 p-3.5 rounded-xl border border-slate-200/80 dark:border-slate-700/80 space-y-2">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-2">
+                    <span class="font-mono text-[10px] font-bold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950 px-2 py-0.5 rounded">${a.actionid}</span>
+                    <span class="font-bold text-slate-900 dark:text-white text-xs">${a.pokokbahasan}</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <button onclick="openQuickEditModal('${m.meetingid}', '${a.actionid}')" class="px-2 py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-[10px] font-bold hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center space-x-1">
+                      <i data-lucide="edit-3" class="w-3 h-3 text-slate-500"></i>
+                      <span>Edit Progress</span>
+                    </button>
+                    ${isT01 ? `<button onclick="deleteSingleActionItem('${m.meetingid}', '${a.actionid}')" class="p-1 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100" title="Hapus Action Item"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>` : ''}
+                  </div>
+                </div>
+
+                ${a.detailbahasan ? `<p class="text-[11px] text-slate-600 dark:text-slate-300"><strong>Detail:</strong> ${a.detailbahasan}</p>` : ''}
+                ${a.hasilkeputusan ? `<p class="text-[11px] text-emerald-700 dark:text-emerald-400"><strong>Keputusan:</strong> ${a.hasilkeputusan}</p>` : ''}
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px] pt-1 text-slate-500 border-t border-slate-200/50 dark:border-slate-800">
+                  <div><strong>PIC:</strong> ${a.pic} (${a.teamid || '-'})</div>
+                  <div><strong>Status:</strong> <span class="font-semibold ${badgeClass}">${a.status}</span> (${prog}%)</div>
+                  <div><strong>Deadline:</strong> ${a.deadline || '-'}</div>
+                  <div><strong>Kendala:</strong> ${a.kendala || 'Tidak ada'}</div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          actionItemsHTML = `<div class="text-[11px] text-slate-400 italic">Tidak ada action item tercatat.</div>`;
+        }
+
+        const pesertaBadges = pesertaList.map(p => 
+          `<span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300">${p}</span>`
+        ).join(' ');
+
+        card.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-700 pb-3">
+            <div>
+              <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-brand-100 text-brand-800 dark:bg-brand-900 dark:text-brand-300">${m.jenismusyawarah || 'Musyawarah'}</span>
+              <h3 class="font-black text-base text-slate-900 dark:text-white mt-1">${m.judul}</h3>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-mono font-bold text-slate-400 bg-slate-100 dark:bg-slate-900 px-2.5 py-1 rounded-xl">${m.tanggal} | ${m.meetingid}</span>
+              <button onclick="openDetailModal('${m.meetingid}')" class="p-1.5 bg-brand-50 hover:bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-300 rounded-xl" title="Lihat Pratinjau Lengkap">
+                <i data-lucide="external-link" class="w-4 h-4"></i>
+              </button>
+              ${isT01 ? `<button onclick="deleteMusyawarahRecord('${m.meetingid}')" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl" title="Hapus Musyawarah"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ''}
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600 dark:text-slate-300">
+            <div><strong>Ketua:</strong> ${m.ketua}</div>
+            <div><strong>Notulis:</strong> ${m.notulis}</div>
+          </div>
+
+          <div>
+            <div class="text-[11px] font-bold text-slate-400 uppercase mb-1">Peserta Hadir (${pesertaList.length} Pengurus):</div>
+            <div class="flex flex-wrap gap-1">${pesertaBadges || '<span class="text-slate-400">-</span>'}</div>
+          </div>
+
+          <!-- Accordion Collapsible Action Items -->
+          <div class="pt-2">
+            <button onclick="toggleCardAccordion('acc-${idx}')" class="w-full flex items-center justify-between p-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl font-bold text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+              <span class="flex items-center space-x-2">
+                <i data-lucide="list-checks" class="w-4 h-4 text-brand-600"></i>
+                <span>Detail Action Items & Pokok Bahasan (${actionCount})</span>
+              </span>
+              <i id="icon-acc-${idx}" data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200"></i>
+            </button>
+
+            <div id="acc-${idx}" class="hidden mt-3 space-y-3">
+              ${actionItemsHTML}
+            </div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      initLucideIcons();
+    }
+
+    function renderMyTasks() {
+      const container = document.getElementById('myTasksContainer');
+      const badge = document.getElementById('myTasksCountBadge');
+      if (!container || !currentUser) return;
+
+      container.innerHTML = '';
+      const searchVal = (document.getElementById('taskSearchInput')?.value || '').toLowerCase().trim();
+      const dateFrom = document.getElementById('taskDateFrom')?.value || '';
+      const dateTo = document.getElementById('taskDateTo')?.value || '';
+
+      let myTasks = [];
+
+      musyawarahData.forEach(m => {
+        if (!userHasAccessToMeetingType(m.jenismusyawarah)) return;
+
+        if (Array.isArray(m.actionItems)) {
+          m.actionItems.forEach(a => {
+            if (a.pic && a.pic.toLowerCase() === currentUser.nama.toLowerCase()) {
+              let matchSearch = !searchVal || 
+                (a.pokokbahasan || '').toLowerCase().includes(searchVal) ||
+                (a.actionid || '').toLowerCase().includes(searchVal) ||
+                (m.judul || '').toLowerCase().includes(searchVal);
+
+              let matchDate = true;
+              if (dateFrom && m.tanggal < dateFrom) matchDate = false;
+              if (dateTo && m.tanggal > dateTo) matchDate = false;
+
+              if (matchSearch && matchDate) {
+                myTasks.push({ ...a, meetingid: m.meetingid, judul: m.judul, meettanggal: m.tanggal });
+              }
+            }
+          });
+        }
+      });
+
+      if (badge) badge.textContent = myTasks.length;
+
+      if (myTasks.length === 0) {
+        container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">Belum ada tugas yang ditugaskan kepada Anda sesuai filter ini.</div>`;
+        return;
+      }
+
+      myTasks.forEach(t => {
+        const prog = getActionProgress(t);
+        const badgeClass = getStatusBadgeClass(t.status);
+        const card = document.createElement('div');
+        card.className = "bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3";
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-brand-600 dark:text-brand-400">${t.actionid}</span>
+            <div class="flex items-center space-x-2">
+              <button onclick="openSingleActionDetailModal('${t.meetingid}', '${t.actionid}')" class="px-2.5 py-1 bg-brand-50 hover:bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-300 rounded-lg text-xs font-bold flex items-center space-x-1">
+                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                <span>Detail</span>
+              </button>
+              <button onclick="openQuickEditModal('${t.meetingid}', '${t.actionid}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:text-white rounded-lg text-xs font-bold flex items-center space-x-1">
+                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                <span>Update</span>
+              </button>
+            </div>
+          </div>
+          <div class="font-bold text-sm text-slate-900 dark:text-white">${t.pokokbahasan}</div>
+          <div class="text-xs text-slate-500">Musyawarah: ${t.judul} (${t.meettanggal || '-'})</div>
+          <div class="flex items-center justify-between text-xs pt-2 border-t border-slate-100 dark:border-slate-700">
+            <span class="px-2 py-0.5 rounded font-semibold ${badgeClass}">${t.status} (${prog}%)</span>
+            <span class="font-mono text-slate-400">Deadline: ${t.deadline || '-'}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      initLucideIcons();
+    }
+
+    function openSingleActionDetailModal(meetingId, actionId) {
+      let foundMeet = null;
+      let foundAct = null;
+
+      musyawarahData.forEach(m => {
+        if (m.meetingid === meetingId && Array.isArray(m.actionItems)) {
+          m.actionItems.forEach(a => {
+            if (a.actionid === actionId) {
+              foundMeet = m;
+              foundAct = a;
+            }
+          });
+        }
+      });
+
+      if (!foundMeet || !foundAct) return;
+
+      document.getElementById('mdCategory').textContent = foundMeet.jenismusyawarah || 'Musyawarah';
+      document.getElementById('mdTitle').textContent = foundMeet.judul;
+
+      const body = document.getElementById('mdBody');
+      const prog = getActionProgress(foundAct);
+      const badgeClass = getStatusBadgeClass(foundAct.status);
+
+      body.innerHTML = `
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl">
+          <div><span class="text-slate-400 block text-[10px]">MEETING ID</span> <strong>${foundMeet.meetingid}</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">TANGGAL</span> <strong>${foundMeet.tanggal}</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">KETUA</span> <strong>${foundMeet.ketua}</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">NOTULIS</span> <strong>${foundMeet.notulis}</strong></div>
+        </div>
+
+        <div class="p-5 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-700 pb-3">
+            <div>
+              <span class="font-mono text-xs font-bold text-brand-600 dark:text-brand-400">${foundAct.actionid}</span>
+              <h4 class="font-black text-sm text-slate-900 dark:text-white mt-1">${foundAct.pokokbahasan}</h4>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-bold ${badgeClass}">${foundAct.status} (${prog}%)</span>
+          </div>
+
+          ${foundAct.detailbahasan ? `<div><span class="text-slate-400 block text-[10px] mb-0.5">DETAIL BAHASAN</span><p class="text-xs text-slate-700 dark:text-slate-200 leading-relaxed">${foundAct.detailbahasan}</p></div>` : ''}
+
+          ${foundAct.hasilkeputusan ? `<div class="bg-emerald-50 dark:bg-emerald-950/40 p-3 rounded-xl border border-emerald-200 dark:border-emerald-900"><span class="text-emerald-800 dark:text-emerald-400 block text-[10px] font-bold mb-0.5">HASIL KEPUTUSAN</span><p class="text-xs text-emerald-900 dark:text-emerald-200 font-medium">${foundAct.hasilkeputusan}</p></div>` : ''}
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs pt-2 border-t border-slate-200 dark:border-slate-800">
+            <div><span class="text-slate-400 block text-[10px]">PIC</span><strong>${foundAct.pic} (${foundAct.teamid || '-'})</strong></div>
+            <div><span class="text-slate-400 block text-[10px]">DEADLINE</span><strong>${foundAct.deadline || '-'}</strong></div>
+            <div><span class="text-slate-400 block text-[10px]">CATATAN</span><strong>${foundAct.catatanterakhir || '-'}</strong></div>
+            <div><span class="text-slate-400 block text-[10px]">KENDALA</span><strong>${foundAct.kendala || 'Tidak ada'}</strong></div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('detailNotulensiModal').classList.remove('hidden');
+    }
+
+    function resetListFilters() {
+      if (document.getElementById('listSearchInput')) document.getElementById('listSearchInput').value = '';
+      if (document.getElementById('listDateFrom')) document.getElementById('listDateFrom').value = '';
+      if (document.getElementById('listDateTo')) document.getElementById('listDateTo').value = '';
+      filterNotulensiCategory('Semua');
+    }
+
+    function resetTaskFilters() {
+      if (document.getElementById('taskSearchInput')) document.getElementById('taskSearchInput').value = '';
+      if (document.getElementById('taskDateFrom')) document.getElementById('taskDateFrom').value = '';
+      if (document.getElementById('taskDateTo')) document.getElementById('taskDateTo').value = '';
+      renderMyTasks();
+    }
+
+    async function handleLoginSubmit(e) {
       e.preventDefault();
+      await fetchUsersFromSheet();
+
       const userVal = document.getElementById('loginUsername').value.trim();
       const passVal = document.getElementById('loginPassword').value.trim();
       const errorMsg = document.getElementById('loginErrorMsg');
@@ -730,6 +1133,7 @@
       );
 
       if (found) {
+        currentUser = found;
         localStorage.setItem('currentUser', JSON.stringify(found));
         errorMsg.classList.add('hidden');
         checkUserSession();
@@ -999,7 +1403,6 @@
         console.warn("Fetch Error via Web App API:", err);
       }
 
-      // Fallback Data Sampel
       musyawarahData = [
         {
           meetingid: "MT-202611-001",
@@ -1131,7 +1534,9 @@
         let matchDate = true;
         if (dateFrom && m.tanggal < dateFrom) matchDate = false;
         if (dateTo && m.tanggal > dateTo) matchDate = false;
-        return matchDate;
+
+        const matchAccess = userHasAccessToMeetingType(m.jenismusyawarah);
+        return matchDate && matchAccess;
       });
 
       let totalActions = 0;
@@ -1165,527 +1570,19 @@
         }
       });
 
-      // Update Top Stat Cards
       document.getElementById('dashTotalMusyawarah').textContent = filtered.length;
       document.getElementById('dashTotalActions').textContent = totalActions;
       document.getElementById('dashInProgresActions').textContent = inProgress;
       document.getElementById('dashCompletedActions').textContent = completed;
 
-      // Update Breakdown Counts
       document.getElementById('cntMusyawarah4S').textContent = cnt4S;
       document.getElementById('cntMusyawarahPengurus').textContent = cntPengurus;
       document.getElementById('cntMusyawarah5Unsur').textContent = cnt5Unsur;
       document.getElementById('cntMusyawarahKBM').textContent = cntKBM;
       document.getElementById('cntMusyawarahMudaMudi').textContent = cntMudaMudi;
 
-      // Render Charts
       renderTypeDistributionChart([cnt4S, cntPengurus, cnt5Unsur, cntKBM, cntMudaMudi]);
       renderStatusProgressChart([belumDimulai, inProgress, tertunda, completed]);
-    }
-
-    function renderTypeDistributionChart(dataCounts) {
-      const ctx = document.getElementById('typeDistributionChart');
-      if (!ctx) return;
-
-      if (chartTypeDistribution) {
-        chartTypeDistribution.destroy();
-      }
-
-      const isDark = document.documentElement.classList.contains('dark');
-      const textColor = isDark ? '#cbd5e1' : '#475569';
-
-      chartTypeDistribution = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Musyawarah 4S', 'Pengurus', '5 Unsur', 'KBM', 'Muda-mudi'],
-          datasets: [{
-            data: dataCounts,
-            backgroundColor: ['#10b981', '#3b82f6', '#a855f7', '#f59e0b', '#6366f1'],
-            borderWidth: 0
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' } }
-            }
-          }
-        }
-      });
-    }
-
-    function renderStatusProgressChart(statusCounts) {
-      const ctx = document.getElementById('statusProgressChart');
-      if (!ctx) return;
-
-      if (chartStatusProgress) {
-        chartStatusProgress.destroy();
-      }
-
-      const isDark = document.documentElement.classList.contains('dark');
-      const textColor = isDark ? '#cbd5e1' : '#475569';
-      const gridColor = isDark ? '#334155' : '#e2e8f0';
-
-      chartStatusProgress = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Belum Dimulai', 'Dalam Proses', 'Tertunda', 'Selesai'],
-          datasets: [{
-            label: 'Jumlah Action Items',
-            data: statusCounts,
-            backgroundColor: ['#94a3b8', '#f59e0b', '#f43f5e', '#10b981'],
-            borderRadius: 8
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false }
-          },
-          scales: {
-            x: {
-              ticks: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 10, weight: 'bold' } },
-              grid: { display: false }
-            },
-            y: {
-              ticks: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 10 }, precision: 0 },
-              grid: { color: gridColor }
-            }
-          }
-        }
-      });
-    }
-
-    function filterNotulensiCategory(catName) {
-      selectedCategoryFilter = catName;
-      const btns = document.querySelectorAll('.filter-cat-btn');
-      btns.forEach(btn => {
-        const btnText = btn.textContent.trim();
-        if (btnText === catName || (catName === 'Semua' && btnText === 'Semua')) {
-          btn.className = "filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-600 text-white shadow-sm transition-all";
-        } else {
-          btn.className = "filter-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all";
-        }
-      });
-      renderMusyawarahList();
-    }
-
-    function resetListFilters() {
-      document.getElementById('listSearchInput').value = '';
-      document.getElementById('listDateFrom').value = '';
-      document.getElementById('listDateTo').value = '';
-      filterNotulensiCategory('Semua');
-    }
-
-    function renderMusyawarahList() {
-      const container = document.getElementById('musyawarahListContainer');
-      if (!container) return;
-      container.innerHTML = '';
-
-      const searchVal = (document.getElementById('listSearchInput')?.value || '').toLowerCase().trim();
-      const dateFrom = document.getElementById('listDateFrom')?.value || '';
-      const dateTo = document.getElementById('listDateTo')?.value || '';
-      const isT01 = currentUser && currentUser.teamid === 'T-01';
-
-      let filtered = musyawarahData.filter(m => {
-        const matchCategory = (selectedCategoryFilter === "Semua") || (m.jenismusyawarah || '').includes(selectedCategoryFilter);
-        const matchSearch = !searchVal || 
-          (m.judul || '').toLowerCase().includes(searchVal) ||
-          (m.meetingid || '').toLowerCase().includes(searchVal) ||
-          (m.ketua || '').toLowerCase().includes(searchVal) ||
-          (m.notulis || '').toLowerCase().includes(searchVal);
-
-        let matchDate = true;
-        if (dateFrom && m.tanggal < dateFrom) matchDate = false;
-        if (dateTo && m.tanggal > dateTo) matchDate = false;
-
-        return matchCategory && matchSearch && matchDate;
-      });
-
-      if (filtered.length === 0) {
-        container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">Belum ada notulensi musyawarah yang sesuai dengan filter.</div>`;
-        return;
-      }
-
-      filtered.forEach((m, idx) => {
-        const actionCount = Array.isArray(m.actionItems) ? m.actionItems.length : 0;
-        const pesertaList = Array.isArray(m.peserta) ? m.peserta : [];
-
-        const card = document.createElement('div');
-        card.className = "bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4";
-        
-        let actionItemsHTML = '';
-        if (actionCount > 0) {
-          actionItemsHTML = m.actionItems.map(a => {
-            const prog = getActionProgress(a);
-            const badgeClass = getStatusBadgeClass(a.status);
-            return `
-              <div class="bg-slate-50 dark:bg-slate-900/60 p-3.5 rounded-xl border border-slate-200/80 dark:border-slate-700/80 space-y-2">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center space-x-2">
-                    <span class="font-mono text-[10px] font-bold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950 px-2 py-0.5 rounded">${a.actionid}</span>
-                    <span class="font-bold text-slate-900 dark:text-white text-xs">${a.pokokbahasan}</span>
-                  </div>
-                  <div class="flex items-center space-x-1">
-                    <button onclick="openQuickEditModal('${m.meetingid}', '${a.actionid}')" class="px-2 py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-[10px] font-bold hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center space-x-1">
-                      <i data-lucide="edit-3" class="w-3 h-3 text-slate-500"></i>
-                      <span>Edit Progress</span>
-                    </button>
-                    ${isT01 ? `
-                      <button onclick="deleteSingleActionItem('${m.meetingid}', '${a.actionid}')" class="p-1 text-rose-500 hover:text-rose-700 rounded-lg" title="Hapus Action Item (Khusus T-01)">
-                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                      </button>
-                    ` : ''}
-                  </div>
-                </div>
-
-                ${a.detailbahasan ? `<p class="text-[11px] text-slate-600 dark:text-slate-300"><strong>Detail:</strong> ${a.detailbahasan}</p>` : ''}
-                ${a.hasilkeputusan ? `<p class="text-[11px] text-emerald-700 dark:text-emerald-400"><strong>Keputusan:</strong> ${a.hasilkeputusan}</p>` : ''}
-
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px] pt-1 text-slate-500 border-t border-slate-200/50 dark:border-slate-800">
-                  <div><strong>PIC:</strong> ${a.pic} (${a.teamid || '-'})</div>
-                  <div><strong>Status:</strong> <span class="font-bold px-1.5 py-0.5 rounded ${badgeClass}">${a.status}</span> (${prog}%)</div>
-                  <div><strong>Deadline:</strong> ${a.deadline || '-'}</div>
-                  <div><strong>Kendala:</strong> ${a.kendala || 'Tidak ada'}</div>
-                </div>
-              </div>
-            `;
-          }).join('');
-        } else {
-          actionItemsHTML = `<div class="text-[11px] text-slate-400 italic">Tidak ada action item tercatat.</div>`;
-        }
-
-        const pesertaBadges = pesertaList.map(p => 
-          `<span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300">${p}</span>`
-        ).join(' ');
-
-        card.innerHTML = `
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-700 pb-3">
-            <div>
-              <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-brand-100 text-brand-800 dark:bg-brand-900 dark:text-brand-300">${m.jenismusyawarah || 'Musyawarah'}</span>
-              <h3 class="font-black text-base text-slate-900 dark:text-white mt-1">${m.judul}</h3>
-            </div>
-            <div class="flex items-center space-x-2">
-              <span class="text-xs font-mono font-bold text-slate-400 bg-slate-100 dark:bg-slate-900 px-2.5 py-1 rounded-xl">${m.tanggal} | ${m.meetingid}</span>
-              <button onclick="openDetailModal('${m.meetingid}')" class="p-1.5 bg-brand-50 hover:bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-300 rounded-xl" title="Lihat Pratinjau Lengkap">
-                <i data-lucide="external-link" class="w-4 h-4"></i>
-              </button>
-              ${isT01 ? `
-                <button onclick="deleteMusyawarahRecord('${m.meetingid}')" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400 rounded-xl" title="Hapus Musyawarah (Khusus T-01)">
-                  <i data-lucide="trash-2" class="w-4 h-4"></i>
-                </button>
-              ` : ''}
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs text-slate-600 dark:text-slate-300">
-            <div><strong>Ketua:</strong> ${m.ketua}</div>
-            <div><strong>Notulis:</strong> ${m.notulis}</div>
-            <div><strong>Lokasi:</strong> ${m.lokasi || '-'}</div>
-          </div>
-
-          <div>
-            <div class="text-[11px] font-bold text-slate-400 uppercase mb-1">Peserta Hadir (${pesertaList.length} Pengurus):</div>
-            <div class="flex flex-wrap gap-1">${pesertaBadges || '<span class="text-slate-400">-</span>'}</div>
-          </div>
-
-          <div class="pt-2">
-            <button onclick="toggleCardAccordion('acc-${idx}')" class="w-full flex items-center justify-between p-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl font-bold text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-              <span class="flex items-center space-x-2">
-                <i data-lucide="list-checks" class="w-4 h-4 text-brand-600"></i>
-                <span>Detail Action Items & Pokok Bahasan (${actionCount})</span>
-              </span>
-              <i id="icon-acc-${idx}" data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200"></i>
-            </button>
-
-            <div id="acc-${idx}" class="hidden mt-3 space-y-3">
-              ${actionItemsHTML}
-            </div>
-          </div>
-        `;
-
-        container.appendChild(card);
-      });
-
-      initLucideIcons();
-    }
-
-    async function deleteMusyawarahRecord(meetingId) {
-      if (!currentUser || currentUser.teamid !== 'T-01') {
-        showToast("Akses ditolak! Hanya pengurus dengan Team ID T-01 yang dapat menghapus.");
-        return;
-      }
-
-      if (!confirm(`Apakah Anda yakin ingin menghapus dokumen musyawarah ${meetingId} beserta seluruh action items terkait?`)) {
-        return;
-      }
-
-      musyawarahData = musyawarahData.filter(m => m.meetingid !== meetingId);
-      updateDashboardStatsAndCharts();
-      renderMusyawarahList();
-      renderMyTasks();
-      renderKanbanBoard();
-      showToast("Menghapus data musyawarah...");
-
-      try {
-        await fetch(MUSYAWARAH_SHEETS_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'deleteMusyawarah', meetingid: meetingId })
-        });
-        showToast("Musyawarah berhasil dihapus!");
-      } catch (err) {
-        console.warn("Delete Error:", err);
-      }
-    }
-
-    async function deleteSingleActionItem(meetingId, actionId) {
-      if (!currentUser || currentUser.teamid !== 'T-01') {
-        showToast("Akses ditolak! Hanya pengurus dengan Team ID T-01 yang dapat menghapus.");
-        return;
-      }
-
-      if (!confirm(`Hapus action item ${actionId}?`)) return;
-
-      let targetMusyawarah = null;
-      musyawarahData.forEach(m => {
-        if (m.meetingid === meetingId && Array.isArray(m.actionItems)) {
-          m.actionItems = m.actionItems.filter(a => a.actionid !== actionId);
-          targetMusyawarah = m;
-        }
-      });
-
-      updateDashboardStatsAndCharts();
-      renderMusyawarahList();
-      renderMyTasks();
-      renderKanbanBoard();
-      showToast("Memperbarui Action Items...");
-
-      if (targetMusyawarah) {
-        try {
-          await fetch(MUSYAWARAH_SHEETS_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'saveMusyawarah', data: targetMusyawarah })
-          });
-          showToast("Action Item berhasil dihapus!");
-        } catch (err) {
-          console.warn("Save Error:", err);
-        }
-      }
-    }
-
-    function toggleCardAccordion(accId) {
-      const el = document.getElementById(accId);
-      const icon = document.getElementById('icon-' + accId);
-      if (el) {
-        if (el.classList.contains('hidden')) {
-          el.classList.remove('hidden');
-          if (icon) icon.style.transform = 'rotate(180deg)';
-        } else {
-          el.classList.add('hidden');
-          if (icon) icon.style.transform = 'rotate(0deg)';
-        }
-      }
-    }
-
-    function openDetailModal(meetingId) {
-      const found = musyawarahData.find(m => m.meetingid === meetingId);
-      if (!found) return;
-
-      document.getElementById('mdCategory').textContent = found.jenismusyawarah || 'Musyawarah';
-      document.getElementById('mdTitle').textContent = found.judul;
-
-      const body = document.getElementById('mdBody');
-      const pesertaList = Array.isArray(found.peserta) ? found.peserta.join(', ') : '-';
-      
-      let actionsHTML = '';
-      if (Array.isArray(found.actionItems) && found.actionItems.length > 0) {
-        actionsHTML = found.actionItems.map(a => {
-          const badgeClass = getStatusBadgeClass(a.status);
-          return `
-            <div class="p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2">
-              <div class="flex justify-between items-center font-bold">
-                <span class="text-brand-600">${a.actionid} - ${a.pokokbahasan}</span>
-                <span class="px-2 py-0.5 rounded text-[10px] ${badgeClass}">${a.status} (${getActionProgress(a)}%)</span>
-              </div>
-              ${a.detailbahasan ? `<p><strong>Detail:</strong> ${a.detailbahasan}</p>` : ''}
-              ${a.hasilkeputusan ? `<p class="text-emerald-700 dark:text-emerald-400"><strong>Keputusan:</strong> ${a.hasilkeputusan}</p>` : ''}
-              <div class="grid grid-cols-2 gap-2 text-slate-500 text-[11px] pt-2 border-t border-slate-200/50">
-                <div>PIC: ${a.pic} (${a.teamid || '-'})</div>
-                <div>Deadline: ${a.deadline || '-'}</div>
-                <div>Catatan: ${a.catatanterakhir || '-'}</div>
-                <div>Kendala: ${a.kendala || '-'}</div>
-              </div>
-            </div>
-          `;
-        }).join('');
-      } else {
-        actionsHTML = `<p class="text-slate-400 italic">Tidak ada action items.</p>`;
-      }
-
-      body.innerHTML = `
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl">
-          <div><span class="text-slate-400 block text-[10px]">MEETING ID</span> <strong>${found.meetingid}</strong></div>
-          <div><span class="text-slate-400 block text-[10px]">TANGGAL</span> <strong>${found.tanggal}</strong></div>
-          <div><span class="text-slate-400 block text-[10px]">KETUA</span> <strong>${found.ketua}</strong></div>
-          <div><span class="text-slate-400 block text-[10px]">NOTULIS</span> <strong>${found.notulis}</strong></div>
-        </div>
-
-        <div>
-          <span class="text-slate-400 block text-[10px] mb-1">PESERTA HADIR</span>
-          <p class="font-semibold text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-700">${pesertaList}</p>
-        </div>
-
-        <div class="space-y-3">
-          <h4 class="font-black uppercase text-slate-900 dark:text-white">Rincian Action Items & Keputusan</h4>
-          ${actionsHTML}
-        </div>
-      `;
-
-      document.getElementById('detailNotulensiModal').classList.remove('hidden');
-    }
-
-    function openSingleActionDetailModal(meetingId, actionId) {
-      const foundMeeting = musyawarahData.find(m => m.meetingid === meetingId);
-      if (!foundMeeting) return;
-
-      let foundAct = null;
-      if (Array.isArray(foundMeeting.actionItems)) {
-        foundAct = foundMeeting.actionItems.find(a => a.actionid === actionId);
-      }
-      if (!foundAct) return;
-
-      document.getElementById('mdCategory').textContent = foundMeeting.jenismusyawarah || 'Musyawarah';
-      document.getElementById('mdTitle').textContent = foundMeeting.judul;
-
-      const body = document.getElementById('mdBody');
-      const pesertaList = Array.isArray(foundMeeting.peserta) ? foundMeeting.peserta.join(', ') : '-';
-      const badgeClass = getStatusBadgeClass(foundAct.status);
-      const prog = getActionProgress(foundAct);
-
-      body.innerHTML = `
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl">
-          <div><span class="text-slate-400 block text-[10px]">MEETING ID</span> <strong>${foundMeeting.meetingid}</strong></div>
-          <div><span class="text-slate-400 block text-[10px]">TANGGAL</span> <strong>${foundMeeting.tanggal}</strong></div>
-          <div><span class="text-slate-400 block text-[10px]">KETUA</span> <strong>${foundMeeting.ketua}</strong></div>
-          <div><span class="text-slate-400 block text-[10px]">NOTULIS</span> <strong>${foundMeeting.notulis}</strong></div>
-        </div>
-
-        <div>
-          <span class="text-slate-400 block text-[10px] mb-1">PESERTA HADIR</span>
-          <p class="font-semibold text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-700">${pesertaList}</p>
-        </div>
-
-        <div class="space-y-3">
-          <h4 class="font-black uppercase text-slate-900 dark:text-white">Detail Action Item Yang Dipilih</h4>
-          <div class="p-5 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
-            <div class="flex justify-between items-center font-bold">
-              <span class="text-brand-600 text-sm font-mono">${foundAct.actionid} - ${foundAct.pokokbahasan}</span>
-              <span class="px-2.5 py-1 rounded text-xs ${badgeClass}">${foundAct.status} (${prog}%)</span>
-            </div>
-            ${foundAct.detailbahasan ? `<div class="bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><strong class="text-slate-400 block text-[10px]">DETAIL BAHASAN</strong> <p class="text-slate-700 dark:text-slate-200 mt-0.5">${foundAct.detailbahasan}</p></div>` : ''}
-            ${foundAct.hasilkeputusan ? `<div class="bg-emerald-50 dark:bg-emerald-950/40 p-3 rounded-xl border border-emerald-200 dark:border-emerald-800"><strong class="text-emerald-700 dark:text-emerald-400 block text-[10px]">HASIL KEPUTUSAN</strong> <p class="text-emerald-800 dark:text-emerald-300 font-medium mt-0.5">${foundAct.hasilkeputusan}</p></div>` : ''}
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-slate-600 dark:text-slate-300 text-xs pt-2 border-t border-slate-200 dark:border-slate-700">
-              <div><strong class="text-slate-400 block text-[10px]">PIC</strong> ${foundAct.pic} (${foundAct.teamid || '-'})</div>
-              <div><strong class="text-slate-400 block text-[10px]">DEADLINE</strong> ${foundAct.deadline || '-'}</div>
-              <div><strong class="text-slate-400 block text-[10px]">CATATAN TERAKHIR</strong> ${foundAct.catatanterakhir || '-'}</div>
-              <div><strong class="text-slate-400 block text-[10px]">KENDALA LAPANGAN</strong> ${foundAct.kendala || 'Tidak ada'}</div>
-            </div>
-          </div>
-        </div>
-      `;
-
-      document.getElementById('detailNotulensiModal').classList.remove('hidden');
-    }
-
-    function closeDetailModal() {
-      document.getElementById('detailNotulensiModal').classList.add('hidden');
-    }
-
-    function resetTaskFilters() {
-      document.getElementById('taskSearchInput').value = '';
-      document.getElementById('taskDateFrom').value = '';
-      document.getElementById('taskDateTo').value = '';
-      renderMyTasks();
-    }
-
-    function renderMyTasks() {
-      const container = document.getElementById('myTasksContainer');
-      const badge = document.getElementById('myTasksCountBadge');
-      if (!container || !currentUser) return;
-
-      container.innerHTML = '';
-      let myTasks = [];
-
-      const searchVal = (document.getElementById('taskSearchInput')?.value || '').toLowerCase().trim();
-      const dateFrom = document.getElementById('taskDateFrom')?.value || '';
-      const dateTo = document.getElementById('taskDateTo')?.value || '';
-
-      musyawarahData.forEach(m => {
-        if (Array.isArray(m.actionItems)) {
-          m.actionItems.forEach(a => {
-            if (a.pic && a.pic.toLowerCase() === currentUser.nama.toLowerCase()) {
-              const matchSearch = !searchVal || 
-                (a.pokokbahasan || '').toLowerCase().includes(searchVal) ||
-                (a.actionid || '').toLowerCase().includes(searchVal) ||
-                (m.judul || '').toLowerCase().includes(searchVal);
-
-              let matchDate = true;
-              if (dateFrom && m.tanggal < dateFrom) matchDate = false;
-              if (dateTo && m.tanggal > dateTo) matchDate = false;
-
-              if (matchSearch && matchDate) {
-                myTasks.push({ ...a, meetingid: m.meetingid, judul: m.judul, tanggal: m.tanggal });
-              }
-            }
-          });
-        }
-      });
-
-      if (badge) badge.textContent = myTasks.length;
-
-      if (myTasks.length === 0) {
-        container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">Belum ada tugas yang sesuai dengan pencarian / filter Anda.</div>`;
-        return;
-      }
-
-      myTasks.forEach(t => {
-        const prog = getActionProgress(t);
-        const badgeClass = getStatusBadgeClass(t.status);
-        const card = document.createElement('div');
-        card.className = "bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3";
-        card.innerHTML = `
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-mono font-bold text-brand-600 dark:text-brand-400">${t.actionid}</span>
-            <div class="flex items-center space-x-2">
-              <button onclick="openSingleActionDetailModal('${t.meetingid}', '${t.actionid}')" class="px-2.5 py-1 bg-brand-50 hover:bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-300 rounded-lg text-xs font-bold flex items-center space-x-1">
-                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
-                <span>Detail</span>
-              </button>
-              <button onclick="openQuickEditModal('${t.meetingid}', '${t.actionid}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:text-white rounded-lg text-xs font-bold flex items-center space-x-1">
-                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-                <span>Update</span>
-              </button>
-            </div>
-          </div>
-          <div class="font-bold text-sm text-slate-900 dark:text-white">${t.pokokbahasan}</div>
-          <div class="text-xs text-slate-500">Musyawarah: ${t.judul} (${t.tanggal})</div>
-          <div class="flex items-center justify-between text-xs pt-2 border-t border-slate-100 dark:border-slate-700">
-            <span class="font-bold px-2 py-0.5 rounded text-[11px] ${badgeClass}">${t.status} (${prog}%)</span>
-            <span class="font-mono text-slate-400">Deadline: ${t.deadline || '-'}</span>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-
-      initLucideIcons();
     }
 
     function renderKanbanBoard() {
@@ -1699,6 +1596,8 @@
       colBelum.innerHTML = ''; colProgres.innerHTML = ''; colTertunda.innerHTML = ''; colSelesai.innerHTML = '';
 
       musyawarahData.forEach(m => {
+        if (!userHasAccessToMeetingType(m.jenismusyawarah)) return;
+
         if (Array.isArray(m.actionItems)) {
           m.actionItems.forEach(a => {
             const prog = getActionProgress(a);
@@ -1766,7 +1665,8 @@
       const catatan = document.getElementById('qeCatatan').value;
       const kendala = document.getElementById('qeKendala').value;
 
-      let parentMusyawarah = null;
+      let targetMeeting = null;
+
       musyawarahData.forEach(m => {
         if (m.meetingid === meetingId && Array.isArray(m.actionItems)) {
           m.actionItems.forEach(a => {
@@ -1775,35 +1675,166 @@
               a.persentaseprogres = progres;
               a.catatanterakhir = catatan;
               a.kendala = kendala;
-              parentMusyawarah = m;
+              targetMeeting = m;
             }
           });
         }
       });
+
+      if (targetMeeting) {
+        showToast("Menyimpan ke spreadsheet...");
+        try {
+          await fetch(MUSYAWARAH_SHEETS_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'saveMusyawarah', data: targetMeeting })
+          });
+        } catch (err) {
+          console.warn("Save Error:", err);
+        }
+      }
 
       closeQuickEditModal();
       updateDashboardStatsAndCharts();
       renderMyTasks();
       renderMusyawarahList();
       renderKanbanBoard();
-      showToast("Memperbarui status progress...");
+      showToast("Progress berhasil diperbarui!");
+    }
 
-      if (parentMusyawarah) {
+    function openDetailModal(meetingId) {
+      const found = musyawarahData.find(m => m.meetingid === meetingId);
+      if (!found) return;
+
+      document.getElementById('mdCategory').textContent = found.jenismusyawarah || 'Musyawarah';
+      document.getElementById('mdTitle').textContent = found.judul;
+
+      const body = document.getElementById('mdBody');
+      const pesertaList = Array.isArray(found.peserta) ? found.peserta.join(', ') : (typeof found.peserta === 'string' ? found.peserta : '-');
+      
+      let actionsHTML = '';
+      if (Array.isArray(found.actionItems) && found.actionItems.length > 0) {
+        actionsHTML = found.actionItems.map(a => {
+          const badgeClass = getStatusBadgeClass(a.status);
+          return `
+            <div class="p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2">
+              <div class="flex items-center justify-between font-bold">
+                <span class="text-brand-600">${a.actionid} - ${a.pokokbahasan}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] ${badgeClass}">${a.status} (${getActionProgress(a)}%)</span>
+              </div>
+              ${a.detailbahasan ? `<p><strong>Detail:</strong> ${a.detailbahasan}</p>` : ''}
+              ${a.hasilkeputusan ? `<p class="text-emerald-700 dark:text-emerald-400"><strong>Keputusan:</strong> ${a.hasilkeputusan}</p>` : ''}
+              <div class="grid grid-cols-2 gap-2 text-slate-500 text-[11px] pt-2 border-t border-slate-200/50">
+                <div>PIC: ${a.pic} (${a.teamid || '-'})</div>
+                <div>Deadline: ${a.deadline || '-'}</div>
+                <div>Catatan: ${a.catatanterakhir || '-'}</div>
+                <div>Kendala: ${a.kendala || '-'}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } else {
+        actionsHTML = `<p class="text-slate-400 italic">Tidak ada action items.</p>`;
+      }
+
+      body.innerHTML = `
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl">
+          <div><span class="text-slate-400 block text-[10px]">MEETING ID</span> <strong>${found.meetingid}</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">TANGGAL</span> <strong>${found.tanggal}</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">KETUA</span> <strong>${found.ketua}</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">NOTULIS</span> <strong>${found.notulis}</strong></div>
+        </div>
+
+        <div>
+          <span class="text-slate-400 block text-[10px] mb-1">PESERTA HADIR</span>
+          <p class="font-semibold text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-700">${pesertaList}</p>
+        </div>
+
+        <div class="space-y-3">
+          <h4 class="font-black uppercase text-slate-900 dark:text-white">Rincian Action Items & Keputusan</h4>
+          ${actionsHTML}
+        </div>
+      `;
+
+      document.getElementById('detailNotulensiModal').classList.remove('hidden');
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detailNotulensiModal').classList.add('hidden');
+    }
+
+    function toggleCardAccordion(accId) {
+      const el = document.getElementById(accId);
+      const icon = document.getElementById('icon-' + accId);
+      if (el) {
+        if (el.classList.contains('hidden')) {
+          el.classList.remove('hidden');
+          if (icon) icon.style.transform = 'rotate(180deg)';
+        } else {
+          el.classList.add('hidden');
+          if (icon) icon.style.transform = 'rotate(0deg)';
+        }
+      }
+    }
+
+    async function deleteMusyawarahRecord(meetingId) {
+      if (!confirm(`Apakah Anda yakin ingin menghapus Musyawarah ${meetingId}? Data yang dihapus tidak dapat dikembalikan.`)) return;
+      showToast("Menghapus musyawarah...");
+
+      try {
+        await fetch(MUSYAWARAH_SHEETS_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'deleteMusyawarah', meetingid: meetingId })
+        });
+      } catch (err) {
+        console.warn("Delete Error:", err);
+      }
+
+      musyawarahData = musyawarahData.filter(m => m.meetingid !== meetingId);
+      updateDashboardStatsAndCharts();
+      renderMyTasks();
+      renderMusyawarahList();
+      renderKanbanBoard();
+      showToast("Musyawarah berhasil dihapus!");
+    }
+
+    async function deleteSingleActionItem(meetingId, actionId) {
+      if (!confirm(`Hapus action item ${actionId}?`)) return;
+
+      let targetMeet = null;
+      musyawarahData.forEach(m => {
+        if (m.meetingid === meetingId && Array.isArray(m.actionItems)) {
+          m.actionItems = m.actionItems.filter(a => a.actionid !== actionId);
+          targetMeet = m;
+        }
+      });
+
+      if (targetMeet) {
+        showToast("Menghapus action item...");
         try {
           await fetch(MUSYAWARAH_SHEETS_URL, {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'saveMusyawarah', data: parentMusyawarah })
+            body: JSON.stringify({ action: 'saveMusyawarah', data: targetMeet })
           });
-          showToast("Progress tersimpan ke Spreadsheet!");
         } catch (err) {
           console.warn("Save Error:", err);
         }
       }
+
+      updateDashboardStatsAndCharts();
+      renderMyTasks();
+      renderMusyawarahList();
+      renderKanbanBoard();
+      showToast("Action item berhasil dihapus!");
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      fetchUsersFromSheet();
       populateUserSelects();
       checkUserSession();
       initLucideIcons();
