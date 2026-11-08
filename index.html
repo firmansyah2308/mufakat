@@ -266,9 +266,8 @@
             </div>
 
             <div class="flex items-center space-x-1 border-l border-slate-200 dark:border-slate-700 pl-2">
-              <button onclick="setDashPreset('thisMonth')" class="px-2.5 py-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-brand-50 hover:text-brand-700 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold transition-all">Bulan Ini</button>
-              <button onclick="setDashPreset('last30')" class="px-2.5 py-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-brand-50 hover:text-brand-700 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold transition-all">30 Hari</button>
-              <button onclick="setDashPreset('all')" class="px-2.5 py-1.5 bg-brand-600 text-white rounded-xl text-xs font-bold transition-all shadow-sm">Semua</button>
+              <button onclick="setDashPreset('last30')" class="px-2.5 py-1.5 bg-brand-600 text-white rounded-xl text-xs font-bold transition-all shadow-sm">Bulan Terakhir</button>
+              <button onclick="setDashPreset('all')" class="px-2.5 py-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-brand-50 hover:text-brand-700 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold transition-all">Semua</button>
             </div>
           </div>
         </div>
@@ -1391,6 +1390,18 @@
               ...m,
               jenismusyawarah: m.jenismusyawarah || m.jenis_musyawarah || 'Musyawarah Pengurus'
             }));
+            
+            // Set default periode ke "Bulan Terakhir" saat data pertama kali dimuat
+            const today = new Date();
+            const past = new Date();
+            past.setDate(today.getDate() - 30);
+            if (document.getElementById('dashDateFrom') && !document.getElementById('dashDateFrom').value) {
+              document.getElementById('dashDateFrom').value = past.toISOString().split('T')[0];
+            }
+            if (document.getElementById('dashDateTo') && !document.getElementById('dashDateTo').value) {
+              document.getElementById('dashDateTo').value = today.toISOString().split('T')[0];
+            }
+
             updateDashboardStatsAndCharts();
             renderMyTasks();
             renderMusyawarahList();
@@ -1443,6 +1454,12 @@
           ]
         }
       ];
+
+      const today = new Date();
+      const past = new Date();
+      past.setDate(today.getDate() - 30);
+      if (document.getElementById('dashDateFrom')) document.getElementById('dashDateFrom').value = past.toISOString().split('T')[0];
+      if (document.getElementById('dashDateTo')) document.getElementById('dashDateTo').value = today.toISOString().split('T')[0];
 
       updateDashboardStatsAndCharts();
       renderMyTasks();
@@ -1509,11 +1526,7 @@
       const dateTo = document.getElementById('dashDateTo');
       const today = new Date();
 
-      if (type === 'thisMonth') {
-        const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-        dateFrom.value = firstDay.toISOString().split('T')[0];
-        dateTo.value = today.toISOString().split('T')[0];
-      } else if (type === 'last30') {
+      if (type === 'last30') {
         const past = new Date();
         past.setDate(today.getDate() - 30);
         dateFrom.value = past.toISOString().split('T')[0];
@@ -1530,12 +1543,13 @@
       const dateFrom = document.getElementById('dashDateFrom')?.value || '';
       const dateTo = document.getElementById('dashDateTo')?.value || '';
 
-      // Tampilan Dashboard menampilkan semua musyawarah (statistik umum tanpa pembatasan akses user)
+      // Tampilan Dashboard disaring sesuai otorisasi hak akses user (akses_musyawarah)
       let filtered = musyawarahData.filter(m => {
+        const matchAccess = userHasAccessToMeetingType(m.jenismusyawarah);
         let matchDate = true;
         if (dateFrom && m.tanggal < dateFrom) matchDate = false;
         if (dateTo && m.tanggal > dateTo) matchDate = false;
-        return matchDate;
+        return matchAccess && matchDate;
       });
 
       let totalActions = 0;
