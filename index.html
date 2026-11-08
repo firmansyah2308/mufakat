@@ -35,6 +35,9 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <!-- Google Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
 
@@ -248,8 +251,30 @@
           </p>
         </div>
 
+        <!-- DASHBOARD DATE RANGE & QUICK PRESET FILTER -->
+        <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex items-center space-x-2">
+            <i data-lucide="calendar" class="w-4 h-4 text-brand-600 dark:text-brand-400"></i>
+            <span class="text-xs font-bold text-slate-700 dark:text-slate-200">Periode Data:</span>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="flex items-center space-x-1.5">
+              <input type="date" id="dashDateFrom" onchange="updateDashboardStatsAndCharts()" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1.5 text-xs font-semibold dark:text-white" title="Dari Tanggal">
+              <span class="text-xs text-slate-400">-</span>
+              <input type="date" id="dashDateTo" onchange="updateDashboardStatsAndCharts()" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1.5 text-xs font-semibold dark:text-white" title="Sampai Tanggal">
+            </div>
+
+            <div class="flex items-center space-x-1 border-l border-slate-200 dark:border-slate-700 pl-2">
+              <button onclick="setDashPreset('thisMonth')" class="px-2.5 py-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-brand-50 hover:text-brand-700 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold transition-all">Bulan Ini</button>
+              <button onclick="setDashPreset('last30')" class="px-2.5 py-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-brand-50 hover:text-brand-700 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold transition-all">30 Hari</button>
+              <button onclick="setDashPreset('all')" class="px-2.5 py-1.5 bg-brand-600 text-white rounded-xl text-xs font-bold transition-all shadow-sm">Semua</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STAT CARDS (4 UTAMA) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <!-- CARD 1 -->
           <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
             <div class="flex items-center justify-between">
               <p class="text-xs font-bold text-slate-400 uppercase">Total Musyawarah</p>
@@ -260,7 +285,6 @@
             <h3 id="dashTotalMusyawarah" class="text-2xl font-black text-slate-900 dark:text-white font-mono">0</h3>
           </div>
 
-          <!-- CARD 2 -->
           <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
             <div class="flex items-center justify-between">
               <p class="text-xs font-bold text-slate-400 uppercase">Total Action Items</p>
@@ -271,7 +295,6 @@
             <h3 id="dashTotalActions" class="text-2xl font-black text-slate-900 dark:text-white font-mono">0</h3>
           </div>
 
-          <!-- CARD 3 -->
           <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
             <div class="flex items-center justify-between">
               <p class="text-xs font-bold text-slate-400 uppercase">Dalam Proses</p>
@@ -282,7 +305,6 @@
             <h3 id="dashInProgresActions" class="text-2xl font-black text-amber-500 font-mono">0</h3>
           </div>
 
-          <!-- CARD 4 -->
           <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
             <div class="flex items-center justify-between">
               <p class="text-xs font-bold text-slate-400 uppercase">Selesai</p>
@@ -293,6 +315,61 @@
             <h3 id="dashCompletedActions" class="text-2xl font-black text-brand-600 font-mono">0</h3>
           </div>
         </div>
+
+        <!-- STAT CARDS BREAKDOWN PER JENIS MUSYAWARAH -->
+        <div>
+          <h3 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-3">Breakdown Musyawarah Per Jenis</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-1 text-center">
+              <span class="text-[10px] font-bold text-slate-400 uppercase">Musyawarah 4S</span>
+              <p id="cntMusyawarah4S" class="text-xl font-black text-emerald-600 font-mono">0</p>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-1 text-center">
+              <span class="text-[10px] font-bold text-slate-400 uppercase">Pengurus</span>
+              <p id="cntMusyawarahPengurus" class="text-xl font-black text-blue-600 font-mono">0</p>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-1 text-center">
+              <span class="text-[10px] font-bold text-slate-400 uppercase">5 Unsur</span>
+              <p id="cntMusyawarah5Unsur" class="text-xl font-black text-purple-600 font-mono">0</p>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-1 text-center">
+              <span class="text-[10px] font-bold text-slate-400 uppercase">KBM</span>
+              <p id="cntMusyawarahKBM" class="text-xl font-black text-amber-600 font-mono">0</p>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-1 text-center">
+              <span class="text-[10px] font-bold text-slate-400 uppercase">Muda-mudi</span>
+              <p id="cntMusyawarahMudaMudi" class="text-xl font-black text-indigo-600 font-mono">0</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHARTS VISUALIZATION SECTION -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+            <h4 class="font-black text-xs uppercase text-slate-900 dark:text-white flex items-center space-x-2">
+              <i data-lucide="pie-chart" class="w-4 h-4 text-brand-600"></i>
+              <span>Proporsi Jenis Musyawarah</span>
+            </h4>
+            <div class="h-64 relative">
+              <canvas id="typeDistributionChart"></canvas>
+            </div>
+          </div>
+
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+            <h4 class="font-black text-xs uppercase text-slate-900 dark:text-white flex items-center space-x-2">
+              <i data-lucide="bar-chart-3" class="w-4 h-4 text-brand-600"></i>
+              <span>Status Progress Action Items</span>
+            </h4>
+            <div class="h-64 relative">
+              <canvas id="statusProgressChart"></canvas>
+            </div>
+          </div>
+        </div>
+
       </section>
 
       <!-- SECTION 2: TUGAS SAYA -->
@@ -575,6 +652,10 @@
     let currentUser = null;
     let selectedCategoryFilter = "Semua";
 
+    // Chart instances
+    let chartTypeDistribution = null;
+    let chartStatusProgress = null;
+
     function initLucideIcons() {
       if (window.lucide) {
         lucide.createIcons();
@@ -735,6 +816,7 @@
 
     function toggleDarkMode() {
       document.documentElement.classList.toggle('dark');
+      updateDashboardStatsAndCharts();
     }
 
     function switchTab(tabName) {
@@ -772,6 +854,7 @@
 
       toggleMobileSidebar(false);
 
+      if (tabName === 'dashboard') updateDashboardStatsAndCharts();
       if (tabName === 'input') resetMusyawarahForm();
       if (tabName === 'tasks') renderMyTasks();
       if (tabName === 'board') renderKanbanBoard();
@@ -904,7 +987,7 @@
               ...m,
               jenismusyawarah: m.jenismusyawarah || m.jenis_musyawarah || 'Musyawarah Pengurus'
             }));
-            updateStats();
+            updateDashboardStatsAndCharts();
             renderMyTasks();
             renderMusyawarahList();
             renderKanbanBoard();
@@ -916,6 +999,7 @@
         console.warn("Fetch Error via Web App API:", err);
       }
 
+      // Fallback Data Sampel
       musyawarahData = [
         {
           meetingid: "MT-202611-001",
@@ -957,7 +1041,7 @@
         }
       ];
 
-      updateStats();
+      updateDashboardStatsAndCharts();
       renderMyTasks();
       renderMusyawarahList();
       renderKanbanBoard();
@@ -1012,30 +1096,168 @@
       }
 
       musyawarahData.unshift(payload);
-      updateStats();
+      updateDashboardStatsAndCharts();
       switchTab('list');
       showToast("Notulensi berhasil disimpan!");
     }
 
-    function updateStats() {
+    function setDashPreset(type) {
+      const dateFrom = document.getElementById('dashDateFrom');
+      const dateTo = document.getElementById('dashDateTo');
+      const today = new Date();
+
+      if (type === 'thisMonth') {
+        const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+        dateFrom.value = firstDay.toISOString().split('T')[0];
+        dateTo.value = today.toISOString().split('T')[0];
+      } else if (type === 'last30') {
+        const past = new Date();
+        past.setDate(today.getDate() - 30);
+        dateFrom.value = past.toISOString().split('T')[0];
+        dateTo.value = today.toISOString().split('T')[0];
+      } else if (type === 'all') {
+        dateFrom.value = '';
+        dateTo.value = '';
+      }
+
+      updateDashboardStatsAndCharts();
+    }
+
+    function updateDashboardStatsAndCharts() {
+      const dateFrom = document.getElementById('dashDateFrom')?.value || '';
+      const dateTo = document.getElementById('dashDateTo')?.value || '';
+
+      let filtered = musyawarahData.filter(m => {
+        let matchDate = true;
+        if (dateFrom && m.tanggal < dateFrom) matchDate = false;
+        if (dateTo && m.tanggal > dateTo) matchDate = false;
+        return matchDate;
+      });
+
       let totalActions = 0;
       let inProgress = 0;
       let completed = 0;
+      let belumDimulai = 0;
+      let tertunda = 0;
 
-      musyawarahData.forEach(m => {
+      let cnt4S = 0;
+      let cntPengurus = 0;
+      let cnt5Unsur = 0;
+      let cntKBM = 0;
+      let cntMudaMudi = 0;
+
+      filtered.forEach(m => {
+        const jenis = m.jenismusyawarah || '';
+        if (jenis.includes('4S')) cnt4S++;
+        else if (jenis.includes('Pengurus')) cntPengurus++;
+        else if (jenis.includes('5 Unsur')) cnt5Unsur++;
+        else if (jenis.includes('KBM')) cntKBM++;
+        else if (jenis.includes('Muda-mudi')) cntMudaMudi++;
+
         if (Array.isArray(m.actionItems)) {
           totalActions += m.actionItems.length;
           m.actionItems.forEach(a => {
-            if (a.status === 'Dalam Proses') inProgress++;
-            if (a.status === 'Selesai') completed++;
+            if (a.status === 'Belum Dimulai') belumDimulai++;
+            else if (a.status === 'Dalam Proses') inProgress++;
+            else if (a.status === 'Tertunda') tertunda++;
+            else if (a.status === 'Selesai') completed++;
           });
         }
       });
 
-      document.getElementById('dashTotalMusyawarah').textContent = musyawarahData.length;
+      // Update Top Stat Cards
+      document.getElementById('dashTotalMusyawarah').textContent = filtered.length;
       document.getElementById('dashTotalActions').textContent = totalActions;
       document.getElementById('dashInProgresActions').textContent = inProgress;
       document.getElementById('dashCompletedActions').textContent = completed;
+
+      // Update Breakdown Counts
+      document.getElementById('cntMusyawarah4S').textContent = cnt4S;
+      document.getElementById('cntMusyawarahPengurus').textContent = cntPengurus;
+      document.getElementById('cntMusyawarah5Unsur').textContent = cnt5Unsur;
+      document.getElementById('cntMusyawarahKBM').textContent = cntKBM;
+      document.getElementById('cntMusyawarahMudaMudi').textContent = cntMudaMudi;
+
+      // Render Charts
+      renderTypeDistributionChart([cnt4S, cntPengurus, cnt5Unsur, cntKBM, cntMudaMudi]);
+      renderStatusProgressChart([belumDimulai, inProgress, tertunda, completed]);
+    }
+
+    function renderTypeDistributionChart(dataCounts) {
+      const ctx = document.getElementById('typeDistributionChart');
+      if (!ctx) return;
+
+      if (chartTypeDistribution) {
+        chartTypeDistribution.destroy();
+      }
+
+      const isDark = document.documentElement.classList.contains('dark');
+      const textColor = isDark ? '#cbd5e1' : '#475569';
+
+      chartTypeDistribution = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Musyawarah 4S', 'Pengurus', '5 Unsur', 'KBM', 'Muda-mudi'],
+          datasets: [{
+            data: dataCounts,
+            backgroundColor: ['#10b981', '#3b82f6', '#a855f7', '#f59e0b', '#6366f1'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' } }
+            }
+          }
+        }
+      });
+    }
+
+    function renderStatusProgressChart(statusCounts) {
+      const ctx = document.getElementById('statusProgressChart');
+      if (!ctx) return;
+
+      if (chartStatusProgress) {
+        chartStatusProgress.destroy();
+      }
+
+      const isDark = document.documentElement.classList.contains('dark');
+      const textColor = isDark ? '#cbd5e1' : '#475569';
+      const gridColor = isDark ? '#334155' : '#e2e8f0';
+
+      chartStatusProgress = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Belum Dimulai', 'Dalam Proses', 'Tertunda', 'Selesai'],
+          datasets: [{
+            label: 'Jumlah Action Items',
+            data: statusCounts,
+            backgroundColor: ['#94a3b8', '#f59e0b', '#f43f5e', '#10b981'],
+            borderRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: {
+              ticks: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 10, weight: 'bold' } },
+              grid: { display: false }
+            },
+            y: {
+              ticks: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 10 }, precision: 0 },
+              grid: { color: gridColor }
+            }
+          }
+        }
+      });
     }
 
     function filterNotulensiCategory(catName) {
@@ -1067,6 +1289,7 @@
       const searchVal = (document.getElementById('listSearchInput')?.value || '').toLowerCase().trim();
       const dateFrom = document.getElementById('listDateFrom')?.value || '';
       const dateTo = document.getElementById('listDateTo')?.value || '';
+      const isT01 = currentUser && currentUser.teamid === 'T-01';
 
       let filtered = musyawarahData.filter(m => {
         const matchCategory = (selectedCategoryFilter === "Semua") || (m.jenismusyawarah || '').includes(selectedCategoryFilter);
@@ -1107,10 +1330,17 @@
                     <span class="font-mono text-[10px] font-bold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950 px-2 py-0.5 rounded">${a.actionid}</span>
                     <span class="font-bold text-slate-900 dark:text-white text-xs">${a.pokokbahasan}</span>
                   </div>
-                  <button onclick="openQuickEditModal('${m.meetingid}', '${a.actionid}')" class="px-2 py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-[10px] font-bold hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center space-x-1">
-                    <i data-lucide="edit-3" class="w-3 h-3 text-slate-500"></i>
-                    <span>Edit Progress</span>
-                  </button>
+                  <div class="flex items-center space-x-1">
+                    <button onclick="openQuickEditModal('${m.meetingid}', '${a.actionid}')" class="px-2 py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-[10px] font-bold hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center space-x-1">
+                      <i data-lucide="edit-3" class="w-3 h-3 text-slate-500"></i>
+                      <span>Edit Progress</span>
+                    </button>
+                    ${isT01 ? `
+                      <button onclick="deleteSingleActionItem('${m.meetingid}', '${a.actionid}')" class="p-1 text-rose-500 hover:text-rose-700 rounded-lg" title="Hapus Action Item (Khusus T-01)">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                      </button>
+                    ` : ''}
+                  </div>
                 </div>
 
                 ${a.detailbahasan ? `<p class="text-[11px] text-slate-600 dark:text-slate-300"><strong>Detail:</strong> ${a.detailbahasan}</p>` : ''}
@@ -1144,6 +1374,11 @@
               <button onclick="openDetailModal('${m.meetingid}')" class="p-1.5 bg-brand-50 hover:bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-300 rounded-xl" title="Lihat Pratinjau Lengkap">
                 <i data-lucide="external-link" class="w-4 h-4"></i>
               </button>
+              ${isT01 ? `
+                <button onclick="deleteMusyawarahRecord('${m.meetingid}')" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400 rounded-xl" title="Hapus Musyawarah (Khusus T-01)">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              ` : ''}
             </div>
           </div>
 
@@ -1177,6 +1412,73 @@
       });
 
       initLucideIcons();
+    }
+
+    async function deleteMusyawarahRecord(meetingId) {
+      if (!currentUser || currentUser.teamid !== 'T-01') {
+        showToast("Akses ditolak! Hanya pengurus dengan Team ID T-01 yang dapat menghapus.");
+        return;
+      }
+
+      if (!confirm(`Apakah Anda yakin ingin menghapus dokumen musyawarah ${meetingId} beserta seluruh action items terkait?`)) {
+        return;
+      }
+
+      musyawarahData = musyawarahData.filter(m => m.meetingid !== meetingId);
+      updateDashboardStatsAndCharts();
+      renderMusyawarahList();
+      renderMyTasks();
+      renderKanbanBoard();
+      showToast("Menghapus data musyawarah...");
+
+      try {
+        await fetch(MUSYAWARAH_SHEETS_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'deleteMusyawarah', meetingid: meetingId })
+        });
+        showToast("Musyawarah berhasil dihapus!");
+      } catch (err) {
+        console.warn("Delete Error:", err);
+      }
+    }
+
+    async function deleteSingleActionItem(meetingId, actionId) {
+      if (!currentUser || currentUser.teamid !== 'T-01') {
+        showToast("Akses ditolak! Hanya pengurus dengan Team ID T-01 yang dapat menghapus.");
+        return;
+      }
+
+      if (!confirm(`Hapus action item ${actionId}?`)) return;
+
+      let targetMusyawarah = null;
+      musyawarahData.forEach(m => {
+        if (m.meetingid === meetingId && Array.isArray(m.actionItems)) {
+          m.actionItems = m.actionItems.filter(a => a.actionid !== actionId);
+          targetMusyawarah = m;
+        }
+      });
+
+      updateDashboardStatsAndCharts();
+      renderMusyawarahList();
+      renderMyTasks();
+      renderKanbanBoard();
+      showToast("Memperbarui Action Items...");
+
+      if (targetMusyawarah) {
+        try {
+          await fetch(MUSYAWARAH_SHEETS_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'saveMusyawarah', data: targetMusyawarah })
+          });
+          showToast("Action Item berhasil dihapus!");
+        } catch (err) {
+          console.warn("Save Error:", err);
+        }
+      }
     }
 
     function toggleCardAccordion(accId) {
@@ -1480,7 +1782,7 @@
       });
 
       closeQuickEditModal();
-      updateStats();
+      updateDashboardStatsAndCharts();
       renderMyTasks();
       renderMusyawarahList();
       renderKanbanBoard();
