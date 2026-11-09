@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MUSYAMANAH SKB1 - Aplikasi Manajemen Musyawarah Kelompok</title>
+  <title>MUSYAMANAH - Aplikasi Manajemen Musyawarah Kelompok</title>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -88,8 +88,8 @@
           <i data-lucide="users" class="w-8 h-8"></i>
         </div>
         <div>
-          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">MUSYAMANAH SKB1</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Aplikasi Manajemen Musyawarah Kelompok</p>
+          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">MUSYAMANAH</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium leading-relaxed">Selamat datang di aplikasi manajemen musyawarah kelompok. Silahkan masukkan username dan password Anda.</p>
         </div>
       </div>
 
@@ -118,6 +118,11 @@
           <i data-lucide="arrow-right" class="w-4 h-4"></i>
         </button>
       </form>
+
+      <!-- Copyright Under Login Card -->
+      <div class="pt-2 text-center text-[11px] font-medium text-slate-400 dark:text-slate-500 relative z-10">
+        &copy; 2026 Kelompok Srengseng Kalibata 1
+      </div>
     </div>
   </div>
 
@@ -192,7 +197,7 @@
       </div>
 
       <div class="p-4 border-t border-slate-800/60 text-center text-[10px] text-slate-500 font-medium">
-        &copy; MUSYAMANAH SKB1
+        &copy; 2026 Kelompok Srengseng Kalibata 1
       </div>
     </aside>
 
@@ -208,7 +213,7 @@
           </button>
 
           <div class="truncate">
-            <h1 class="font-black text-sm sm:text-base text-slate-900 dark:text-white tracking-tight leading-tight truncate">MUSYAMANAH SKB1</h1>
+            <h1 class="font-black text-sm sm:text-base text-slate-900 dark:text-white tracking-tight leading-tight truncate">MUSYAMANAH</h1>
             <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium truncate">Aplikasi Manajemen Musyawarah Kelompok</p>
           </div>
         </div>
@@ -320,7 +325,7 @@
               <i data-lucide="grid" class="w-4 h-4 text-brand-500"></i>
               <span>BREAKDOWN MUSYAWARAH PER JENIS</span>
             </h3>
-            <div id="breakdownJenisContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+            <div id="breakdownJenisContainer" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
               <!-- Dynamically populated card grid -->
             </div>
           </div>
@@ -447,29 +452,44 @@
             </button>
           </div>
 
-          <!-- SEARCH & DATE RANGE FILTER -->
-          <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-end gap-3 text-xs">
-            <div class="w-full md:flex-1 space-y-1">
-              <label class="block font-bold text-slate-500 dark:text-slate-400 text-[11px]">Cari Kata Kunci</label>
-              <div class="relative">
-                <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
-                <input type="text" id="searchNotulensi" oninput="renderMusyawarahList()" placeholder="Cari judul, jenis musyawarah, ketua..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all">
+          <!-- SEARCH, QUICK JENIS BUTTONS & DATE RANGE FILTER -->
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
+            <!-- QUICK FILTER BUTTONS PER JENIS MUSYAWARAH -->
+            <div class="space-y-1.5">
+              <label class="block font-bold text-slate-500 dark:text-slate-400 text-[11px] uppercase tracking-wider">Kategori Jenis Musyawarah:</label>
+              <div class="flex flex-wrap gap-2" id="quickFilterJenisContainer">
+                <button onclick="setJenisFilter(this, '')" id="btnFilterJenisAll" class="btn-jenis-filter active-jenis px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-brand-600 text-white shadow-sm">Semua Jenis</button>
+                <button onclick="setJenisFilter(this, 'Musyawarah 4S')" class="btn-jenis-filter px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">Musyawarah 4S</button>
+                <button onclick="setJenisFilter(this, 'Musyawarah Pengurus')" class="btn-jenis-filter px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">Musyawarah Pengurus</button>
+                <button onclick="setJenisFilter(this, 'Musyawarah KBM')" class="btn-jenis-filter px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">Musyawarah KBM</button>
+                <button onclick="setJenisFilter(this, 'Musyawarah Muda-mudi')" class="btn-jenis-filter px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">Musyawarah Muda-mudi</button>
+                <button onclick="setJenisFilter(this, 'Musyawarah 5 Unsur')" class="btn-jenis-filter px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">Musyawarah 5 Unsur</button>
               </div>
             </div>
-            <div class="w-full md:w-auto flex items-center space-x-2">
-              <div class="space-y-1">
-                <label class="block font-bold text-slate-500 dark:text-slate-400 text-[11px]">Dari Tanggal</label>
-                <input type="date" id="filterStartDate" onchange="renderMusyawarahList()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
+
+            <div class="flex flex-col md:flex-row items-end gap-3 text-xs pt-2 border-t border-slate-100 dark:border-slate-800/80">
+              <div class="w-full md:flex-1 space-y-1">
+                <label class="block font-bold text-slate-500 dark:text-slate-400 text-[11px]">Cari Kata Kunci</label>
+                <div class="relative">
+                  <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
+                  <input type="text" id="searchNotulensi" oninput="renderMusyawarahList()" placeholder="Cari judul, jenis musyawarah, ketua..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all">
+                </div>
               </div>
-              <div class="space-y-1">
-                <label class="block font-bold text-slate-500 dark:text-slate-400 text-[11px]">Sampai Tanggal</label>
-                <input type="date" id="filterEndDate" onchange="renderMusyawarahList()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <div class="w-full md:w-auto flex items-center space-x-2">
+                <div class="space-y-1">
+                  <label class="block font-bold text-slate-500 dark:text-slate-400 text-[11px]">Dari Tanggal</label>
+                  <input type="date" id="filterStartDate" onchange="renderMusyawarahList()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+                <div class="space-y-1">
+                  <label class="block font-bold text-slate-500 dark:text-slate-400 text-[11px]">Sampai Tanggal</label>
+                  <input type="date" id="filterEndDate" onchange="renderMusyawarahList()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
               </div>
+              <button onclick="resetNotulensiFilters()" class="w-full md:w-auto px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-1.5 h-[38px]">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                <span>Reset</span>
+              </button>
             </div>
-            <button onclick="resetNotulensiFilters()" class="w-full md:w-auto px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-1.5 h-[38px]">
-              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-              <span>Reset</span>
-            </button>
           </div>
 
           <div id="musyawarahListContainer" class="grid grid-cols-1 gap-4"></div>
@@ -740,15 +760,14 @@
     let currentUser = null;
     let musyawarahData = [];
     let usersList = [];
+    let selectedJenisFilter = '';
     let chartBelumInstance = null;
     let chartProgresInstance = null;
     let chartTertundaInstance = null;
     let chartSelesaiInstance = null;
-    let chartStatusInstance = null;
     let chartPercentProgresInstance = null;
     let chartPercentSelesaiInstance = null;
-    let chartBreakdownJenisInstance = null;
-    let chartProporsiJenisInstance = null;
+    let chartStatusInstance = null;
     let chartTeamInstance = null;
 
     // INIT
@@ -758,8 +777,220 @@
     };
 
     function initLucideIcons() {
-      if (window.lucide) {
-        lucide.createIcons();
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+    }
+
+    // RENDER: NOTULENSI LIST (DENGAN SEARCH, QUICK JENIS & DATE FILTER)
+    function setJenisFilter(btnElement, jenis) {
+      selectedJenisFilter = jenis || '';
+
+      // Update style status aktif untuk semua tombol filter jenis
+      const buttons = document.querySelectorAll('#quickFilterJenisContainer .btn-jenis-filter');
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-brand-600', 'text-white', 'shadow-sm');
+        btn.classList.add('bg-slate-100', 'hover:bg-slate-200', 'dark:bg-slate-800', 'dark:hover:bg-slate-700', 'text-slate-700', 'dark:text-slate-200');
+      });
+
+      // Highlight tombol yang diklik
+      if (btnElement) {
+        btnElement.classList.remove('bg-slate-100', 'hover:bg-slate-200', 'dark:bg-slate-800', 'dark:hover:bg-slate-700', 'text-slate-700', 'dark:text-slate-200');
+        btnElement.classList.add('bg-brand-600', 'text-white', 'shadow-sm');
+      }
+
+      // Solusi: Mengisi input cari kata kunci secara otomatis dengan nilai dari tombol cepat yang dipilih
+      const searchInput = document.getElementById('searchNotulensi');
+      if (searchInput) {
+        searchInput.value = jenis || '';
+      }
+
+      // Re-render daftar notulensi secara otomatis
+      renderMusyawarahList();
+    }
+
+    function renderMusyawarahList() {
+      const container = document.getElementById('musyawarahListContainer');
+      const search = (document.getElementById('searchNotulensi')?.value || '').toLowerCase();
+      const startDate = document.getElementById('filterStartDate')?.value;
+      const endDate = document.getElementById('filterEndDate')?.value;
+
+      if (!container) return;
+      container.innerHTML = '';
+
+      const filtered = musyawarahData.filter(m => {
+        const jenisStr = (m.jenismusyawarah || '').toLowerCase();
+
+        // Search Input Keyword Matching
+        const matchesSearch = (m.judul || '').toLowerCase().includes(search) || 
+                              jenisStr.includes(search) ||
+                              (m.ketua || '').toLowerCase().includes(search);
+
+        // Date Range
+        let matchesDate = true;
+        if (m.tanggal) {
+          if (startDate && m.tanggal < startDate) matchesDate = false;
+          if (endDate && m.tanggal > endDate) matchesDate = false;
+        }
+
+        return matchesSearch && matchesDate;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="p-12 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 space-y-3">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400">
+              <i data-lucide="search-x" class="w-6 h-6"></i>
+            </div>
+            <p class="text-xs font-semibold text-slate-400">Tidak ada notulensi musyawarah yang sesuai filter.</p>
+          </div>
+        `;
+        initLucideIcons();
+        return;
+      }
+
+      filtered.forEach(m => {
+        const card = document.createElement('div');
+        card.className = "bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm hover:border-slate-300 dark:hover:border-slate-700 transition-all space-y-4";
+        card.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="space-y-1">
+              <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200 dark:border-brand-800/50">${m.jenismusyawarah || 'Musyawarah'}</span>
+              <h3 class="font-bold text-base text-slate-900 dark:text-white mt-1">${m.judul}</h3>
+            </div>
+            <div class="flex items-center space-x-2 self-start sm:self-auto">
+              <button onclick="openDetailModal('${m.meetingid}')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all">
+                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                <span>Detail</span>
+              </button>
+              <button onclick="openMusyawarahModal('${m.meetingid}')" class="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all">
+                <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                <span>Edit</span>
+              </button>
+              <button onclick="deleteEntireMusyawarah('${m.meetingid}')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200/60 dark:border-rose-800/40 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>Hapus</span>
+              </button>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-slate-500 dark:text-slate-400 pt-3 border-t border-slate-100 dark:border-slate-800/80">
+            <div><span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Tanggal</span><strong class="text-slate-700 dark:text-slate-200">${m.tanggal || '-'}</strong></div>
+            <div><span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Ketua</span><strong class="text-slate-700 dark:text-slate-200">${m.ketua || '-'}</strong></div>
+            <div><span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Notulis</span><strong class="text-slate-700 dark:text-slate-200">${m.notulis || '-'}</strong></div>
+            <div><span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Action Items</span><strong class="text-brand-600 dark:text-brand-400">${(m.actionItems || []).length} items</strong></div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      initLucideIcons();
+    }
+
+    function resetNotulensiFilters() {
+      selectedJenisFilter = '';
+      document.getElementById('searchNotulensi').value = '';
+      document.getElementById('filterStartDate').value = '';
+      document.getElementById('filterEndDate').value = '';
+      
+      const btnAll = document.getElementById('btnFilterJenisAll');
+      setJenisFilter(btnAll, '');
+    }
+
+    function renderMusyawarahList() {
+      const container = document.getElementById('musyawarahListContainer');
+      const search = (document.getElementById('searchNotulensi')?.value || '').toLowerCase();
+      const startDate = document.getElementById('filterStartDate')?.value;
+      const endDate = document.getElementById('filterEndDate')?.value;
+
+      if (!container) return;
+      container.innerHTML = '';
+
+      const filtered = musyawarahData.filter(m => {
+        const jenisStr = (m.jenismusyawarah || '').toLowerCase();
+        
+        // Filter Quick Jenis Button
+        let matchesJenis = true;
+        if (selectedJenisFilter) {
+          matchesJenis = jenisStr.includes(selectedJenisFilter.toLowerCase());
+        }
+
+        // Search Input Keyword
+        const matchesSearch = (m.judul || '').toLowerCase().includes(search) || 
+                              jenisStr.includes(search) ||
+                              (m.ketua || '').toLowerCase().includes(search);
+
+        // Date Range
+        let matchesDate = true;
+        if (m.tanggal) {
+          if (startDate && m.tanggal < startDate) matchesDate = false;
+          if (endDate && m.tanggal > endDate) matchesDate = false;
+        }
+
+        return matchesJenis && matchesSearch && matchesDate;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="p-12 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 space-y-3">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400">
+              <i data-lucide="search-x" class="w-6 h-6"></i>
+            </div>
+            <p class="text-xs font-semibold text-slate-400">Tidak ada notulensi musyawarah yang sesuai filter.</p>
+          </div>
+        `;
+        initLucideIcons();
+        return;
+      }
+
+      filtered.forEach(m => {
+        const card = document.createElement('div');
+        card.className = "bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm hover:border-slate-300 dark:hover:border-slate-700 transition-all space-y-4";
+        card.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="space-y-1">
+              <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200 dark:border-brand-800/50">${m.jenismusyawarah || 'Musyawarah'}</span>
+              <h3 class="font-bold text-base text-slate-900 dark:text-white mt-1">${m.judul}</h3>
+            </div>
+            <div class="flex items-center space-x-2 self-start sm:self-auto">
+              <button onclick="openDetailModal('${m.meetingid}')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all">
+                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                <span>Detail</span>
+              </button>
+              <button onclick="openMusyawarahModal('${m.meetingid}')" class="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all">
+                <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                <span>Edit</span>
+              </button>
+              <button onclick="deleteEntireMusyawarah('${m.meetingid}')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200/60 dark:border-rose-800/40 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>Hapus</span>
+              </button>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-slate-500 dark:text-slate-400 pt-3 border-t border-slate-100 dark:border-slate-800/80">
+            <div><span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Tanggal</span><strong class="text-slate-700 dark:text-slate-200">${m.tanggal || '-'}</strong></div>
+            <div><span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Ketua</span><strong class="text-slate-700 dark:text-slate-200">${m.ketua || '-'}</strong></div>
+            <div><span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Notulis</span><strong class="text-slate-700 dark:text-slate-200">${m.notulis || '-'}</strong></div>
+            <div><span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Action Items</span><strong class="text-brand-600 dark:text-brand-400">${(m.actionItems || []).length} items</strong></div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      initLucideIcons();
+    }
+
+    function resetNotulensiFilters() {
+      selectedJenisFilter = '';
+      document.getElementById('searchNotulensi').value = '';
+      document.getElementById('filterStartDate').value = '';
+      document.getElementById('filterEndDate').value = '';
+      
+      const btnAll = document.getElementById('btnFilterJenisAll');
+      if (btnAll) {
+        const eventObj = { currentTarget: btnAll };
+        setJenisFilter.call(eventObj, '');
+      } else {
+        renderMusyawarahList();
       }
     }
 
@@ -1036,21 +1267,24 @@
         return;
       }
 
-      const colorPalette = [
-        { bg: 'bg-emerald-50 dark:bg-emerald-950/40', text: 'text-emerald-600 dark:text-emerald-400', border: 'border-emerald-200/60 dark:border-emerald-800/40' },
-        { bg: 'bg-blue-50 dark:bg-blue-950/40', text: 'text-blue-600 dark:text-blue-400', border: 'border-blue-200/60 dark:border-blue-800/40' },
-        { bg: 'bg-purple-50 dark:bg-purple-950/40', text: 'text-purple-600 dark:text-purple-400', border: 'border-purple-200/60 dark:border-purple-800/40' },
-        { bg: 'bg-amber-50 dark:bg-amber-950/40', text: 'text-amber-600 dark:text-amber-400', border: 'border-amber-200/60 dark:border-amber-800/40' },
-        { bg: 'bg-rose-50 dark:bg-rose-950/40', text: 'text-rose-600 dark:text-rose-400', border: 'border-rose-200/60 dark:border-rose-800/40' },
+      const textColorPalette = [
+        'text-emerald-600 dark:text-emerald-400',
+        'text-blue-600 dark:text-blue-400',
+        'text-purple-600 dark:text-purple-400',
+        'text-amber-500 dark:text-amber-400',
+        'text-indigo-600 dark:text-indigo-400',
+        'text-rose-500 dark:text-rose-400',
       ];
 
       keys.forEach((jenis, idx) => {
-        const theme = colorPalette[idx % colorPalette.length];
+        const textClass = textColorPalette[idx % textColorPalette.length];
         const card = document.createElement('div');
-        card.className = `bg-white dark:bg-slate-900 p-4 rounded-2xl border ${theme.border} shadow-sm space-y-2 text-center transition-all hover:scale-[1.02]`;
+        card.className = `bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 flex flex-col justify-between transition-all hover:border-brand-500/40 hover:shadow-md`;
         card.innerHTML = `
-          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block leading-tight break-words" title="${jenis}">${jenis}</span>
-          <div class="text-2xl font-black ${theme.text}">${jenisMap[jenis]}</div>
+          <div class="flex items-start justify-between">
+            <span class="text-slate-400 text-[10px] font-extrabold uppercase tracking-wider block leading-tight break-words pr-1" title="${jenis}">${jenis}</span>
+          </div>
+          <div class="text-3xl font-black ${textClass}">${jenisMap[jenis]}</div>
         `;
         container.appendChild(card);
       });
