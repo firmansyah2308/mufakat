@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MUSYAMANAH - Aplikasi Manajemen Musyawarah Kelompok</title>
+  <title>MUFAKAT - Aplikasi Manajemen Musyawarah Kelompok</title>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -88,8 +88,8 @@
           <i data-lucide="users" class="w-8 h-8"></i>
         </div>
         <div>
-          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">MUSYAMANAH</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium leading-relaxed">Selamat datang di aplikasi manajemen musyawarah kelompok. Silahkan masukkan username dan password Anda.</p>
+          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">MUFAKAT SKB1</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium leading-relaxed">Selamat Datang di aplikasi MUFAKAT (Musyawarah, Forum Amanah, Kolaborasi, Aksi dan Tindak Lanjut) Kelompok SKB1. Silahkan masukkan username dan password Anda.</p>
         </div>
       </div>
 
@@ -142,7 +142,7 @@
               M
             </div>
             <div class="truncate">
-              <h1 class="font-black text-sm text-white tracking-wide truncate">MUSYAMANAH</h1>
+              <h1 class="font-black text-sm text-white tracking-wide truncate">MUFAKAT</h1>
               <p class="text-[10px] text-brand-400 font-bold truncate">Kelompok SKB1</p>
             </div>
           </div>
@@ -213,8 +213,8 @@
           </button>
 
           <div class="truncate">
-            <h1 class="font-black text-sm sm:text-base text-slate-900 dark:text-white tracking-tight leading-tight truncate">MUSYAMANAH</h1>
-            <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium truncate">Aplikasi Manajemen Musyawarah Kelompok</p>
+            <h1 class="font-black text-sm sm:text-base text-slate-900 dark:text-white tracking-tight leading-tight truncate">MUFAKAT</h1>
+            <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium truncate">Aplikasi Manajemen Musyawarah Kelompok SKB1</p>
           </div>
         </div>
 
@@ -338,20 +338,7 @@
             </h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- KOTAK TERPISAH 1: PROSES vs TOTAL -->
-              <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center justify-between space-x-4">
-                <div class="space-y-1">
-                  <span class="text-xs font-bold uppercase tracking-wider text-amber-500 block">Status Dalam Proses</span>
-                  <h4 class="text-sm font-black text-slate-900 dark:text-white leading-tight break-words">Proporsi "Dalam Proses" terhadap Total Action Item</h4>
-                  <p class="text-[11px] text-slate-400 font-medium">Persentase pekerjaan yang sedang aktif dikerjakan.</p>
-                </div>
-                <div class="relative w-24 h-24 flex items-center justify-center flex-shrink-0">
-                  <canvas id="chartPercentProgres"></canvas>
-                  <div id="textPercentProgres" class="absolute font-black text-xs text-amber-500">0%</div>
-                </div>
-              </div>
-
-              <!-- KOTAK TERPISAH 2: BELUM DIMULAI vs TOTAL -->
+              <!-- KOTAK TERPISAH 1: BELUM DIMULAI vs TOTAL (DISEBALAH KIRI / LEBIH DULU) -->
               <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center justify-between space-x-4">
                 <div class="space-y-1">
                   <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block">Status Belum Dimulai</span>
@@ -361,6 +348,19 @@
                 <div class="relative w-24 h-24 flex items-center justify-center flex-shrink-0">
                   <canvas id="chartPercentSelesai"></canvas>
                   <div id="textPercentSelesai" class="absolute font-black text-xs text-slate-400">0%</div>
+                </div>
+              </div>
+
+              <!-- KOTAK TERPISAH 2: PROSES vs TOTAL (DISEBALAH KANAN) -->
+              <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center justify-between space-x-4">
+                <div class="space-y-1">
+                  <span class="text-xs font-bold uppercase tracking-wider text-amber-500 block">Status Dalam Proses</span>
+                  <h4 class="text-sm font-black text-slate-900 dark:text-white leading-tight break-words">Proporsi "Dalam Proses" terhadap Total Action Item</h4>
+                  <p class="text-[11px] text-slate-400 font-medium">Persentase pekerjaan yang sedang aktif dikerjakan.</p>
+                </div>
+                <div class="relative w-24 h-24 flex items-center justify-center flex-shrink-0">
+                  <canvas id="chartPercentProgres"></canvas>
+                  <div id="textPercentProgres" class="absolute font-black text-xs text-amber-500">0%</div>
                 </div>
               </div>
             </div>
@@ -1281,16 +1281,19 @@
 
         if (existingInstance) existingInstance.destroy();
 
-        const labels = Object.keys(dataObj);
-        const dataValues = Object.values(dataObj);
+        // Urutkan Team ID secara teratur (T-01, T-02, T-03, dst.)
+        const sortedLabels = Object.keys(dataObj).sort((a, b) => {
+          return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+        });
+        const dataValues = sortedLabels.map(key => dataObj[key]);
 
         return new Chart(ctx, {
           type: 'bar',
           data: {
-            labels: labels.length > 0 ? labels : ['Belum ada data'],
+            labels: sortedLabels.length > 0 ? sortedLabels : ['Belum ada data'],
             datasets: [{
               label: 'Jumlah Items',
-              data: labels.length > 0 ? dataValues : [0],
+              data: sortedLabels.length > 0 ? dataValues : [0],
               backgroundColor: colorHex,
               borderRadius: 6,
               borderSkipped: false
