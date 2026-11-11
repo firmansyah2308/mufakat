@@ -88,8 +88,8 @@
           <i data-lucide="users" class="w-8 h-8"></i>
         </div>
         <div>
-          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">MUFAKAT SKB1</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium leading-relaxed">Selamat Datang di aplikasi MUFAKAT (Musyawarah, Forum Amanah, Kolaborasi, Aksi dan Tindak Lanjut) Kelompok SKB1. Silahkan masukkan username dan password Anda.</p>
+          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">MUFAKAT</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium leading-relaxed">Selamat Datang di aplikasi MUFAKAT (Musyawarah, Forum Amanah, Kolaborasi, Aksi dan Tindak Lanjut) Kelompok. Silahkan masukkan username dan password Anda.</p>
         </div>
       </div>
 
@@ -214,7 +214,7 @@
 
           <div class="truncate">
             <h1 class="font-black text-sm sm:text-base text-slate-900 dark:text-white tracking-tight leading-tight truncate">MUFAKAT</h1>
-            <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium truncate">Aplikasi Manajemen Musyawarah Kelompok SKB1</p>
+            <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium truncate">Aplikasi Manajemen Musyawarah Kelompok</p>
           </div>
         </div>
 
@@ -238,264 +238,264 @@
       </header>
 
       <!-- MAIN CONTENT AREA -->
-      <main class="flex-1 bg-slate-50 dark:bg-slate-950 p-4 sm:p-6 lg:p-8 space-y-6 overflow-y-auto custom-scrollbar">
-        
-        <!-- VIEW: DASHBOARD -->
-        <section id="view-dashboard" class="space-y-6 max-w-7xl mx-auto">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
-            <div>
-              <h2 class="text-xl font-black text-slate-900 dark:text-white tracking-tight">Ringkasan Musyawarah</h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Statistik, analisis, dan breakdown pencapaian keputusan musyawarah</p>
+    <main class="flex-1 bg-slate-50 dark:bg-slate-950 p-4 sm:p-6 lg:p-8 space-y-6 overflow-y-auto custom-scrollbar min-w-0 w-full">
+      
+      <!-- VIEW: DASHBOARD -->
+      <section id="view-dashboard" class="space-y-6 w-full max-w-[1600px] mx-auto">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm w-full">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">Ringkasan Musyawarah</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">Statistik, analisis, dan breakdown pencapaian keputusan musyawarah</p>
+          </div>
+          <button onclick="openMusyawarahModal()" class="px-4 py-2.5 bg-brand-600 hover:bg-brand-700 active:scale-95 text-white rounded-xl text-xs font-bold flex items-center space-x-2 shadow-lg shadow-brand-600/20 transition-all self-start sm:self-auto flex-shrink-0">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Musyawarah Baru</span>
+          </button>
+        </div>
+
+        <!-- PERIODE DATA FILTER BAR -->
+        <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs w-full">
+          <div class="flex items-center space-x-2 text-slate-700 dark:text-slate-300 font-bold flex-shrink-0">
+            <i data-lucide="calendar-range" class="w-4 h-4 text-brand-600 dark:text-brand-400"></i>
+            <span>Periode Data:</span>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+            <div class="flex items-center space-x-2">
+              <input type="date" id="dashStartDate" onchange="filterDashboardByDate()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <span class="text-slate-400 font-bold">-</span>
+              <input type="date" id="dashEndDate" onchange="filterDashboardByDate()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
             </div>
-            <button onclick="openMusyawarahModal()" class="px-4 py-2.5 bg-brand-600 hover:bg-brand-700 active:scale-95 text-white rounded-xl text-xs font-bold flex items-center space-x-2 shadow-lg shadow-brand-600/20 transition-all self-start sm:self-auto">
-              <i data-lucide="plus-circle" class="w-4 h-4"></i>
-              <span>Musyawarah Baru</span>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <button id="btnPresetLastMonth" onclick="setDashboardPresetDate('lastMonth')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-xs transition-all">Bulan Terakhir</button>
+              <button id="btnPresetLast30" onclick="setDashboardPresetDate('last30')" class="px-3 py-2 bg-brand-600 text-white font-bold rounded-xl text-xs shadow-sm transition-all">30 Hari Terakhir</button>
+              <button id="btnPresetAll" onclick="setDashboardPresetDate('all')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-xs transition-all">Semua Periode</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 STAT CARDS UTAMA -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 w-full">
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 relative overflow-hidden group hover:border-brand-500/50 transition-colors">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-400 text-[10px] font-extrabold uppercase tracking-wider block leading-tight">TOTAL MUSYAWARAH</span>
+              <div class="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="file-text" class="w-4.5 h-4.5"></i>
+              </div>
+            </div>
+            <div id="statTotalMusyawarah" class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">0</div>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 relative overflow-hidden group hover:border-brand-500/50 transition-colors">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-400 text-[10px] font-extrabold uppercase tracking-wider block leading-tight">TOTAL ACTION ITEMS</span>
+              <div class="w-9 h-9 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="list-checks" class="w-4.5 h-4.5"></i>
+              </div>
+            </div>
+            <div id="statTotalActions" class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">0</div>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 relative overflow-hidden group hover:border-amber-500/50 transition-colors">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-400 text-[10px] font-extrabold uppercase tracking-wider block leading-tight">DALAM PROSES</span>
+              <div class="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="loader" class="w-4.5 h-4.5"></i>
+              </div>
+            </div>
+            <div id="statInProgresActions" class="text-3xl sm:text-4xl font-black text-amber-500">0</div>
+            <div id="statAvgProgress" class="hidden">0%</div>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 relative overflow-hidden group hover:border-emerald-500/50 transition-colors">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-400 text-[10px] font-extrabold uppercase tracking-wider block leading-tight">SELESAI</span>
+              <div class="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="check-circle-2" class="w-4.5 h-4.5"></i>
+              </div>
+            </div>
+            <div id="statCompletedActions" class="text-3xl sm:text-4xl font-black text-emerald-600 dark:text-emerald-400">0</div>
+          </div>
+        </div>
+
+        <!-- SECTION: BREAKDOWN MUSYAWARAH PER JENIS (CARD GRID) -->
+        <div class="space-y-3 w-full">
+          <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center space-x-2">
+            <i data-lucide="grid" class="w-4 h-4 text-brand-500"></i>
+            <span>BREAKDOWN MUSYAWARAH PER JENIS</span>
+          </h3>
+          <div id="breakdownJenisContainer" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 w-full">
+            <!-- Dynamically populated card grid -->
+          </div>
+        </div>
+
+        <!-- SECTION: TERPISAH - KOTAK RASIO PROGRES ACTION ITEM -->
+        <div class="space-y-3 pt-2 w-full">
+          <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center space-x-2">
+            <i data-lucide="pie-chart" class="w-4 h-4 text-brand-500"></i>
+            <span>RASIO PROGRES ACTION ITEM</span>
+          </h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
+            <!-- KOTAK TERPISAH 1: BELUM DIMULAI vs TOTAL -->
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center justify-between space-x-4 w-full">
+              <div class="space-y-1.5 flex-1 min-w-0">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block">Status Belum Dimulai</span>
+                <h4 class="text-sm sm:text-base font-black text-slate-900 dark:text-white leading-snug">Proporsi "Belum Dimulai" terhadap Total Action Item</h4>
+                <p class="text-xs text-slate-400 font-medium leading-relaxed">Persentase pekerjaan yang belum berjalan.</p>
+              </div>
+              <div class="relative w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center flex-shrink-0">
+                <canvas id="chartPercentSelesai"></canvas>
+                <div id="textPercentSelesai" class="absolute font-black text-sm sm:text-base text-slate-500 dark:text-slate-400">0%</div>
+              </div>
+            </div>
+
+            <!-- KOTAK TERPISAH 2: PROSES vs TOTAL -->
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center justify-between space-x-4 w-full">
+              <div class="space-y-1.5 flex-1 min-w-0">
+                <span class="text-xs font-bold uppercase tracking-wider text-amber-500 block">Status Dalam Proses</span>
+                <h4 class="text-sm sm:text-base font-black text-slate-900 dark:text-white leading-snug">Proporsi "Dalam Proses" terhadap Total Action Item</h4>
+                <p class="text-xs text-slate-400 font-medium leading-relaxed">Persentase pekerjaan yang sedang aktif dikerjakan.</p>
+              </div>
+              <div class="relative w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center flex-shrink-0">
+                <canvas id="chartPercentProgres"></canvas>
+                <div id="textPercentProgres" class="absolute font-black text-sm sm:text-base text-amber-500">0%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION: STATUS PROGRESS ACTION ITEMS (Masing-masing status memiliki kotak sendiri) -->
+        <div class="space-y-3 pt-2 w-full">
+          <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center space-x-2">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-brand-500"></i>
+            <span>STATUS PROGRESS ACTION ITEMS (PER TEAM ID)</span>
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
+            <!-- CHART TERPISAH 1: BELUM DIMULAI -->
+            <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4 w-full">
+              <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                <span class="font-bold text-xs uppercase tracking-wider text-slate-500 flex items-center space-x-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+                  <span>Status: Belum Dimulai</span>
+                </span>
+                <span class="text-[10px] font-bold text-slate-400 uppercase">Jumlah per Team ID</span>
+              </div>
+              <div class="relative h-60 w-full flex items-center justify-center">
+                <canvas id="chartBelumTeam"></canvas>
+              </div>
+            </div>
+
+            <!-- CHART TERPISAH 2: DALAM PROSES -->
+            <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4 w-full">
+              <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                <span class="font-bold text-xs uppercase tracking-wider text-amber-500 flex items-center space-x-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                  <span>Status: Dalam Proses</span>
+                </span>
+                <span class="text-[10px] font-bold text-slate-400 uppercase">Jumlah per Team ID</span>
+              </div>
+              <div class="relative h-60 w-full flex items-center justify-center">
+                <canvas id="chartProgresTeam"></canvas>
+              </div>
+            </div>
+
+            <!-- CHART TERPISAH 3: TERTUNDA -->
+            <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4 w-full">
+              <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                <span class="font-bold text-xs uppercase tracking-wider text-rose-500 flex items-center space-x-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                  <span>Status: Tertunda</span>
+                </span>
+                <span class="text-[10px] font-bold text-slate-400 uppercase">Jumlah per Team ID</span>
+              </div>
+              <div class="relative h-60 w-full flex items-center justify-center">
+                <canvas id="chartTertundaTeam"></canvas>
+              </div>
+            </div>
+
+            <!-- CHART TERPISAH 4: SELESAI -->
+            <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4 w-full">
+              <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                <span class="font-bold text-xs uppercase tracking-wider text-emerald-500 flex items-center space-x-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                  <span>Status: Selesai</span>
+                </span>
+                <span class="text-[10px] font-bold text-slate-400 uppercase">Jumlah per Team ID</span>
+              </div>
+              <div class="relative h-60 w-full flex items-center justify-center">
+                <canvas id="chartSelesaiTeam"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hidden canvas for fallback compatibility -->
+        <div class="hidden"><canvas id="chartStatus"></canvas></div>
+        <div class="hidden"><canvas id="chartBreakdownJenis"></canvas></div>
+        <div class="hidden"><canvas id="chartTeam"></canvas></div>
+        <div class="hidden"><canvas id="chartProporsiJenis"></canvas></div>
+      </section>
+
+      <!-- VIEW: NOTULENSI LIST -->
+      <section id="view-notulensi" class="hidden space-y-6 w-full max-w-[1600px] mx-auto">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm w-full">
+          <div>
+            <h2 class="text-xl font-black text-slate-900 dark:text-white tracking-tight">Daftar Notulensi Musyawarah</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Arsip lengkap hasil pembahasan dan keputusan musyawarah</p>
+          </div>
+          <button onclick="openMusyawarahModal()" class="px-4 py-2.5 bg-brand-600 hover:bg-brand-700 active:scale-95 text-white rounded-xl text-xs font-bold flex items-center space-x-2 shadow-lg shadow-brand-600/20 transition-all self-start sm:self-auto flex-shrink-0">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Musyawarah Baru</span>
+          </button>
+        </div>
+
+        <!-- SEARCH, QUICK JENIS BUTTONS & DATE RANGE FILTER -->
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
+          <!-- QUICK FILTER BUTTONS PER JENIS MUSYAWARAH -->
+          <div class="space-y-1.5">
+            <label class="block font-bold text-slate-500 dark:text-slate-400 text-[11px] uppercase tracking-wider">Kategori Jenis Musyawarah:</label>
+            <div class="flex flex-wrap gap-2" id="quickFilterJenisContainer">
+              <button onclick="setJenisFilter(this, '')" id="btnFilterJenisAll" class="btn-jenis-filter active-jenis px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-brand-600 text-white shadow-sm">Semua Jenis</button>
+              <button onclick="setJenisFilter(this, 'Musyawarah 4S')" class="btn-jenis-filter px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">Musyawarah 4S</button>
+              <button onclick="setJenisFilter(this, 'Musyawarah Pengurus')" class="btn-jenis-filter px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">Musyawarah Pengurus</button>
+              <button onclick="setJenisFilter(this, 'Musyawarah KBM')" class="btn-jenis-filter px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">Musyawarah KBM</button>
+              <button onclick="setJenisFilter(this, 'Musyawarah Muda-mudi')" class="btn-jenis-filter px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">Musyawarah Muda-mudi</button>
+              <button onclick="setJenisFilter(this, 'Musyawarah 5 Unsur')" class="btn-jenis-filter px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">Musyawarah 5 Unsur</button>
+            </div>
+          </div>
+
+          <div class="flex flex-col md:flex-row items-end gap-3 text-xs pt-2 border-t border-slate-100 dark:border-slate-800/80">
+            <div class="w-full md:flex-1 space-y-1">
+              <label class="block font-bold text-slate-500 dark:text-slate-400 text-[11px]">Cari Kata Kunci</label>
+              <div class="relative">
+                <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
+                <input type="text" id="searchNotulensi" oninput="renderMusyawarahList()" placeholder="Cari judul, jenis musyawarah, ketua..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all">
+              </div>
+            </div>
+            <div class="w-full md:w-auto flex items-center space-x-2">
+              <div class="space-y-1">
+                <label class="block font-bold text-slate-500 dark:text-slate-400 text-[11px]">Dari Tanggal</label>
+                <input type="date" id="filterStartDate" onchange="renderMusyawarahList()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+              <div class="space-y-1">
+                <label class="block font-bold text-slate-500 dark:text-slate-400 text-[11px]">Sampai Tanggal</label>
+                <input type="date" id="filterEndDate" onchange="renderMusyawarahList()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+            </div>
+            <button onclick="resetNotulensiFilters()" class="w-full md:w-auto px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-1.5 h-[38px]">
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+              <span>Reset</span>
             </button>
           </div>
+        </div>
 
-          <!-- PERIODE DATA FILTER BAR -->
-          <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col lg:flex-row items-center justify-between gap-3 text-xs">
-            <div class="flex items-center space-x-2 text-slate-700 dark:text-slate-300 font-bold self-start lg:self-auto">
-              <i data-lucide="calendar-range" class="w-4 h-4 text-brand-600 dark:text-brand-400"></i>
-              <span>Periode Data:</span>
-            </div>
+        <div id="musyawarahListContainer" class="grid grid-cols-1 gap-4"></div>
+      </section>
 
-            <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
-              <div class="flex items-center space-x-1.5">
-                <input type="date" id="dashStartDate" onchange="filterDashboardByDate()" class="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
-                <span class="text-slate-400 font-bold">-</span>
-                <input type="date" id="dashEndDate" onchange="filterDashboardByDate()" class="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
-              </div>
-
-              <div class="flex items-center space-x-1.5 ml-0 lg:ml-2">
-                <button id="btnPresetLastMonth" onclick="setDashboardPresetDate('lastMonth')" class="px-3 py-1.5 bg-brand-600 text-white font-bold rounded-xl text-xs shadow-sm transition-all">Bulan Terakhir</button>
-                <button id="btnPresetLast30" onclick="setDashboardPresetDate('last30')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-xs transition-all">30 Hari Terakhir</button>
-                <button id="btnPresetAll" onclick="setDashboardPresetDate('all')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-xs transition-all">Semua Periode</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- 4 STAT CARDS UTAMA (DENGAN DALAM PROSES & SELESAI Sesuai Lampiran) -->
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-2 relative overflow-hidden group hover:border-brand-500/50 transition-colors">
-              <div class="flex items-center justify-between">
-                <span class="text-slate-400 text-[10px] font-extrabold uppercase tracking-wider block leading-tight break-words pr-1">TOTAL MUSYAWARAH</span>
-                <div class="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="file-text" class="w-4 h-4"></i>
-                </div>
-              </div>
-              <div id="statTotalMusyawarah" class="text-3xl font-black text-slate-900 dark:text-white">0</div>
-            </div>
-
-            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-2 relative overflow-hidden group hover:border-brand-500/50 transition-colors">
-              <div class="flex items-center justify-between">
-                <span class="text-slate-400 text-[10px] font-extrabold uppercase tracking-wider block leading-tight break-words pr-1">TOTAL ACTION ITEMS</span>
-                <div class="w-8 h-8 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="list-checks" class="w-4 h-4"></i>
-                </div>
-              </div>
-              <div id="statTotalActions" class="text-3xl font-black text-slate-900 dark:text-white">0</div>
-            </div>
-
-            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-2 relative overflow-hidden group hover:border-amber-500/50 transition-colors">
-              <div class="flex items-center justify-between">
-                <span class="text-slate-400 text-[10px] font-extrabold uppercase tracking-wider block leading-tight break-words pr-1">DALAM PROSES</span>
-                <div class="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="loader" class="w-4 h-4"></i>
-                </div>
-              </div>
-              <div id="statInProgresActions" class="text-3xl font-black text-amber-500">0</div>
-              <div id="statAvgProgress" class="hidden">0%</div>
-            </div>
-
-            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-2 relative overflow-hidden group hover:border-emerald-500/50 transition-colors">
-              <div class="flex items-center justify-between">
-                <span class="text-slate-400 text-[10px] font-extrabold uppercase tracking-wider block leading-tight break-words pr-1">SELESAI</span>
-                <div class="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="check-circle-2" class="w-4 h-4"></i>
-                </div>
-              </div>
-              <div id="statCompletedActions" class="text-3xl font-black text-emerald-600 dark:text-emerald-400">0</div>
-            </div>
-          </div>
-
-          <!-- SECTION: BREAKDOWN MUSYAWARAH PER JENIS (CARD GRID) -->
-          <div class="space-y-3">
-            <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center space-x-2">
-              <i data-lucide="grid" class="w-4 h-4 text-brand-500"></i>
-              <span>BREAKDOWN MUSYAWARAH PER JENIS</span>
-            </h3>
-            <div id="breakdownJenisContainer" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-              <!-- Dynamically populated card grid -->
-            </div>
-          </div>
-
-          <!-- SECTION: TERPISAH - KOTAK RASIO PROGRES ACTION ITEM -->
-          <div class="space-y-3 pt-2">
-            <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center space-x-2">
-              <i data-lucide="pie-chart" class="w-4 h-4 text-brand-500"></i>
-              <span>RASIO PROGRES ACTION ITEM</span>
-            </h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- KOTAK TERPISAH 1: BELUM DIMULAI vs TOTAL (DISEBALAH KIRI / LEBIH DULU) -->
-              <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center justify-between space-x-4">
-                <div class="space-y-1">
-                  <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block">Status Belum Dimulai</span>
-                  <h4 class="text-sm font-black text-slate-900 dark:text-white leading-tight break-words">Proporsi "Belum Dimulai" terhadap Total Action Item</h4>
-                  <p class="text-[11px] text-slate-400 font-medium">Persentase pekerjaan yang belum berjalan.</p>
-                </div>
-                <div class="relative w-24 h-24 flex items-center justify-center flex-shrink-0">
-                  <canvas id="chartPercentSelesai"></canvas>
-                  <div id="textPercentSelesai" class="absolute font-black text-xs text-slate-400">0%</div>
-                </div>
-              </div>
-
-              <!-- KOTAK TERPISAH 2: PROSES vs TOTAL (DISEBALAH KANAN) -->
-              <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center justify-between space-x-4">
-                <div class="space-y-1">
-                  <span class="text-xs font-bold uppercase tracking-wider text-amber-500 block">Status Dalam Proses</span>
-                  <h4 class="text-sm font-black text-slate-900 dark:text-white leading-tight break-words">Proporsi "Dalam Proses" terhadap Total Action Item</h4>
-                  <p class="text-[11px] text-slate-400 font-medium">Persentase pekerjaan yang sedang aktif dikerjakan.</p>
-                </div>
-                <div class="relative w-24 h-24 flex items-center justify-center flex-shrink-0">
-                  <canvas id="chartPercentProgres"></canvas>
-                  <div id="textPercentProgres" class="absolute font-black text-xs text-amber-500">0%</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- SECTION: STATUS PROGRESS ACTION ITEMS (Masing-masing status memiliki kotak sendiri) -->
-          <div class="space-y-3 pt-2">
-            <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center space-x-2">
-              <i data-lucide="bar-chart-2" class="w-4 h-4 text-brand-500"></i>
-              <span>STATUS PROGRESS ACTION ITEMS (PER TEAM ID)</span>
-            </h3>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <!-- CHART TERPISAH 1: BELUM DIMULAI -->
-              <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
-                <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
-                  <span class="font-bold text-xs uppercase tracking-wider text-slate-500 flex items-center space-x-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
-                    <span class="leading-tight break-words">Status: Belum Dimulai</span>
-                  </span>
-                  <span class="text-[10px] font-bold text-slate-400 uppercase">Jumlah per Team ID</span>
-                </div>
-                <div class="relative h-56 flex items-center justify-center">
-                  <canvas id="chartBelumTeam"></canvas>
-                </div>
-              </div>
-
-              <!-- CHART TERPISAH 2: DALAM PROSES -->
-              <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
-                <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
-                  <span class="font-bold text-xs uppercase tracking-wider text-amber-500 flex items-center space-x-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                    <span class="leading-tight break-words">Status: Dalam Proses</span>
-                  </span>
-                  <span class="text-[10px] font-bold text-slate-400 uppercase">Jumlah per Team ID</span>
-                </div>
-                <div class="relative h-56 flex items-center justify-center">
-                  <canvas id="chartProgresTeam"></canvas>
-                </div>
-              </div>
-
-              <!-- CHART TERPISAH 3: TERTUNDA -->
-              <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
-                <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
-                  <span class="font-bold text-xs uppercase tracking-wider text-rose-500 flex items-center space-x-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-                    <span class="leading-tight break-words">Status: Tertunda</span>
-                  </span>
-                  <span class="text-[10px] font-bold text-slate-400 uppercase">Jumlah per Team ID</span>
-                </div>
-                <div class="relative h-56 flex items-center justify-center">
-                  <canvas id="chartTertundaTeam"></canvas>
-                </div>
-              </div>
-
-              <!-- CHART TERPISAH 4: SELESAI -->
-              <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
-                <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
-                  <span class="font-bold text-xs uppercase tracking-wider text-emerald-500 flex items-center space-x-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                    <span class="leading-tight break-words">Status: Selesai</span>
-                  </span>
-                  <span class="text-[10px] font-bold text-slate-400 uppercase">Jumlah per Team ID</span>
-                </div>
-                <div class="relative h-56 flex items-center justify-center">
-                  <canvas id="chartSelesaiTeam"></canvas>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Hidden canvas for fallback compatibility -->
-          <div class="hidden"><canvas id="chartStatus"></canvas></div>
-          <div class="hidden"><canvas id="chartBreakdownJenis"></canvas></div>
-          <div class="hidden"><canvas id="chartTeam"></canvas></div>
-          <div class="hidden"><canvas id="chartProporsiJenis"></canvas></div>
-        </section>
-
-        <!-- VIEW: NOTULENSI LIST -->
-        <section id="view-notulensi" class="hidden space-y-6 max-w-7xl mx-auto">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
-            <div>
-              <h2 class="text-xl font-black text-slate-900 dark:text-white tracking-tight">Daftar Notulensi Musyawarah</h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Arsip lengkap hasil pembahasan dan keputusan musyawarah</p>
-            </div>
-            <button onclick="openMusyawarahModal()" class="px-4 py-2.5 bg-brand-600 hover:bg-brand-700 active:scale-95 text-white rounded-xl text-xs font-bold flex items-center space-x-2 shadow-lg shadow-brand-600/20 transition-all self-start sm:self-auto">
-              <i data-lucide="plus-circle" class="w-4 h-4"></i>
-              <span>Musyawarah Baru</span>
-            </button>
-          </div>
-
-          <!-- SEARCH, QUICK JENIS BUTTONS & DATE RANGE FILTER -->
-          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
-            <!-- QUICK FILTER BUTTONS PER JENIS MUSYAWARAH -->
-            <div class="space-y-1.5">
-              <label class="block font-bold text-slate-500 dark:text-slate-400 text-[11px] uppercase tracking-wider">Kategori Jenis Musyawarah:</label>
-              <div class="flex flex-wrap gap-2" id="quickFilterJenisContainer">
-                <button onclick="setJenisFilter(this, '')" id="btnFilterJenisAll" class="btn-jenis-filter active-jenis px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-brand-600 text-white shadow-sm">Semua Jenis</button>
-                <button onclick="setJenisFilter(this, 'Musyawarah 4S')" class="btn-jenis-filter px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">Musyawarah 4S</button>
-                <button onclick="setJenisFilter(this, 'Musyawarah Pengurus')" class="btn-jenis-filter px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">Musyawarah Pengurus</button>
-                <button onclick="setJenisFilter(this, 'Musyawarah KBM')" class="btn-jenis-filter px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">Musyawarah KBM</button>
-                <button onclick="setJenisFilter(this, 'Musyawarah Muda-mudi')" class="btn-jenis-filter px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">Musyawarah Muda-mudi</button>
-                <button onclick="setJenisFilter(this, 'Musyawarah 5 Unsur')" class="btn-jenis-filter px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">Musyawarah 5 Unsur</button>
-              </div>
-            </div>
-
-            <div class="flex flex-col md:flex-row items-end gap-3 text-xs pt-2 border-t border-slate-100 dark:border-slate-800/80">
-              <div class="w-full md:flex-1 space-y-1">
-                <label class="block font-bold text-slate-500 dark:text-slate-400 text-[11px]">Cari Kata Kunci</label>
-                <div class="relative">
-                  <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
-                  <input type="text" id="searchNotulensi" oninput="renderMusyawarahList()" placeholder="Cari judul, jenis musyawarah, ketua..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all">
-                </div>
-              </div>
-              <div class="w-full md:w-auto flex items-center space-x-2">
-                <div class="space-y-1">
-                  <label class="block font-bold text-slate-500 dark:text-slate-400 text-[11px]">Dari Tanggal</label>
-                  <input type="date" id="filterStartDate" onchange="renderMusyawarahList()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
-                </div>
-                <div class="space-y-1">
-                  <label class="block font-bold text-slate-500 dark:text-slate-400 text-[11px]">Sampai Tanggal</label>
-                  <input type="date" id="filterEndDate" onchange="renderMusyawarahList()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
-                </div>
-              </div>
-              <button onclick="resetNotulensiFilters()" class="w-full md:w-auto px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-1.5 h-[38px]">
-                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-                <span>Reset</span>
-              </button>
-            </div>
-          </div>
-
-          <div id="musyawarahListContainer" class="grid grid-cols-1 gap-4"></div>
-        </section>
-
-        <!-- VIEW: KANBAN BOARD -->
+      <!-- VIEW: KANBAN BOARD -->
         <section id="view-kanban" class="hidden space-y-6 max-w-7xl mx-auto">
           <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
             <h2 class="text-xl font-black text-slate-900 dark:text-white tracking-tight">Progress Board Action Items</h2>
@@ -582,38 +582,51 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block font-bold text-slate-600 dark:text-slate-400 mb-1.5">Jenis Musyawarah</label>
-            <input type="text" id="formJenis" required placeholder="Contoh: Musyawarah Pengurus SKB1" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none">
+            <label class="block font-bold text-slate-600 dark:text-slate-400 mb-1.5">Jenis Musyawarah <span class="text-rose-500">*</span></label>
+            <select id="formJenis" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none">
+              <option value="">-- Pilih Jenis Musyawarah --</option>
+              <option value="Musyawarah 4S">Musyawarah 4S</option>
+              <option value="Musyawarah Pengurus">Musyawarah Pengurus</option>
+              <option value="Musyawarah KBM">Musyawarah KBM</option>
+              <option value="Musyawarah 5 Unsur">Musyawarah 5 Unsur</option>
+              <option value="Musyawarah Muda-mudi">Musyawarah Muda-mudi</option>
+            </select>
           </div>
 
           <div>
-            <label class="block font-bold text-slate-600 dark:text-slate-400 mb-1.5">Judul Musyawarah</label>
+            <label class="block font-bold text-slate-600 dark:text-slate-400 mb-1.5">Judul Musyawarah <span class="text-rose-500">*</span></label>
             <input type="text" id="formJudul" required placeholder="Judul topik utama musyawarah" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none">
           </div>
 
           <div>
-            <label class="block font-bold text-slate-600 dark:text-slate-400 mb-1.5">Tanggal Pelaksanaan</label>
+            <label class="block font-bold text-slate-600 dark:text-slate-400 mb-1.5">Tanggal Pelaksanaan <span class="text-rose-500">*</span></label>
             <input type="date" id="formTanggal" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none">
           </div>
 
           <div>
-            <label class="block font-bold text-slate-600 dark:text-slate-400 mb-1.5">Lokasi Musyawarah</label>
-            <input type="text" id="formLokasi" placeholder="Lokasi tempat pelaksanaan" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none">
+            <label class="block font-bold text-slate-600 dark:text-slate-400 mb-1.5">Lokasi Musyawarah <span class="text-rose-500">*</span></label>
+            <input type="text" id="formLokasi" required placeholder="Lokasi tempat pelaksanaan" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none">
           </div>
 
           <div>
-            <label class="block font-bold text-slate-600 dark:text-slate-400 mb-1.5">Ketua Musyawarah</label>
-            <input type="text" id="formKetua" placeholder="Nama ketua musyawarah" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none">
+            <label class="block font-bold text-slate-600 dark:text-slate-400 mb-1.5">Ketua Musyawarah <span class="text-rose-500">*</span></label>
+            <select id="formKetua" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none">
+              <option value="">-- Pilih Ketua Musyawarah --</option>
+            </select>
           </div>
 
           <div>
-            <label class="block font-bold text-slate-600 dark:text-slate-400 mb-1.5">Notulis</label>
-            <input type="text" id="formNotulis" placeholder="Nama penyusun notulensi" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none">
+            <label class="block font-bold text-slate-600 dark:text-slate-400 mb-1.5">Notulis <span class="text-rose-500">*</span></label>
+            <select id="formNotulis" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none">
+              <option value="">-- Pilih Notulis --</option>
+            </select>
           </div>
 
           <div class="sm:col-span-2">
-            <label class="block font-bold text-slate-600 dark:text-slate-400 mb-1.5">Peserta Hadir (Pisahkan dengan koma)</label>
-            <input type="text" id="formPeserta" placeholder="Contoh: Arif, Nursahid, Fandi, Maryono" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none">
+            <label class="block font-bold text-slate-600 dark:text-slate-400 mb-1.5">Peserta Hadir <span class="text-rose-500">*</span></label>
+            <div id="formPesertaContainer" class="p-3 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-40 overflow-y-auto custom-scrollbar">
+              <span class="text-slate-400 italic text-[11px] col-span-full">Memuat daftar pengurus...</span>
+            </div>
           </div>
         </div>
 
@@ -636,7 +649,8 @@
         <!-- Form Footer Actions -->
         <div class="flex justify-end space-x-3 pt-4 border-t border-slate-200/80 dark:border-slate-800">
           <button type="button" onclick="closeMusyawarahModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold transition-all">Batal</button>
-          <button type="submit" id="btnSaveMusyawarah" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-bold shadow-lg shadow-brand-600/20 active:scale-95 transition-all">Simpan Musyawarah</button>
+          <button type="button" id="btnSaveDraftMusyawarah" onclick="handleMusyawarahFormSubmit(event, true)" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-bold shadow-md shadow-amber-500/20 active:scale-95 transition-all">Simpan Draft</button>
+          <button type="submit" id="btnSaveMusyawarah" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-bold shadow-lg shadow-brand-600/20 active:scale-95 transition-all">Submit</button>
         </div>
       </form>
     </div>
@@ -786,6 +800,7 @@
     window.onload = function() {
       initLucideIcons();
       checkUserSession();
+      fetchUsersList();
     };
 
     function initLucideIcons() {
@@ -794,174 +809,36 @@
       }
     }
 
-    // RENDER: NOTULENSI LIST (DENGAN SEARCH, QUICK JENIS & DATE FILTER)
-    function setJenisFilter(btnElement, jenis) {
-      selectedJenisFilter = jenis || '';
-
-      // Update style status aktif untuk semua tombol filter jenis
-      const buttons = document.querySelectorAll('#quickFilterJenisContainer .btn-jenis-filter');
-      buttons.forEach(btn => {
-        btn.classList.remove('bg-brand-600', 'text-white', 'shadow-sm');
-        btn.classList.add('bg-slate-100', 'hover:bg-slate-200', 'dark:bg-slate-800', 'dark:hover:bg-slate-700', 'text-slate-700', 'dark:text-slate-200');
-      });
-
-      // Highlight tombol yang diklik
-      if (btnElement) {
-        btnElement.classList.remove('bg-slate-100', 'hover:bg-slate-200', 'dark:bg-slate-800', 'dark:hover:bg-slate-700', 'text-slate-700', 'dark:text-slate-200');
-        btnElement.classList.add('bg-brand-600', 'text-white', 'shadow-sm');
-      }
-
-      // Solusi: Mengisi input cari kata kunci secara otomatis dengan nilai dari tombol cepat yang dipilih
-      const searchInput = document.getElementById('searchNotulensi');
-      if (searchInput) {
-        searchInput.value = jenis || '';
-      }
-
-      // Re-render daftar notulensi secara otomatis
-      renderMusyawarahList();
-    }
-
-    function renderMusyawarahList() {
-      const container = document.getElementById('musyawarahListContainer');
-      const search = (document.getElementById('searchNotulensi')?.value || '').toLowerCase();
-      const startDate = document.getElementById('filterStartDate')?.value;
-      const endDate = document.getElementById('filterEndDate')?.value;
-
-      if (!container) return;
-      container.innerHTML = '';
-
-      const filtered = musyawarahData.filter(m => {
-        const jenisStr = (m.jenismusyawarah || '').toLowerCase();
-
-        // Search Input Keyword Matching
-        const matchesSearch = (m.judul || '').toLowerCase().includes(search) || 
-                              jenisStr.includes(search) ||
-                              (m.ketua || '').toLowerCase().includes(search);
-
-        // Date Range
-        let matchesDate = true;
-        if (m.tanggal) {
-          if (startDate && m.tanggal < startDate) matchesDate = false;
-          if (endDate && m.tanggal > endDate) matchesDate = false;
-        }
-
-        return matchesSearch && matchesDate;
-      });
-
-      if (filtered.length === 0) {
-        container.innerHTML = `
-          <div class="p-12 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 space-y-3">
-            <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400">
-              <i data-lucide="search-x" class="w-6 h-6"></i>
-            </div>
-            <p class="text-xs font-semibold text-slate-400">Tidak ada notulensi musyawarah yang sesuai filter.</p>
-          </div>
-        `;
-        initLucideIcons();
-        return;
-      }
-
-      filtered.forEach(m => {
-        const card = document.createElement('div');
-        card.className = "bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm hover:border-slate-300 dark:hover:border-slate-700 transition-all space-y-4";
-        card.innerHTML = `
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div class="space-y-1">
-              <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200 dark:border-brand-800/50">${m.jenismusyawarah || 'Musyawarah'}</span>
-              <h3 class="font-bold text-base text-slate-900 dark:text-white mt-1">${m.judul}</h3>
-            </div>
-            <div class="flex items-center space-x-2 self-start sm:self-auto">
-              <button onclick="openDetailModal('${m.meetingid}')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all">
-                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
-                <span>Detail</span>
-              </button>
-              <button onclick="openMusyawarahModal('${m.meetingid}')" class="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all">
-                <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
-                <span>Edit</span>
-              </button>
-              <button onclick="deleteEntireMusyawarah('${m.meetingid}')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200/60 dark:border-rose-800/40 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all">
-                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                <span>Hapus</span>
-              </button>
-            </div>
-          </div>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-slate-500 dark:text-slate-400 pt-3 border-t border-slate-100 dark:border-slate-800/80">
-            <div><span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Tanggal</span><strong class="text-slate-700 dark:text-slate-200">${m.tanggal || '-'}</strong></div>
-            <div><span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Ketua</span><strong class="text-slate-700 dark:text-slate-200">${m.ketua || '-'}</strong></div>
-            <div><span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Notulis</span><strong class="text-slate-700 dark:text-slate-200">${m.notulis || '-'}</strong></div>
-            <div><span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Action Items</span><strong class="text-brand-600 dark:text-brand-400">${(m.actionItems || []).length} items</strong></div>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-
-      initLucideIcons();
-    }
-
-    function resetNotulensiFilters() {
-      selectedJenisFilter = '';
-      document.getElementById('searchNotulensi').value = '';
-      document.getElementById('filterStartDate').value = '';
-      document.getElementById('filterEndDate').value = '';
-      
-      const btnAll = document.getElementById('btnFilterJenisAll');
-      if (btnAll) {
-        setJenisFilter(btnAll, '');
-      } else {
-        renderMusyawarahList();
-      }
-    }
-
     function showToast(msg, type = 'info') {
       const container = document.getElementById('toastContainer');
       if (!container) return;
 
       const toast = document.createElement('div');
-      toast.className = `px-4 py-3 rounded-2xl text-xs font-bold text-white shadow-xl pointer-events-auto transition-all duration-300 transform translate-y-2 flex items-center space-x-2.5 border ${
-        type === 'error' ? 'bg-rose-600 border-rose-500' : type === 'success' ? 'bg-emerald-600 border-emerald-500' : 'bg-slate-900 border-slate-700'
+      toast.className = `px-4 py-3 rounded-2xl text-xs font-bold text-white shadow-xl pointer-events-auto transition-all duration-300 transform translate-y-2 flex items-center space-x-2 ${
+        type === 'error' ? 'bg-rose-600' : type === 'success' ? 'bg-emerald-600' : 'bg-slate-800'
       }`;
-      
-      const icon = type === 'error' ? 'alert-circle' : type === 'success' ? 'check-circle-2' : 'info';
-      toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 flex-shrink-0"></i><span>${msg}</span>`;
+      toast.innerHTML = `<span>${msg}</span>`;
 
       container.appendChild(toast);
-      initLucideIcons();
-
       setTimeout(() => {
         toast.classList.add('opacity-0', '-translate-y-2');
         setTimeout(() => toast.remove(), 300);
-      }, 3200);
+      }, 3000);
     }
 
     function toggleDarkMode() {
       document.documentElement.classList.toggle('dark');
-      if (musyawarahData.length > 0) {
-        renderDashboardStats();
-      }
+      renderDashboardStats();
     }
 
-    // UNIFIED SIDEBAR TOGGLE (DESKTOP & MOBILE COLLAPSIBLE)
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebarMenu');
       const backdrop = document.getElementById('sidebarBackdrop');
-      
-      if (!sidebar) return;
-
-      const isMobile = window.innerWidth < 768;
-
-      if (isMobile) {
-        // Mobile drawer toggle
+      if (sidebar) {
         sidebar.classList.toggle('-translate-x-full');
-        if (backdrop) backdrop.classList.toggle('hidden');
-      } else {
-        // Desktop collapse toggle
-        if (sidebar.classList.contains('md:w-64')) {
-          sidebar.classList.remove('md:w-64');
-          sidebar.classList.add('md:w-0', 'md:overflow-hidden', 'md:border-none');
-        } else {
-          sidebar.classList.remove('md:w-0', 'md:overflow-hidden', 'md:border-none');
-          sidebar.classList.add('md:w-64');
-        }
+      }
+      if (backdrop) {
+        backdrop.classList.toggle('hidden');
       }
     }
 
@@ -1029,7 +906,7 @@
           currentUser = data.userData || { user: u, nama: data.nama || u, role: data.role, teamid: 'T-01' };
           currentUser.password = p;
           localStorage.setItem('musyawarah_user', JSON.stringify(currentUser));
-          showToast(`Selamat datang, ${currentUser.nama}!`, "success");
+          showToast(`Selamat datang, ${currentUser.nama || currentUser.user}!`, "success");
           showMainApp();
           switchTab('dashboard');
           loadAllData();
@@ -1053,6 +930,71 @@
       showLoginPage();
     }
 
+    // FETCH USERS LIST FROM APPS SCRIPT USER APP
+    async function fetchUsersList() {
+      try {
+        const resp = await fetch(`${USER_APP_URL}?action=getUsers`);
+        const data = await resp.json();
+        if (data.status === 'success' && Array.isArray(data.users)) {
+          usersList = data.users;
+        } else if (Array.isArray(data)) {
+          usersList = data;
+        }
+      } catch (err) {
+        console.error("Gagal mengambil list user:", err);
+      }
+    }
+
+    function populateUserOptions() {
+      const ketuaSelect = document.getElementById('formKetua');
+      const notulisSelect = document.getElementById('formNotulis');
+      const pesertaContainer = document.getElementById('formPesertaContainer');
+
+      if (ketuaSelect) {
+        const curKetua = ketuaSelect.value;
+        ketuaSelect.innerHTML = `<option value="">-- Pilih Ketua Musyawarah --</option>`;
+        usersList.forEach(u => {
+          const name = u.nama || u.username || u.user;
+          const opt = document.createElement('option');
+          opt.value = name;
+          opt.textContent = `${name} (${u.teamid || '-'})`;
+          ketuaSelect.appendChild(opt);
+        });
+        if (curKetua) ketuaSelect.value = curKetua;
+      }
+
+      if (notulisSelect) {
+        const curNotulis = notulisSelect.value;
+        notulisSelect.innerHTML = `<option value="">-- Pilih Notulis --</option>`;
+        usersList.forEach(u => {
+          const name = u.nama || u.username || u.user;
+          const opt = document.createElement('option');
+          opt.value = name;
+          opt.textContent = `${name} (${u.teamid || '-'})`;
+          notulisSelect.appendChild(opt);
+        });
+        if (curNotulis) notulisSelect.value = curNotulis;
+      }
+
+      if (pesertaContainer) {
+        pesertaContainer.innerHTML = '';
+        if (usersList.length === 0) {
+          pesertaContainer.innerHTML = `<span class="text-slate-400 italic text-[11px] col-span-full">Tidak ada pengurus ditemukan.</span>`;
+        } else {
+          usersList.forEach((u) => {
+            const name = u.nama || u.username || u.user;
+            const item = document.createElement('label');
+            item.className = "flex items-center space-x-2 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 cursor-pointer font-medium text-slate-800 dark:text-slate-200 text-xs";
+            item.innerHTML = `
+              <input type="checkbox" name="chkPeserta" value="${name}" class="rounded border-slate-300 text-brand-600 focus:ring-brand-500">
+              <span class="truncate">${name}</span>
+            `;
+            pesertaContainer.appendChild(item);
+          });
+        }
+      }
+    }
+
     // DATA FETCHING
     async function loadAllData() {
       showToast("Memuat data musyawarah...");
@@ -1062,8 +1004,7 @@
 
         if (result.status === 'success' && Array.isArray(result.data)) {
           musyawarahData = result.data;
-          // Set default preset tanggal ke 'Bulan Terakhir' saat pertama kali load data
-          setDashboardPresetDate('lastMonth');
+          setDashboardPresetDate('last30');
           renderMusyawarahList();
           renderKanbanBoard();
           renderMyTasks();
@@ -1076,13 +1017,6 @@
       }
     }
 
-    function renderAllViews() {
-      filterDashboardByDate();
-      renderMusyawarahList();
-      renderKanbanBoard();
-      renderMyTasks();
-    }
-
     // SIDEBAR TAB SWITCHING
     function switchTab(tabName) {
       ['dashboard', 'notulensi', 'kanban', 'mytasks'].forEach(t => {
@@ -1090,7 +1024,7 @@
         const b = document.getElementById(`nav-${t}`);
         if (v) v.classList.add('hidden');
         if (b) {
-          b.classList.remove('bg-brand-600', 'text-white', 'shadow-md', 'shadow-brand-600/20');
+          b.classList.remove('bg-brand-600', 'text-white', 'shadow-lg', 'shadow-brand-600/20');
           b.classList.add('text-slate-400', 'hover:bg-slate-800/80', 'hover:text-slate-100');
         }
       });
@@ -1100,130 +1034,157 @@
 
       if (activeView) activeView.classList.remove('hidden');
       if (activeBtn) {
-        activeBtn.classList.add('bg-brand-600', 'text-white', 'shadow-md', 'shadow-brand-600/20');
+        activeBtn.classList.add('bg-brand-600', 'text-white', 'shadow-lg', 'shadow-brand-600/20');
         activeBtn.classList.remove('text-slate-400', 'hover:bg-slate-800/80', 'hover:text-slate-100');
       }
 
-      // Auto hide mobile sidebar after tab selection
-      if (window.innerWidth < 768) {
-        const sidebar = document.getElementById('sidebarMenu');
-        const backdrop = document.getElementById('sidebarBackdrop');
-        if (sidebar && !sidebar.classList.contains('-translate-x-full')) {
-          sidebar.classList.add('-translate-x-full');
-          if (backdrop) backdrop.classList.add('hidden');
-        }
+      // Close mobile sidebar if open
+      const sidebar = document.getElementById('sidebarMenu');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      if (window.innerWidth < 768 && sidebar && !sidebar.classList.contains('-translate-x-full')) {
+        sidebar.classList.add('-translate-x-full');
+        if (backdrop) backdrop.classList.add('hidden');
       }
     }
 
-    // RENDER: DASHBOARD
-    function renderDashboardStats(filteredList = null) {
-      const dataToRender = filteredList || musyawarahData;
+    // DASHBOARD PRESET DATES & STATS RENDER
+    function setDashboardPresetDate(preset) {
+      const startInput = document.getElementById('dashStartDate');
+      const endInput = document.getElementById('dashEndDate');
 
-      const totalM = dataToRender.length;
+      const bLastMonth = document.getElementById('btnPresetLastMonth');
+      const bLast30 = document.getElementById('btnPresetLast30');
+      const bAll = document.getElementById('btnPresetAll');
+
+      [bLastMonth, bLast30, bAll].forEach(b => {
+        if (b) b.className = "px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-xs transition-all";
+      });
+
+      const today = new Date();
+
+      if (preset === 'lastMonth') {
+        const firstDayPrevMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+        const lastDayPrevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+        if (startInput) startInput.value = firstDayPrevMonth.toISOString().split('T')[0];
+        if (endInput) endInput.value = lastDayPrevMonth.toISOString().split('T')[0];
+        if (bLastMonth) bLastMonth.className = "px-3 py-1.5 bg-brand-600 text-white font-bold rounded-xl text-xs shadow-sm transition-all";
+      } else if (preset === 'last30') {
+        const d30 = new Date(today);
+        d30.setDate(d30.getDate() - 30);
+        if (startInput) startInput.value = d30.toISOString().split('T')[0];
+        if (endInput) endInput.value = today.toISOString().split('T')[0];
+        if (bLast30) bLast30.className = "px-3 py-1.5 bg-brand-600 text-white font-bold rounded-xl text-xs shadow-sm transition-all";
+      } else {
+        if (startInput) startInput.value = '';
+        if (endInput) endInput.value = '';
+        if (bAll) bAll.className = "px-3 py-1.5 bg-brand-600 text-white font-bold rounded-xl text-xs shadow-sm transition-all";
+      }
+
+      filterDashboardByDate();
+    }
+
+    function filterDashboardByDate() {
+      const sDate = document.getElementById('dashStartDate')?.value;
+      const eDate = document.getElementById('dashEndDate')?.value;
+
+      const filteredMusyawarah = musyawarahData.filter(m => {
+        if (!m.tanggal) return true;
+        if (sDate && m.tanggal < sDate) return false;
+        if (eDate && m.tanggal > eDate) return false;
+        return true;
+      });
+
+      renderDashboardStats(filteredMusyawarah);
+    }
+
+    function renderDashboardStats(filteredData = musyawarahData) {
+      const totalM = filteredData.length;
       let totalActions = 0;
-      let inProgresActions = 0;
-      let notStartedActions = 0;
       let completedActions = 0;
-      let totalProgressSum = 0;
+      let inProgresActions = 0;
+      let belumActions = 0;
+      let tertundaActions = 0;
 
-      const jenisCountsMap = {};
-      const statusTeamMap = {
+      const jenisCounts = {};
+      const statusPerTeam = {
         'Belum Dimulai': {},
         'Dalam Proses': {},
         'Tertunda': {},
         'Selesai': {}
       };
 
-      dataToRender.forEach(m => {
-        const j = (m.jenismusyawarah || 'Lainnya').trim();
-        jenisCountsMap[j] = (jenisCountsMap[j] || 0) + 1;
+      filteredData.forEach(m => {
+        const j = m.jenismusyawarah || 'Lainnya';
+        jenisCounts[j] = (jenisCounts[j] || 0) + 1;
 
         if (Array.isArray(m.actionItems)) {
           m.actionItems.forEach(a => {
             totalActions++;
             const st = a.status || 'Belum Dimulai';
-            const team = (a.teamid || 'T-Unassigned').trim();
+            const team = a.teamid || 'T-01';
 
-            if (!statusTeamMap[st]) {
-              statusTeamMap[st] = {};
-            }
-            statusTeamMap[st][team] = (statusTeamMap[st][team] || 0) + 1;
-
-            const prog = Number(a.persentaseprogres || (st === 'Selesai' ? 100 : 0));
-            totalProgressSum += prog;
-            
             if (st === 'Selesai') completedActions++;
-            if (st === 'Dalam Proses') inProgresActions++;
-            if (st === 'Belum Dimulai') notStartedActions++;
+            else if (st === 'Dalam Proses') inProgresActions++;
+            else if (st === 'Belum Dimulai') belumActions++;
+            else if (st === 'Tertunda') tertundaActions++;
+
+            if (!statusPerTeam[st]) statusPerTeam[st] = {};
+            statusPerTeam[st][team] = (statusPerTeam[st][team] || 0) + 1;
           });
         }
       });
 
-      const avgProgress = totalActions > 0 ? Math.round(totalProgressSum / totalActions) : 0;
-
       document.getElementById('statTotalMusyawarah').textContent = totalM;
       document.getElementById('statTotalActions').textContent = totalActions;
-      if (document.getElementById('statInProgresActions')) {
-        document.getElementById('statInProgresActions').textContent = inProgresActions;
-      }
+      document.getElementById('statInProgresActions').textContent = inProgresActions;
       document.getElementById('statCompletedActions').textContent = completedActions;
-      if (document.getElementById('statAvgProgress')) {
-        document.getElementById('statAvgProgress').textContent = `${avgProgress}%`;
-      }
 
-      renderBreakdownJenisCards(jenisCountsMap);
-      renderPercentageCharts(inProgresActions, notStartedActions, totalActions);
-      renderStatusByTeamChart(statusTeamMap);
+      renderBreakdownJenisCards(jenisCounts);
+      renderProgressPercentageCharts(totalActions, inProgresActions, belumActions);
+      renderSeparateTeamStatusCharts(statusPerTeam);
     }
 
-    // RENDER CARDS: BREAKDOWN MUSYAWARAH PER JENIS
-    function renderBreakdownJenisCards(jenisMap) {
+    function renderBreakdownJenisCards(jenisCounts) {
       const container = document.getElementById('breakdownJenisContainer');
       if (!container) return;
-
       container.innerHTML = '';
-      const keys = Object.keys(jenisMap);
 
-      if (keys.length === 0) {
-        container.innerHTML = `<div class="col-span-full p-4 text-center text-xs text-slate-400 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">Tidak ada data musyawarah</div>`;
-        return;
-      }
-
-      const textColorPalette = [
-        'text-emerald-600 dark:text-emerald-400',
-        'text-blue-600 dark:text-blue-400',
-        'text-purple-600 dark:text-purple-400',
-        'text-amber-500 dark:text-amber-400',
-        'text-indigo-600 dark:text-indigo-400',
-        'text-rose-500 dark:text-rose-400',
+      const categories = [
+        { name: 'Musyawarah 4S', color: 'text-emerald-600 dark:text-emerald-400' },
+        { name: 'Musyawarah Pengurus', color: 'text-blue-600 dark:text-blue-400' },
+        { name: 'Musyawarah 5 Unsur', color: 'text-purple-600 dark:text-purple-400' },
+        { name: 'Musyawarah KBM', color: 'text-amber-600 dark:text-amber-400' },
+        { name: 'Musyawarah Muda-mudi', color: 'text-indigo-600 dark:text-indigo-400' }
       ];
 
-      keys.forEach((jenis, idx) => {
-        const textClass = textColorPalette[idx % textColorPalette.length];
+      Object.keys(jenisCounts).forEach(catName => {
+        if (!categories.find(c => c.name === catName)) {
+          categories.push({ name: catName, color: 'text-brand-600 dark:text-brand-400' });
+        }
+      });
+
+      categories.forEach(cat => {
+        const count = jenisCounts[cat.name] || 0;
         const card = document.createElement('div');
-        card.className = `bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 flex flex-col justify-between transition-all hover:border-brand-500/40 hover:shadow-md`;
+        card.className = "bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-2 relative overflow-hidden flex flex-col justify-between hover:border-brand-500/40 transition-all w-full";
         card.innerHTML = `
-          <div class="flex items-start justify-between">
-            <span class="text-slate-400 text-[10px] font-extrabold uppercase tracking-wider block leading-tight break-words pr-1" title="${jenis}">${jenis}</span>
-          </div>
-          <div class="text-3xl font-black ${textClass}">${jenisMap[jenis]}</div>
+          <span class="text-slate-400 uppercase font-extrabold text-[10px] tracking-wider leading-tight block">${cat.name}</span>
+          <div class="text-3xl font-black ${cat.color} tracking-tight">${count}</div>
         `;
         container.appendChild(card);
       });
     }
 
-    // RENDER CIRCULAR PERCENTAGE GAUGE CHARTS (PROSES & BELUM DIMULAI vs TOTAL)
-    function renderPercentageCharts(inProgres, notStarted, total) {
-      const pctProgres = total > 0 ? Math.round((inProgres / total) * 100) : 0;
-      const pctBelum = total > 0 ? Math.round((notStarted / total) * 100) : 0;
+    function renderProgressPercentageCharts(total, progres, belum) {
+      const percentProgres = total > 0 ? Math.round((progres / total) * 100) : 0;
+      const percentBelum = total > 0 ? Math.round((belum / total) * 100) : 0;
 
-      document.getElementById('textPercentProgres').textContent = `${pctProgres}%`;
-      document.getElementById('textPercentSelesai').textContent = `${pctBelum}%`;
+      document.getElementById('textPercentProgres').textContent = `${percentProgres}%`;
+      document.getElementById('textPercentSelesai').textContent = `${percentBelum}%`;
 
       const isDark = document.documentElement.classList.contains('dark');
-      const emptyBg = isDark ? '#334155' : '#e2e8f0';
+      const emptyBg = isDark ? '#1e293b' : '#f1f5f9';
 
-      // Chart Progres
       const ctxP = document.getElementById('chartPercentProgres');
       if (ctxP) {
         if (chartPercentProgresInstance) chartPercentProgresInstance.destroy();
@@ -1231,21 +1192,20 @@
           type: 'doughnut',
           data: {
             datasets: [{
-              data: [pctProgres, 100 - pctProgres],
+              data: [progres, total - progres],
               backgroundColor: ['#f59e0b', emptyBg],
               borderWidth: 0
             }]
           },
           options: {
+            cutout: '78%',
             responsive: true,
             maintainAspectRatio: false,
-            cutout: '78%',
             plugins: { tooltip: { enabled: false }, legend: { display: false } }
           }
         });
       }
 
-      // Chart Belum Dimulai
       const ctxS = document.getElementById('chartPercentSelesai');
       if (ctxS) {
         if (chartPercentSelesaiInstance) chartPercentSelesaiInstance.destroy();
@@ -1253,335 +1213,206 @@
           type: 'doughnut',
           data: {
             datasets: [{
-              data: [pctBelum, 100 - pctBelum],
+              data: [belum, total - belum],
               backgroundColor: ['#94a3b8', emptyBg],
               borderWidth: 0
             }]
           },
           options: {
+            cutout: '78%',
             responsive: true,
             maintainAspectRatio: false,
-            cutout: '78%',
             plugins: { tooltip: { enabled: false }, legend: { display: false } }
           }
         });
       }
     }
 
-    // RENDER 4 KOTAK TERPISAH GRAPH STATUS PROGRESS PER TEAM ID
-    function renderStatusByTeamChart(statusTeamMap) {
+    function renderSeparateTeamStatusCharts(statusMap) {
+      const allTeamsSet = new Set();
+      Object.values(statusMap).forEach(obj => {
+        Object.keys(obj).forEach(t => allTeamsSet.add(t));
+      });
+      const teamList = Array.from(allTeamsSet).sort();
+
       const isDark = document.documentElement.classList.contains('dark');
       const textColor = isDark ? '#94a3b8' : '#64748b';
       const gridColor = isDark ? 'rgba(51, 65, 85, 0.4)' : 'rgba(226, 232, 240, 0.8)';
 
-      // Helper function untuk membangun Single Status Bar Chart per Team ID
-      const buildSingleChart = (canvasId, existingInstance, dataObj, colorHex) => {
+      const createSingleStatusChart = (canvasId, statusName, colorHex, currentInstance) => {
         const ctx = document.getElementById(canvasId);
         if (!ctx) return null;
+        if (currentInstance) currentInstance.destroy();
 
-        if (existingInstance) existingInstance.destroy();
-
-        // Urutkan Team ID secara teratur (T-01, T-02, T-03, dst.)
-        const sortedLabels = Object.keys(dataObj).sort((a, b) => {
-          return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
-        });
-        const dataValues = sortedLabels.map(key => dataObj[key]);
+        const dataArr = teamList.map(t => statusMap[statusName]?.[t] || 0);
 
         return new Chart(ctx, {
           type: 'bar',
           data: {
-            labels: sortedLabels.length > 0 ? sortedLabels : ['Belum ada data'],
+            labels: teamList.length > 0 ? teamList : ['T-01'],
             datasets: [{
-              label: 'Jumlah Items',
-              data: sortedLabels.length > 0 ? dataValues : [0],
+              label: statusName,
+              data: teamList.length > 0 ? dataArr : [0],
               backgroundColor: colorHex,
-              borderRadius: 6,
-              borderSkipped: false
+              borderRadius: 6
             }]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-              legend: { display: false },
-              tooltip: { enabled: true }
-            },
+            plugins: { legend: { display: false } },
             scales: {
               x: {
-                grid: { display: false },
-                ticks: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 10, weight: '600' } }
+                ticks: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' } },
+                grid: { display: false }
               },
               y: {
                 beginAtZero: true,
-                grid: { color: gridColor },
-                ticks: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 10 }, stepSize: 1 }
+                ticks: { stepSize: 1, color: textColor, font: { family: 'Plus Jakarta Sans', size: 11 } },
+                grid: { color: gridColor }
               }
             }
           }
         });
       };
 
-      chartBelumInstance = buildSingleChart('chartBelumTeam', chartBelumInstance, statusTeamMap['Belum Dimulai'] || {}, '#94a3b8');
-      chartProgresInstance = buildSingleChart('chartProgresTeam', chartProgresInstance, statusTeamMap['Dalam Proses'] || {}, '#f59e0b');
-      chartTertundaInstance = buildSingleChart('chartTertundaTeam', chartTertundaInstance, statusTeamMap['Tertunda'] || {}, '#f43f5e');
-      chartSelesaiInstance = buildSingleChart('chartSelesaiTeam', chartSelesaiInstance, statusTeamMap['Selesai'] || {}, '#10b981');
+      chartBelumInstance = createSingleStatusChart('chartBelumTeam', 'Belum Dimulai', '#94a3b8', chartBelumInstance);
+      chartProgresInstance = createSingleStatusChart('chartProgresTeam', 'Dalam Proses', '#f59e0b', chartProgresInstance);
+      chartTertundaInstance = createSingleStatusChart('chartTertundaTeam', 'Tertunda', '#f43f5e', chartTertundaInstance);
+      chartSelesaiInstance = createSingleStatusChart('chartSelesaiTeam', 'Selesai', '#22c55e', chartSelesaiInstance);
     }
 
-    function renderBreakdownJenisBarChart(jenisMap) {
-      // Kept for backward compatibility
+    // NOTULENSI SEARCH & QUICK FILTER BUTTONS
+    function setJenisFilter(btnEl, jenis) {
+      document.getElementById('searchNotulensi').value = jenis;
+
+      const buttons = document.querySelectorAll('.btn-jenis-filter');
+      buttons.forEach(b => {
+        b.className = "btn-jenis-filter px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200";
+      });
+
+      if (btnEl) {
+        btnEl.className = "btn-jenis-filter active-jenis px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-brand-600 text-white shadow-sm";
+      }
+
+      renderMusyawarahList();
     }
 
-    function renderProporsiJenisChart(jenisMap) {
-      // Kept for backward compatibility
-    }
+    function renderMusyawarahList() {
+      const container = document.getElementById('musyawarahListContainer');
+      const search = (document.getElementById('searchNotulensi')?.value || '').toLowerCase();
+      const startDate = document.getElementById('filterStartDate')?.value;
+      const endDate = document.getElementById('filterEndDate')?.value;
 
-    function renderStatusChart(counts) {
-      // Kept for backward compatibility
-    }
+      if (!container) return;
+      container.innerHTML = '';
 
-    // FILTER DASHBOARD PRESETS
-    function filterDashboardByDate() {
-      const start = document.getElementById('dashStartDate')?.value;
-      const end = document.getElementById('dashEndDate')?.value;
+      const filtered = musyawarahData.filter(m => {
+        const matchesSearch = (m.judul || '').toLowerCase().includes(search) || 
+                              (m.jenismusyawarah || '').toLowerCase().includes(search) ||
+                              (m.ketua || '').toLowerCase().includes(search);
 
-      if (!start && !end) {
-        renderDashboardStats(musyawarahData);
+        let matchesDate = true;
+        if (m.tanggal) {
+          if (startDate && m.tanggal < startDate) matchesDate = false;
+          if (endDate && m.tanggal > endDate) matchesDate = false;
+        }
+
+        return matchesSearch && matchesDate;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="p-8 text-center text-slate-400 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800">Tidak ada notulensi musyawarah yang sesuai filter.</div>`;
         return;
       }
 
-      const filtered = musyawarahData.filter(m => {
-        if (!m.tanggal) return false;
-        let valid = true;
-        if (start && m.tanggal < start) valid = false;
-        if (end && m.tanggal > end) valid = false;
-        return valid;
+      filtered.forEach(m => {
+        const card = document.createElement('div');
+        card.className = "bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 hover:border-brand-500/40 transition-colors";
+        card.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200/60 dark:border-brand-800/40">${m.jenismusyawarah || 'Musyawarah'}</span>
+              <h3 class="font-bold text-base text-slate-900 dark:text-white mt-1">${m.judul}</h3>
+            </div>
+            <div class="flex items-center space-x-2 self-start sm:self-auto">
+              <button onclick="openDetailModal('${m.meetingid}')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold flex items-center space-x-1">
+                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                <span>Detail</span>
+              </button>
+              <button onclick="openMusyawarahModal('${m.meetingid}')" class="px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 rounded-xl text-xs font-bold flex items-center space-x-1">
+                <i data-lucide="edit" class="w-3.5 h-3.5"></i>
+                <span>Edit</span>
+              </button>
+              <button onclick="deleteEntireMusyawarah('${m.meetingid}')" class="px-3 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 rounded-xl text-xs font-bold flex items-center space-x-1">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>Hapus</span>
+              </button>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-slate-500 pt-2 border-t border-slate-100 dark:border-slate-800">
+            <div>Tanggal: <strong class="text-slate-800 dark:text-slate-200">${m.tanggal || '-'}</strong></div>
+            <div>Ketua: <strong class="text-slate-800 dark:text-slate-200">${m.ketua || '-'}</strong></div>
+            <div>Notulis: <strong class="text-slate-800 dark:text-slate-200">${m.notulis || '-'}</strong></div>
+            <div>Action Items: <strong class="text-slate-800 dark:text-slate-200">${(m.actionItems || []).length} items</strong></div>
+          </div>
+        `;
+        container.appendChild(card);
       });
 
-      renderDashboardStats(filtered);
-    }
-
-    function setDashboardPresetDate(preset) {
-      const startInput = document.getElementById('dashStartDate');
-      const endInput = document.getElementById('dashEndDate');
-
-      const btnLastMonth = document.getElementById('btnPresetLastMonth');
-      const btnLast30 = document.getElementById('btnPresetLast30');
-      const btnAll = document.getElementById('btnPresetAll');
-
-      // Helper update visual button active
-      const resetBtnClasses = () => {
-        [btnLastMonth, btnLast30, btnAll].forEach(b => {
-          if (b) {
-            b.className = "px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-xs transition-all";
-          }
-        });
-      };
-
-      resetBtnClasses();
-
-      const today = new Date();
-
-      if (preset === 'lastMonth') {
-        if (btnLastMonth) btnLastMonth.className = "px-3 py-1.5 bg-brand-600 text-white font-bold rounded-xl text-xs shadow-sm transition-all";
-        
-        // Logika tanggal 1 hingga akhir bulan lalu (30/31)
-        const firstDayLastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-        const lastDayLastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
-
-        // Format YYYY-MM-DD lokal
-        const formatYMD = (d) => {
-          const year = d.getFullYear();
-          const month = String(d.getMonth() + 1).padStart(2, '0');
-          const day = String(d.getDate()).padStart(2, '0');
-          return `${year}-${month}-${day}`;
-        };
-
-        startInput.value = formatYMD(firstDayLastMonth);
-        endInput.value = formatYMD(lastDayLastMonth);
-      } else if (preset === 'last30') {
-        if (btnLast30) btnLast30.className = "px-3 py-1.5 bg-brand-600 text-white font-bold rounded-xl text-xs shadow-sm transition-all";
-        endInput.value = today.toISOString().split('T')[0];
-        const last30 = new Date();
-        last30.setDate(today.getDate() - 30);
-        startInput.value = last30.toISOString().split('T')[0];
-      } else {
-        if (btnAll) btnAll.className = "px-3 py-1.5 bg-brand-600 text-white font-bold rounded-xl text-xs shadow-sm transition-all";
-        startInput.value = '';
-        endInput.value = '';
-      }
-
-      filterDashboardByDate();
-    }
-
-    function renderTeamChart(teamMap) {
-      // Kept for backward compatibility
-    }
-
-    function renderStatusChart(counts) {
-      const ctx = document.getElementById('chartStatus');
-      if (!ctx) return;
-
-      if (chartStatusInstance) chartStatusInstance.destroy();
-
-      const isDark = document.documentElement.classList.contains('dark');
-      const textColor = isDark ? '#94a3b8' : '#64748b';
-
-      chartStatusInstance = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: Object.keys(counts),
-          datasets: [{
-            data: Object.values(counts),
-            backgroundColor: ['#94a3b8', '#f59e0b', '#f43f5e', '#10b981'],
-            borderWidth: 3,
-            borderColor: isDark ? '#0f172a' : '#ffffff'
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { 
-            legend: { 
-              position: 'bottom',
-              labels: {
-                color: textColor,
-                font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' },
-                padding: 15,
-                usePointStyle: true,
-                pointStyle: 'circle'
-              }
-            } 
-          },
-          cutout: '70%'
-        }
-      });
-    }
-
-    function renderTeamChart(teamMap) {
-      const ctx = document.getElementById('chartTeam');
-      if (!ctx) return;
-
-      if (chartTeamInstance) chartTeamInstance.destroy();
-
-      const labels = Object.keys(teamMap);
-      const data = labels.map(k => Math.round(teamMap[k].sum / teamMap[k].count));
-      const isDark = document.documentElement.classList.contains('dark');
-      const textColor = isDark ? '#94a3b8' : '#64748b';
-      const gridColor = isDark ? 'rgba(51, 65, 85, 0.4)' : 'rgba(226, 232, 240, 0.8)';
-
-      chartTeamInstance = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Avg Progress (%)',
-            data: data,
-            backgroundColor: '#0d9488',
-            hoverBackgroundColor: '#0f766e',
-            borderRadius: 8,
-            borderSkipped: false
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false }
-          },
-          scales: { 
-            y: { 
-              min: 0, 
-              max: 100,
-              grid: { color: gridColor },
-              ticks: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 10 } }
-            },
-            x: {
-              grid: { display: false },
-              ticks: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 10, weight: '600' } }
-            }
-          }
-        }
-      });
-    }
-
-    // QUICK EDIT ACTION ITEM (DENGAN PREVIEW LENGKAP DETAIL & KEPUTUSAN)
-    function openQuickEditModal(meetingId, actionId) {
-      const m = musyawarahData.find(item => item.meetingid === meetingId);
-      if (!m || !Array.isArray(m.actionItems)) return;
-
-      const a = m.actionItems.find(item => item.actionid === actionId);
-      if (!a) return;
-
-      // Populate Ringkasan Preview Action Item
-      document.getElementById('qePreviewJudul').textContent = `${m.jenismusyawarah || 'Musyawarah'} - ${m.judul || ''}`;
-      document.getElementById('qePreviewId').textContent = a.actionid || '-';
-      document.getElementById('qePreviewPokok').textContent = a.pokokbahasan || '-';
-      document.getElementById('qePreviewDetail').textContent = a.detailbahasan || 'Tidak ada detail bahasan.';
-      document.getElementById('qePreviewKeputusan').textContent = a.hasilkeputusan || 'Belum ada keputusan tercatat.';
-
-      document.getElementById('qeMeetingId').value = meetingId;
-      document.getElementById('qeActionId').value = actionId;
-      document.getElementById('qeStatus').value = a.status || 'Belum Dimulai';
-      document.getElementById('qeProgress').value = a.persentaseprogres || (a.status === 'Selesai' ? 100 : 0);
-      document.getElementById('qeNotes').value = a.catatanterakhir || '';
-      document.getElementById('qeKendala').value = a.kendala || '';
-
-      document.getElementById('quickEditModal').classList.remove('hidden');
       initLucideIcons();
     }
 
-    // RENDER: KANBAN
+    function resetNotulensiFilters() {
+      document.getElementById('searchNotulensi').value = '';
+      document.getElementById('filterStartDate').value = '';
+      document.getElementById('filterEndDate').value = '';
+      setJenisFilter(document.getElementById('btnFilterJenisAll'), '');
+    }
+
+    // KANBAN BOARD RENDER
     function renderKanbanBoard() {
       const colBelum = document.getElementById('colBelum');
       const colProgres = document.getElementById('colProgres');
       const colTertunda = document.getElementById('colTertunda');
-      const colSelesai = document.getElementById('colSelesai');
 
-      if (!colBelum || !colProgres || !colTertunda || !colSelesai) return;
+      if (!colBelum || !colProgres || !colTertunda) return;
 
-      colBelum.innerHTML = ''; colProgres.innerHTML = ''; colTertunda.innerHTML = ''; colSelesai.innerHTML = '';
+      colBelum.innerHTML = ''; colProgres.innerHTML = ''; colTertunda.innerHTML = '';
 
-      let cB = 0, cP = 0, cT = 0, cS = 0;
+      let cB = 0, cP = 0, cT = 0;
 
       musyawarahData.forEach(m => {
         if (Array.isArray(m.actionItems)) {
           m.actionItems.forEach(a => {
-            const prog = Number(a.persentaseprogres || (a.status === 'Selesai' ? 100 : 0));
+            if (a.status === 'Selesai') return;
+
+            const prog = Number(a.persentaseprogres || 0);
             const badgeClass = getStatusBadgeClass(a.status);
-            const isT01 = currentUser && currentUser.teamid === 'T-01';
 
             const card = document.createElement('div');
-            card.className = "bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 text-xs hover:border-brand-500/40 transition-all";
+            card.className = "bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-2.5 text-xs hover:border-brand-500/40 transition-colors";
             card.innerHTML = `
               <div class="flex items-center justify-between">
-                <span class="font-mono font-bold text-[10px] text-brand-600 dark:text-brand-400 px-1.5 py-0.5 rounded bg-brand-50 dark:bg-brand-950 border border-brand-200/50 dark:border-brand-800/40">${a.actionid}</span>
+                <span class="font-mono font-bold text-[10px] text-brand-600 dark:text-brand-400">${a.actionid}</span>
                 <div class="flex items-center space-x-1">
-                  <button onclick="openQuickEditModal('${m.meetingid}', '${a.actionid}')" class="text-slate-400 hover:text-brand-600 p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800" title="Edit Action Item">
+                  <button onclick="openQuickEditModal('${m.meetingid}', '${a.actionid}')" class="text-slate-400 hover:text-brand-600 p-1" title="Update Status">
                     <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
                   </button>
-                  ${isT01 ? `<button onclick="deleteSingleActionItem('${m.meetingid}', '${a.actionid}')" class="text-rose-400 hover:text-rose-600 p-1 rounded hover:bg-rose-50 dark:hover:bg-rose-950/50" title="Hapus (Khusus T-01)"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>` : ''}
+                  <button onclick="deleteSingleActionItem('${m.meetingid}', '${a.actionid}')" class="text-rose-400 hover:text-rose-600 p-1" title="Hapus Item"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                 </div>
               </div>
               <div class="font-bold text-slate-900 dark:text-white leading-snug">${a.pokokbahasan}</div>
-              <div class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center space-x-1">
-                <i data-lucide="user" class="w-3 h-3 text-slate-400"></i>
-                <span>PIC: <strong>${a.pic}</strong> (${a.teamid || '-'})</span>
-              </div>
-              <div class="space-y-1.5 pt-2 border-t border-slate-100 dark:border-slate-800">
-                <div class="flex items-center justify-between text-[10px] font-bold">
-                  <span class="px-2 py-0.5 rounded ${badgeClass}">${a.status}</span>
-                  <span class="text-brand-600 dark:text-brand-400 font-mono">${prog}%</span>
-                </div>
-                <div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                  <div class="bg-brand-500 h-full rounded-full transition-all duration-300" style="width: ${prog}%"></div>
-                </div>
+              <div class="text-slate-500 text-[11px]">PIC: <strong class="text-slate-700 dark:text-slate-300">${a.pic}</strong> (${a.teamid || '-'})</div>
+              <div class="flex items-center justify-between text-[11px] pt-2 border-t border-slate-100 dark:border-slate-800">
+                <span class="px-2 py-0.5 rounded-md font-semibold text-[10px] ${badgeClass}">${a.status}</span>
+                <span class="font-bold text-brand-600 dark:text-brand-400">${prog}%</span>
               </div>
             `;
 
             if (a.status === 'Belum Dimulai') { colBelum.appendChild(card); cB++; }
             else if (a.status === 'Dalam Proses') { colProgres.appendChild(card); cP++; }
             else if (a.status === 'Tertunda') { colTertunda.appendChild(card); cT++; }
-            else if (a.status === 'Selesai') { colSelesai.appendChild(card); cS++; }
           });
         }
       });
@@ -1589,12 +1420,11 @@
       document.getElementById('cntBelum').textContent = cB;
       document.getElementById('cntProgres').textContent = cP;
       document.getElementById('cntTertunda').textContent = cT;
-      document.getElementById('cntSelesai').textContent = cS;
 
       initLucideIcons();
     }
 
-    // RENDER: MY TASKS
+    // MY TASKS RENDER
     function renderMyTasks() {
       const container = document.getElementById('myTasksContainer');
       if (!container) return;
@@ -1602,7 +1432,7 @@
 
       if (!currentUser) return;
 
-      const myName = (currentUser.nama || '').toLowerCase();
+      const myName = (currentUser.nama || currentUser.user || '').toLowerCase();
       let myTasksCount = 0;
 
       musyawarahData.forEach(m => {
@@ -1612,17 +1442,17 @@
               myTasksCount++;
               const badgeClass = getStatusBadgeClass(a.status);
               const card = document.createElement('div');
-              card.className = "bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 text-xs hover:border-brand-500/40 transition-all";
+              card.className = "bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 text-xs hover:border-brand-500/40 transition-colors";
               card.innerHTML = `
                 <div class="flex items-center justify-between">
-                  <span class="font-mono font-bold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950 px-2 py-0.5 rounded border border-brand-200/50 dark:border-brand-800/40">${a.actionid}</span>
-                  <span class="px-2 py-0.5 rounded font-semibold text-[10px] ${badgeClass}">${a.status}</span>
+                  <span class="font-mono font-bold text-brand-600 text-[11px]">${a.actionid}</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold ${badgeClass}">${a.status}</span>
                 </div>
-                <div class="font-bold text-slate-900 dark:text-white text-sm">${a.pokokbahasan}</div>
-                <p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">${a.detailbahasan || 'Tidak ada rincian.'}</p>
-                <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                  <span class="text-slate-400 text-[11px]">Deadline: <strong>${a.deadline || '-'}</strong></span>
-                  <button onclick="openQuickEditModal('${m.meetingid}', '${a.actionid}')" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-bold shadow-md shadow-brand-600/20 transition-all text-xs">Update Status</button>
+                <div class="font-bold text-slate-900 dark:text-white text-sm leading-snug">${a.pokokbahasan}</div>
+                <p class="text-slate-500 dark:text-slate-400 text-[11px] leading-relaxed">${a.detailbahasan || 'Tidak ada rincian.'}</p>
+                <div class="pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px]">
+                  <span class="text-slate-400">Deadline: <strong class="text-slate-700 dark:text-slate-300">${a.deadline || '-'}</strong></span>
+                  <button onclick="openQuickEditModal('${m.meetingid}', '${a.actionid}')" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-bold shadow-sm transition-all">Update Status</button>
                 </div>
               `;
               container.appendChild(card);
@@ -1632,14 +1462,7 @@
       });
 
       if (myTasksCount === 0) {
-        container.innerHTML = `
-          <div class="col-span-2 p-12 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 space-y-3">
-            <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400">
-              <i data-lucide="check-circle" class="w-6 h-6"></i>
-            </div>
-            <p class="text-xs font-semibold text-slate-400">Tidak ada tugas yang ditugaskan atas nama Anda saat ini.</p>
-          </div>
-        `;
+        container.innerHTML = `<div class="col-span-2 p-8 text-center text-slate-400 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800">Tidak ada tugas yang ditugaskan atas nama Anda.</div>`;
       }
 
       initLucideIcons();
@@ -1663,6 +1486,8 @@
       const title = document.getElementById('musyawarahModalTitle');
       const container = document.getElementById('actionItemsRowContainer');
 
+      populateUserOptions();
+
       form.reset();
       container.innerHTML = '';
       actionItemsCount = 0;
@@ -1679,7 +1504,15 @@
         document.getElementById('formLokasi').value = found.lokasi || '';
         document.getElementById('formKetua').value = found.ketua || '';
         document.getElementById('formNotulis').value = found.notulis || '';
-        document.getElementById('formPeserta').value = Array.isArray(found.peserta) ? found.peserta.join(', ') : (found.peserta || '');
+
+        const pesertaArray = Array.isArray(found.peserta) 
+          ? found.peserta 
+          : (typeof found.peserta === 'string' ? found.peserta.split(',').map(s=>s.trim()) : []);
+
+        const checkboxes = document.querySelectorAll('input[name="chkPeserta"]');
+        checkboxes.forEach(chk => {
+          chk.checked = pesertaArray.includes(chk.value);
+        });
 
         if (Array.isArray(found.actionItems) && found.actionItems.length > 0) {
           found.actionItems.forEach(item => addActionItemRow(item));
@@ -1690,7 +1523,9 @@
         title.textContent = "Musyawarah Baru";
         document.getElementById('formMeetingId').value = `MT-${new Date().getFullYear()}${String(new Date().getMonth()+1).padStart(2,'0')}-${Math.floor(100 + Math.random()*900)}`;
         document.getElementById('formTanggal').value = new Date().toISOString().split('T')[0];
-        document.getElementById('formKetua').value = currentUser ? currentUser.nama : '';
+        if (currentUser) {
+          document.getElementById('formKetua').value = currentUser.nama || currentUser.user || '';
+        }
         addActionItemRow();
       }
 
@@ -1721,6 +1556,13 @@
         kendala: ''
       };
 
+      let picOptionsHTML = `<option value="">-- Pilih PIC --</option>`;
+      usersList.forEach(u => {
+        const name = u.nama || u.username || u.user;
+        const isSel = itemData.pic === name ? 'selected' : '';
+        picOptionsHTML += `<option value="${name}" data-teamid="${u.teamid || 'T-01'}" ${isSel}>${name} (${u.teamid || '-'})</option>`;
+      });
+
       const row = document.createElement('div');
       row.id = rowId;
       row.className = "p-4 bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 rounded-2xl space-y-3 relative transition-all";
@@ -1740,28 +1582,26 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block font-semibold text-slate-500 dark:text-slate-400 mb-1">Pokok Bahasan</label>
+            <label class="block font-semibold text-slate-500 dark:text-slate-400 mb-1">Pokok Bahasan <span class="text-rose-500">*</span></label>
             <input type="text" class="ai-pokok w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" value="${itemData.pokokbahasan}" required>
           </div>
           <div>
-            <label class="block font-semibold text-slate-500 dark:text-slate-400 mb-1">PIC (Penanggung Jawab)</label>
-            <input type="text" class="ai-pic w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" value="${itemData.pic}">
+            <label class="block font-semibold text-slate-500 dark:text-slate-400 mb-1">PIC (Penanggung Jawab) <span class="text-rose-500">*</span></label>
+            <select class="ai-pic w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" required>
+              ${picOptionsHTML}
+            </select>
           </div>
           <div class="sm:col-span-2">
-            <label class="block font-semibold text-slate-500 dark:text-slate-400 mb-1">Detail Bahasan</label>
-            <textarea class="ai-detail w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" rows="2">${itemData.detailbahasan}</textarea>
+            <label class="block font-semibold text-slate-500 dark:text-slate-400 mb-1">Detail Bahasan <span class="text-rose-500">*</span></label>
+            <textarea class="ai-detail w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" rows="2" required>${itemData.detailbahasan}</textarea>
           </div>
           <div class="sm:col-span-2">
-            <label class="block font-semibold text-slate-500 dark:text-slate-400 mb-1">Hasil Keputusan</label>
-            <textarea class="ai-keputusan w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" rows="2">${itemData.hasilkeputusan}</textarea>
+            <label class="block font-semibold text-slate-500 dark:text-slate-400 mb-1">Hasil Keputusan <span class="text-rose-500">*</span></label>
+            <textarea class="ai-keputusan w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" rows="2" required>${itemData.hasilkeputusan}</textarea>
           </div>
           <div>
-            <label class="block font-semibold text-slate-500 dark:text-slate-400 mb-1">Team ID</label>
-            <input type="text" class="ai-teamid w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" value="${itemData.teamid}">
-          </div>
-          <div>
-            <label class="block font-semibold text-slate-500 dark:text-slate-400 mb-1">Deadline</label>
-            <input type="date" class="ai-deadline w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" value="${itemData.deadline}">
+            <label class="block font-semibold text-slate-500 dark:text-slate-400 mb-1">Deadline <span class="text-rose-500">*</span></label>
+            <input type="date" class="ai-deadline w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" value="${itemData.deadline}" required>
           </div>
           <div>
             <label class="block font-semibold text-slate-500 dark:text-slate-400 mb-1">Status</label>
@@ -1783,8 +1623,8 @@
       initLucideIcons();
     }
 
-    async function handleMusyawarahFormSubmit(e) {
-      e.preventDefault();
+    async function handleMusyawarahFormSubmit(e, isDraft = false) {
+      if (e) e.preventDefault();
       const meetingId = document.getElementById('formMeetingId').value;
       const jenis = document.getElementById('formJenis').value;
       const judul = document.getElementById('formJudul').value;
@@ -1792,26 +1632,59 @@
       const lokasi = document.getElementById('formLokasi').value;
       const ketua = document.getElementById('formKetua').value;
       const notulis = document.getElementById('formNotulis').value;
-      const pesertaRaw = document.getElementById('formPeserta').value;
+
+      const selectedPeserta = [];
+      const checkboxes = document.querySelectorAll('input[name="chkPeserta"]:checked');
+      checkboxes.forEach(c => selectedPeserta.push(c.value));
+
+      if (selectedPeserta.length === 0) {
+        showToast("Pilih minimal satu Peserta Hadir!", "error");
+        return;
+      }
 
       const rows = document.querySelectorAll('#actionItemsRowContainer > div');
       const actionItems = [];
 
+      let isValidActionItems = true;
       rows.forEach((r, idx) => {
+        const picSelect = r.querySelector('.ai-pic');
+        const selectedPicOption = picSelect.options[picSelect.selectedIndex];
+        
+        let autoTeamId = selectedPicOption ? selectedPicOption.getAttribute('data-teamid') : 'T-01';
+        if (!autoTeamId) {
+          const userObj = usersList.find(u => (u.nama || u.username) === picSelect.value);
+          autoTeamId = userObj ? userObj.teamid : 'T-01';
+        }
+
+        const pokok = r.querySelector('.ai-pokok').value.trim();
+        const pic = picSelect.value.trim();
+        const detail = r.querySelector('.ai-detail').value.trim();
+        const keputusan = r.querySelector('.ai-keputusan').value.trim();
+        const deadline = r.querySelector('.ai-deadline').value.trim();
+
+        if (!pokok || !pic || !detail || !keputusan || !deadline) {
+          isValidActionItems = false;
+        }
+
         actionItems.push({
           actionid: r.querySelector('.ai-id').value || `ACT-${meetingId}-${idx+1}`,
-          pokokbahasan: r.querySelector('.ai-pokok').value,
-          detailbahasan: r.querySelector('.ai-detail').value,
-          hasilkeputusan: r.querySelector('.ai-keputusan').value,
-          pic: r.querySelector('.ai-pic').value,
-          teamid: r.querySelector('.ai-teamid').value,
-          deadline: r.querySelector('.ai-deadline').value,
+          pokokbahasan: pokok,
+          detailbahasan: detail,
+          hasilkeputusan: keputusan,
+          pic: pic,
+          teamid: autoTeamId || 'T-01',
+          deadline: deadline,
           status: r.querySelector('.ai-status').value,
           persentaseprogres: Number(r.querySelector('.ai-prog').value || 0),
           catatanterakhir: '',
           kendala: ''
         });
       });
+
+      if (!isValidActionItems) {
+        showToast("Harap lengkapi seluruh field mandatory pada Action Items!", "error");
+        return;
+      }
 
       const payload = {
         meetingid: meetingId,
@@ -1821,13 +1694,18 @@
         lokasi: lokasi,
         ketua: ketua,
         notulis: notulis,
-        peserta: pesertaRaw.split(',').map(s => s.trim()).filter(Boolean),
+        peserta: selectedPeserta,
         actionItems: actionItems
       };
 
-      const btn = document.getElementById('btnSaveMusyawarah');
-      btn.disabled = true;
-      btn.textContent = "Menyimpan...";
+      const btnSubmit = document.getElementById('btnSaveMusyawarah');
+      const btnDraft = document.getElementById('btnSaveDraftMusyawarah');
+
+      if (isDraft) {
+        if (btnDraft) { btnDraft.disabled = true; btnDraft.textContent = "Menyimpan Draft..."; }
+      } else {
+        if (btnSubmit) { btnSubmit.disabled = true; btnSubmit.textContent = "Submitting..."; }
+      }
 
       try {
         const resp = await fetch(MUSYAWARAH_APP_URL, {
@@ -1837,9 +1715,18 @@
         const result = await resp.json();
 
         if (result.status === 'success') {
-          showToast("Musyawarah berhasil disimpan!", "success");
-          closeMusyawarahModal();
-          loadAllData();
+          showToast(isDraft ? "Draft musyawarah berhasil disimpan!" : "Musyawarah berhasil divalidasi & disimpan!", "success");
+          
+          if (!isDraft) {
+            closeMusyawarahModal();
+          }
+
+          // Refresh data tanpa menutup jika draft, atau setelah ditutup jika submit
+          await loadAllData();
+          if (isDraft) {
+            // Jaga agar ID meeting tetap terisi setelah load data
+            document.getElementById('formMeetingId').value = meetingId;
+          }
         } else {
           showToast(result.message || "Gagal menyimpan musyawarah.", "error");
         }
@@ -1847,8 +1734,8 @@
         console.error("Save Error:", err);
         showToast("Gagal terhubung ke server musyawarah.", "error");
       } finally {
-        btn.disabled = false;
-        btn.textContent = "Simpan Musyawarah";
+        if (btnSubmit) { btnSubmit.disabled = false; btnSubmit.textContent = "Submit"; }
+        if (btnDraft) { btnDraft.disabled = false; btnDraft.textContent = "Simpan Draft"; }
       }
     }
 
@@ -1896,18 +1783,18 @@
       if (Array.isArray(found.actionItems) && found.actionItems.length > 0) {
         actionsHTML = found.actionItems.map(a => {
           const badgeClass = getStatusBadgeClass(a.status);
-          const prog = Number(a.persentaseprogres || (a.status === 'Selesai' ? 100 : 0));
+          const prog = Number(a.persentaseprogres || 0);
           return `
-            <div class="p-4 bg-slate-50 dark:bg-slate-950/60 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2.5 pdf-card">
+            <div class="p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-2 pdf-card">
               <div class="flex items-center justify-between font-bold">
-                <span class="text-brand-600 dark:text-brand-400 font-mono text-xs">${a.actionid} - ${a.pokokbahasan}</span>
+                <span class="text-brand-600 dark:text-brand-400">${a.actionid} - ${a.pokokbahasan}</span>
                 <span class="px-2 py-0.5 rounded text-[10px] ${badgeClass}">${a.status} (${prog}%)</span>
               </div>
-              ${a.detailbahasan ? `<p class="text-slate-600 dark:text-slate-300"><strong>Detail:</strong> ${a.detailbahasan}</p>` : ''}
-              ${a.hasilkeputusan ? `<p class="text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 p-2.5 rounded-xl border border-emerald-200 dark:border-emerald-800/40"><strong>Keputusan:</strong> ${a.hasilkeputusan}</p>` : ''}
-              <div class="grid grid-cols-2 gap-2 text-slate-500 dark:text-slate-400 text-[11px] pt-2 border-t border-slate-200/50 dark:border-slate-800">
-                <div>PIC: <strong>${a.pic}</strong> (${a.teamid || '-'})</div>
-                <div>Deadline: <strong>${a.deadline || '-'}</strong></div>
+              ${a.detailbahasan ? `<p class="text-slate-700 dark:text-slate-300"><strong>Detail:</strong> ${a.detailbahasan}</p>` : ''}
+              ${a.hasilkeputusan ? `<p class="text-emerald-700 dark:text-emerald-400"><strong>Keputusan:</strong> ${a.hasilkeputusan}</p>` : ''}
+              <div class="grid grid-cols-2 gap-2 text-slate-500 text-[11px] pt-2 border-t border-slate-200/50 dark:border-slate-800">
+                <div>PIC: ${a.pic} (${a.teamid || '-'})</div>
+                <div>Deadline: ${a.deadline || '-'}</div>
                 <div>Catatan: ${a.catatanterakhir || '-'}</div>
                 <div>Kendala: ${a.kendala || '-'}</div>
               </div>
@@ -1967,12 +1854,6 @@
       clone.style.height = 'auto';
       clone.style.overflow = 'visible';
 
-      clone.classList.remove('dark');
-      const allText = clone.querySelectorAll('*');
-      allText.forEach(el => {
-        el.classList.remove('dark:bg-slate-800', 'dark:bg-slate-900', 'dark:text-white', 'dark:text-slate-200', 'dark:border-slate-700');
-      });
-
       const opt = {
         margin:       [10, 10, 10, 10],
         filename:     `Notulensi_${found.meetingid}_${found.tanggal}.pdf`,
@@ -1981,8 +1862,7 @@
           scale: 2, 
           useCORS: true, 
           scrollY: 0,
-          scrollX: 0,
-          windowWidth: document.documentElement.offsetWidth
+          scrollX: 0
         },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
         pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
@@ -2000,7 +1880,7 @@
       document.getElementById('detailNotulensiModal').classList.add('hidden');
     }
 
-    // QUICK EDIT ACTION ITEM (DENGAN PREVIEW LENGKAP DETAIL & KEPUTUSAN)
+    // QUICK EDIT ACTION ITEM
     function openQuickEditModal(meetingId, actionId) {
       const m = musyawarahData.find(item => item.meetingid === meetingId);
       if (!m || !Array.isArray(m.actionItems)) return;
@@ -2008,22 +1888,21 @@
       const a = m.actionItems.find(item => item.actionid === actionId);
       if (!a) return;
 
-      // Populate Ringkasan Preview Action Item secara lengkap & akurat
-      document.getElementById('qePreviewJudul').textContent = `${m.jenismusyawarah || 'Musyawarah'} - ${m.judul || ''}`;
-      document.getElementById('qePreviewId').textContent = a.actionid || '-';
-      document.getElementById('qePreviewPokok').textContent = a.pokokbahasan || '-';
-      document.getElementById('qePreviewDetail').textContent = a.detailbahasan || 'Tidak ada detail bahasan.';
-      document.getElementById('qePreviewKeputusan').textContent = a.hasilkeputusan || 'Belum ada keputusan tercatat.';
-
       document.getElementById('qeMeetingId').value = meetingId;
       document.getElementById('qeActionId').value = actionId;
+
+      document.getElementById('qePreviewJudul').textContent = m.judul || 'Musyawarah';
+      document.getElementById('qePreviewId').textContent = a.actionid || '';
+      document.getElementById('qePreviewPokok').textContent = a.pokokbahasan || '-';
+      document.getElementById('qePreviewDetail').textContent = a.detailbahasan || '-';
+      document.getElementById('qePreviewKeputusan').textContent = a.hasilkeputusan || '-';
+
       document.getElementById('qeStatus').value = a.status || 'Belum Dimulai';
-      document.getElementById('qeProgress').value = a.persentaseprogres || (a.status === 'Selesai' ? 100 : 0);
+      document.getElementById('qeProgress').value = a.persentaseprogres || 0;
       document.getElementById('qeNotes').value = a.catatanterakhir || '';
       document.getElementById('qeKendala').value = a.kendala || '';
 
       document.getElementById('quickEditModal').classList.remove('hidden');
-      initLucideIcons();
     }
 
     function closeQuickEditModal() {
@@ -2065,7 +1944,10 @@
 
         if (result.status === 'success') {
           showToast("Status berhasil diupdate!", "success");
-          renderAllViews();
+          renderMusyawarahList();
+          renderKanbanBoard();
+          renderMyTasks();
+          renderDashboardStats();
         } else {
           showToast("Gagal menyimpan ke server.", "error");
         }
@@ -2075,13 +1957,8 @@
       }
     }
 
-    // DELETE ACTION ITEM (KHUSUS T-01)
+    // DELETE ACTION ITEM
     async function deleteSingleActionItem(meetingId, actionId) {
-      if (!currentUser || currentUser.teamid !== 'T-01') {
-        showToast("Akses ditolak! Fitur hapus hanya untuk TeamID T-01.", "error");
-        return;
-      }
-
       if (!confirm(`Hapus action item ${actionId}?`)) return;
 
       const m = musyawarahData.find(item => item.meetingid === meetingId);
@@ -2100,7 +1977,7 @@
 
         if (result.status === 'success') {
           showToast("Action item berhasil dihapus!", "success");
-          renderAllViews();
+          loadAllData();
         } else {
           showToast("Gagal memperbarui data.", "error");
         }
