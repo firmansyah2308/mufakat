@@ -797,10 +797,9 @@
     let chartTeamInstance = null;
 
     // INIT
-    window.onload = function() {
+    window.onload = async function() {
       initLucideIcons();
-      checkUserSession();
-      fetchUsersList();
+      await checkUserSession();
     };
 
     function initLucideIcons() {
@@ -849,20 +848,86 @@
       }
     }
 
-    // SESSION & AUTH
-    function checkUserSession() {
-      const savedUser = localStorage.getItem('musyawarah_user');
-      if (savedUser) {
-        try {
-          currentUser = JSON.parse(savedUser);
-          showMainApp();
-          switchTab('dashboard');
-          loadAllData();
-        } catch (e) {
-          localStorage.removeItem('musyawarah_user');
-          showLoginPage();
-        }
+    // USER MEETING-TYPE ACCESS
+    function normalizeMeetingAccess(value) {
+      if (Array.isArray(value)) {
+        return value.map(v => String(v || '').trim()).filter(Boolean);
+      }
+      if (typeof value !== 'string') return [];
+      return value.split(/[,;\\n]/).map(v => v.trim()).filter(Boolean);
+    }
+
+    function getUserRecord(username) {
+      const key = String(username || '').trim().toLowerCase();
+      return usersList.find(u =>
+        String(u.user || u.username || u.User || '').trim().toLowerCase() === key
+      ) || null;
+    }
+
+    function applyUserMasterRecord(user) {
+      if (!user) return null;
+      const master = getUserRecord(user.user || user.username);
+      // The master sheet is the source of truth for meeting-type access.
+      const merged = { ...user };
+      if (master) {
+        Object.assign(merged, master);
+        const masterAccess = master.akses_musyawarah ?? master.aksesMusyawarah ?? master.aksesmusyawarah;
+        merged.akses_musyawarah = normalizeMeetingAccess(masterAccess);
       } else {
+        // Fail closed: never trust permissions cached in the browser or returned by an old session.
+        merged.akses_musyawarah = [];
+      }
+      merged.user = merged.user || merged.username || merged.User || user.user || user.username;
+      delete merged.password;
+      return merged;
+    }
+
+    function getAccessibleMusyawarahData() {
+      if (!currentUser || !Array.isArray(currentUser.akses_musyawarah)) return [];
+      const allowed = new Set(currentUser.akses_musyawarah.map(v => v.toLowerCase()));
+      return musyawarahData.filter(m =>
+        allowed.has(String(m.jenismusyawarah || '').trim().toLowerCase())
+      );
+    }
+
+    function isMeetingTypeAllowed(jenis) {
+      if (!currentUser || !Array.isArray(currentUser.akses_musyawarah)) return false;
+      return currentUser.akses_musyawarah.some(v =>
+        v.toLowerCase() === String(jenis || '').trim().toLowerCase()
+      );
+    }
+
+    function updateMeetingTypeControls() {
+      document.querySelectorAll('.btn-jenis-filter').forEach(btn => {
+        const match = (btn.getAttribute('onclick') || '').match(/setJenisFilter\(this,\s*'([^']*)'/);
+        const jenis = match ? match[1] : '';
+        btn.hidden = Boolean(jenis) && !isMeetingTypeAllowed(jenis);
+      });
+      const select = document.getElementById('formJenis');
+      if (select) {
+        Array.from(select.options).forEach(opt => {
+          if (opt.value) {
+            opt.hidden = !isMeetingTypeAllowed(opt.value);
+            opt.disabled = !isMeetingTypeAllowed(opt.value);
+          }
+        });
+      }
+    }
+
+    // SESSION & AUTH
+    async function checkUserSession() {
+      const savedUser = localStorage.getItem('musyawarah_user');
+      if (!savedUser) { showLoginPage(); return; }
+      try {
+        currentUser = JSON.parse(savedUser);
+        if (!currentUser || !currentUser.apiToken) throw new Error('Sesi tidak tersedia');
+        await fetchUsersList();
+        showMainApp();
+        switchTab('dashboard');
+        await loadAllData();
+      } catch (e) {
+        localStorage.removeItem('musyawarah_user');
+        currentUser = null;
         showLoginPage();
       }
     }
@@ -877,6 +942,7 @@
       document.getElementById('mainApp').classList.remove('hidden');
 
       if (currentUser) {
+        updateMeetingTypeControls();
         document.getElementById('userDisplayName').textContent = currentUser.nama || currentUser.user;
         document.getElementById('userDisplayRole').textContent = `${currentUser.role || 'Pengurus'} (${currentUser.teamid || '-'})`;
         document.getElementById('userAvatarInit').textContent = (currentUser.nama || currentUser.user || 'U').charAt(0).toUpperCase();
@@ -887,35 +953,31 @@
       e.preventDefault();
       const u = document.getElementById('loginUsername').value.trim();
       const p = document.getElementById('loginPassword').value.trim();
-
-      if (!u || !p) {
-        showToast("Username dan password wajib diisi!", "error");
-        return;
-      }
+      if (!u || !p) { showToast("Username dan password wajib diisi!", "error"); return; }
 
       const btn = document.getElementById('btnLogin');
       btn.disabled = true;
       btn.innerHTML = `<span>Memverifikasi...</span>`;
-
       try {
-        const url = `${USER_APP_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}`;
-        const resp = await fetch(url);
+        const resp = await fetch(MUSYAWARAH_APP_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'authorize', username: u, password: p })
+        });
         const data = await resp.json();
-
-        if (data.status === 'success' || data.authenticated) {
-          currentUser = data.userData || { user: u, nama: data.nama || u, role: data.role, teamid: 'T-01' };
-          currentUser.password = p;
+        if (data.status === 'success' && data.token && data.userData) {
+          currentUser = { ...data.userData, apiToken: data.token };
           localStorage.setItem('musyawarah_user', JSON.stringify(currentUser));
+          await fetchUsersList();
           showToast(`Selamat datang, ${currentUser.nama || currentUser.user}!`, "success");
           showMainApp();
           switchTab('dashboard');
-          loadAllData();
+          await loadAllData();
         } else {
           showToast(data.message || "Username atau password salah!", "error");
         }
       } catch (err) {
         console.error("Login Error:", err);
-        showToast("Gagal terhubung ke server login.", "error");
+        showToast("Gagal terhubung ke server MUFAKAT.", "error");
       } finally {
         btn.disabled = false;
         btn.innerHTML = `<span>Masuk Sistem</span><i data-lucide="arrow-right" class="w-4 h-4"></i>`;
@@ -930,18 +992,23 @@
       showLoginPage();
     }
 
-    // FETCH USERS LIST FROM APPS SCRIPT USER APP
+    // FETCH USER DIRECTORY THROUGH AUTHENTICATED MUFAKAT BACKEND
     async function fetchUsersList() {
+      if (!currentUser || !currentUser.apiToken) return false;
       try {
-        const resp = await fetch(`${USER_APP_URL}?action=getUsers`);
+        const resp = await fetch(MUSYAWARAH_APP_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'getUsers', token: currentUser.apiToken })
+        });
         const data = await resp.json();
         if (data.status === 'success' && Array.isArray(data.users)) {
           usersList = data.users;
-        } else if (Array.isArray(data)) {
-          usersList = data;
+          return true;
         }
+        return false;
       } catch (err) {
         console.error("Gagal mengambil list user:", err);
+        return false;
       }
     }
 
@@ -997,19 +1064,30 @@
 
     // DATA FETCHING
     async function loadAllData() {
+      if (!currentUser || !currentUser.apiToken) { showLoginPage(); return; }
       showToast("Memuat data musyawarah...");
       try {
-        const resp = await fetch(`${MUSYAWARAH_APP_URL}?action=getData`);
+        const resp = await fetch(MUSYAWARAH_APP_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'getData', token: currentUser.apiToken })
+        });
         const result = await resp.json();
-
         if (result.status === 'success' && Array.isArray(result.data)) {
+          if (result.userData) currentUser = { ...result.userData, apiToken: currentUser.apiToken };
           musyawarahData = result.data;
+          localStorage.setItem('musyawarah_user', JSON.stringify(currentUser));
+          updateMeetingTypeControls();
           setDashboardPresetDate('last30');
           renderMusyawarahList();
           renderKanbanBoard();
           renderMyTasks();
         } else {
-          showToast("Data musyawarah kosong atau bermasalah.", "error");
+          if (result.code === 'UNAUTHORIZED') {
+            handleLogout();
+            showToast(result.message || 'Sesi berakhir. Silakan login kembali.', 'error');
+          } else {
+            showToast(result.message || "Data musyawarah kosong atau bermasalah.", "error");
+          }
         }
       } catch (err) {
         console.error("Fetch Data Error:", err);
@@ -1087,7 +1165,7 @@
       const sDate = document.getElementById('dashStartDate')?.value;
       const eDate = document.getElementById('dashEndDate')?.value;
 
-      const filteredMusyawarah = musyawarahData.filter(m => {
+      const filteredMusyawarah = getAccessibleMusyawarahData().filter(m => {
         if (!m.tanggal) return true;
         if (sDate && m.tanggal < sDate) return false;
         if (eDate && m.tanggal > eDate) return false;
@@ -1097,7 +1175,8 @@
       renderDashboardStats(filteredMusyawarah);
     }
 
-    function renderDashboardStats(filteredData = musyawarahData) {
+    function renderDashboardStats(filteredData = getAccessibleMusyawarahData()) {
+      filteredData = filteredData.filter(m => isMeetingTypeAllowed(m.jenismusyawarah));
       const totalM = filteredData.length;
       let totalActions = 0;
       let completedActions = 0;
@@ -1149,13 +1228,14 @@
       if (!container) return;
       container.innerHTML = '';
 
-      const categories = [
+      const allCategories = [
         { name: 'Musyawarah 4S', color: 'text-emerald-600 dark:text-emerald-400' },
         { name: 'Musyawarah Pengurus', color: 'text-blue-600 dark:text-blue-400' },
         { name: 'Musyawarah 5 Unsur', color: 'text-purple-600 dark:text-purple-400' },
         { name: 'Musyawarah KBM', color: 'text-amber-600 dark:text-amber-400' },
         { name: 'Musyawarah Muda-mudi', color: 'text-indigo-600 dark:text-indigo-400' }
       ];
+      const categories = allCategories.filter(c => isMeetingTypeAllowed(c.name));
 
       Object.keys(jenisCounts).forEach(catName => {
         if (!categories.find(c => c.name === catName)) {
@@ -1286,6 +1366,7 @@
     function setJenisFilter(btnEl, jenis) {
       document.getElementById('searchNotulensi').value = jenis;
 
+      if (jenis && !isMeetingTypeAllowed(jenis)) return;
       const buttons = document.querySelectorAll('.btn-jenis-filter');
       buttons.forEach(b => {
         b.className = "btn-jenis-filter px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200";
@@ -1307,7 +1388,7 @@
       if (!container) return;
       container.innerHTML = '';
 
-      const filtered = musyawarahData.filter(m => {
+      const filtered = getAccessibleMusyawarahData().filter(m => {
         const matchesSearch = (m.judul || '').toLowerCase().includes(search) || 
                               (m.jenismusyawarah || '').toLowerCase().includes(search) ||
                               (m.ketua || '').toLowerCase().includes(search);
@@ -1486,6 +1567,23 @@
       const title = document.getElementById('musyawarahModalTitle');
       const container = document.getElementById('actionItemsRowContainer');
 
+      if (meetingId) {
+        const permittedMeeting = musyawarahData.find(m => m.meetingid === meetingId);
+        if (!permittedMeeting || !isMeetingTypeAllowed(permittedMeeting.jenismusyawarah)) {
+          showToast('Anda tidak memiliki akses ke jenis musyawarah ini.', 'error');
+          return;
+        }
+      }
+
+      const jenisSelect = document.getElementById('formJenis');
+      if (jenisSelect) {
+        Array.from(jenisSelect.options).forEach(opt => {
+          if (!opt.value) return;
+          opt.hidden = !isMeetingTypeAllowed(opt.value);
+          opt.disabled = !isMeetingTypeAllowed(opt.value);
+        });
+      }
+
       populateUserOptions();
 
       form.reset();
@@ -1627,6 +1725,10 @@
       if (e) e.preventDefault();
       const meetingId = document.getElementById('formMeetingId').value;
       const jenis = document.getElementById('formJenis').value;
+      if (!isMeetingTypeAllowed(jenis)) {
+        showToast('Anda tidak memiliki hak akses untuk jenis musyawarah tersebut.', 'error');
+        return;
+      }
       const judul = document.getElementById('formJudul').value;
       const tanggal = document.getElementById('formTanggal').value;
       const lokasi = document.getElementById('formLokasi').value;
@@ -1710,7 +1812,7 @@
       try {
         const resp = await fetch(MUSYAWARAH_APP_URL, {
           method: 'POST',
-          body: JSON.stringify({ action: 'saveMusyawarah', data: payload })
+          body: JSON.stringify({ action: 'saveMusyawarah', token: currentUser.apiToken, data: payload })
         });
         const result = await resp.json();
 
@@ -1747,7 +1849,7 @@
       try {
         const resp = await fetch(MUSYAWARAH_APP_URL, {
           method: 'POST',
-          body: JSON.stringify({ action: 'deleteMusyawarah', meetingid: meetingId })
+          body: JSON.stringify({ action: 'deleteMusyawarah', token: currentUser.apiToken, meetingid: meetingId })
         });
         const result = await resp.json();
 
@@ -1766,7 +1868,10 @@
     // MODAL DETAIL & PDF EXPORT
     function openDetailModal(meetingId) {
       const found = musyawarahData.find(m => m.meetingid === meetingId);
-      if (!found) return;
+      if (!found || !isMeetingTypeAllowed(found.jenismusyawarah)) {
+        showToast('Anda tidak memiliki akses ke jenis musyawarah ini.', 'error');
+        return;
+      }
 
       document.getElementById('mdCategory').textContent = found.jenismusyawarah || 'Musyawarah';
       document.getElementById('mdTitle').textContent = found.judul;
@@ -1938,7 +2043,7 @@
       try {
         const resp = await fetch(MUSYAWARAH_APP_URL, {
           method: 'POST',
-          body: JSON.stringify({ action: 'saveMusyawarah', data: m })
+          body: JSON.stringify({ action: 'saveMusyawarah', token: currentUser.apiToken, data: m })
         });
         const result = await resp.json();
 
@@ -1971,7 +2076,7 @@
       try {
         const resp = await fetch(MUSYAWARAH_APP_URL, {
           method: 'POST',
-          body: JSON.stringify({ action: 'saveMusyawarah', data: m })
+          body: JSON.stringify({ action: 'saveMusyawarah', token: currentUser.apiToken, data: m })
         });
         const result = await resp.json();
 
@@ -2014,7 +2119,8 @@
         const data = await resp.json();
 
         if (data.status === 'success') {
-          currentUser.password = newPass;
+          // Do not store plaintext passwords in localStorage.
+          delete currentUser.password;
           localStorage.setItem('musyawarah_user', JSON.stringify(currentUser));
           showToast("Password berhasil diperbarui!", "success");
           closeChangePasswordModal();
