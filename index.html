@@ -176,6 +176,10 @@
             <span class="truncate">Tugas Saya</span>
           </button>
 
+          <button onclick="switchTab('proker')" id="nav-proker" class="nav-btn w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center space-x-3 transition-all text-slate-400 hover:bg-slate-800/80 hover:text-slate-100">
+            <i data-lucide="clipboard-list" class="w-4 h-4 flex-shrink-0"></i><span class="truncate">Program Kerja</span>
+          </button>
+
           <!-- SETTINGS SECTION -->
           <div class="px-3 pt-6 pb-1.5 text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Pengaturan</div>
 
@@ -555,7 +559,57 @@
           <div id="myTasksContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </section>
 
+        <!-- VIEW: PROGRAM KERJA -->
+        <section id="view-proker" class="hidden space-y-6 max-w-[1600px] mx-auto">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+            <div><h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">Program Kerja</h2><p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Perencanaan, pelaksanaan, dan evaluasi program kerja seluruh dapukan</p></div>
+            <button onclick="openProkerModal()" id="btnAddProker" class="px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i>Tambah Proker</button>
+          </div>
+          <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800"><div class="text-xs text-slate-500">Total Proker</div><div id="prokerStatTotal" class="text-2xl font-black mt-1">0</div></div>
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800"><div class="text-xs text-slate-500">Belum Dimulai</div><div id="prokerStatTodo" class="text-2xl font-black mt-1">0</div></div>
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800"><div class="text-xs text-slate-500">Dalam Proses</div><div id="prokerStatDoing" class="text-2xl font-black mt-1">0</div></div>
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800"><div class="text-xs text-slate-500">Selesai</div><div id="prokerStatDone" class="text-2xl font-black mt-1">0</div></div>
+            <div class="col-span-2 lg:col-span-1 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800"><div class="text-xs text-slate-500">Total Anggaran</div><div id="prokerStatBudget" class="text-xl font-black mt-1 break-words">Rp 0</div><div class="text-[10px] text-slate-400 mt-1">Akumulasi seluruh Proker aktif</div></div>
+          </div>
+          <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800">
+            <div class="mb-4"><h3 class="font-black text-sm text-slate-900 dark:text-white">Jumlah Program Kerja per Dapukan</h3><p class="text-xs text-slate-500 mt-1">Distribusi jumlah Proker aktif berdasarkan dapukan</p></div>
+            <div class="relative w-full h-64 sm:h-72"><canvas id="prokerDapukanChart" aria-label="Grafik batang jumlah program kerja per dapukan" role="img"></canvas></div>
+          </div>
+          <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row gap-3">
+            <input id="prokerSearch" oninput="renderProkerList()" placeholder="Cari nama program kerja..." class="flex-1 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-xs">
+            <select id="prokerFilterDapukan" onchange="renderProkerList()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-xs"><option value="">Semua dapukan</option></select>
+            <select id="prokerFilterStatus" onchange="renderProkerList()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-xs"><option value="">Semua status</option><option>Belum Dimulai</option><option>Dalam Proses</option><option>Selesai</option></select>
+          </div>
+          <div id="prokerListContainer" class="grid grid-cols-1 xl:grid-cols-2 gap-4"></div>
+        </section>
+
       </main>
+    </div>
+  </div>
+
+  <!-- MODAL PROGRAM KERJA -->
+  <div id="prokerModal" class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-3 sm:p-5">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-3xl w-full max-h-[94vh] flex flex-col shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+      <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center"><div><h3 id="prokerModalTitle" class="font-black text-base">Tambah Program Kerja</h3><p id="prokerOwnerLabel" class="text-xs text-slate-500 mt-1"></p></div><button onclick="closeProkerModal()" class="text-slate-400 text-xl">×</button></div>
+      <form id="prokerForm" onsubmit="submitProker(event)" class="p-5 overflow-y-auto space-y-4 text-xs">
+        <input type="hidden" id="pfId">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <label class="sm:col-span-2 font-bold">Nama Program Kerja *<input id="pfJudul" required class="mt-1 w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-950 dark:border-slate-700" placeholder="Nama program"></label>
+          <label class="sm:col-span-2 font-bold">Deskripsi *<textarea id="pfDeskripsi" required rows="2" class="mt-1 w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-950 dark:border-slate-700"></textarea></label>
+          <label class="font-bold">Target *<textarea id="pfTarget" required rows="2" class="mt-1 w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-950 dark:border-slate-700"></textarea></label>
+          <label class="font-bold">Indikator Keberhasilan *<textarea id="pfIndikator" required rows="2" class="mt-1 w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-950 dark:border-slate-700"></textarea></label>
+          <label class="font-bold">Tanggal Mulai *<input id="pfMulai" required type="date" class="mt-1 w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-950 dark:border-slate-700"></label>
+          <label class="font-bold">Tanggal Selesai *<input id="pfSelesai" required type="date" class="mt-1 w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-950 dark:border-slate-700"></label>
+          <label class="font-bold">Periodik *<select id="pfPeriodik" required onchange="const other=document.getElementById('pfPeriodikLain');other.classList.toggle('hidden',this.value!=='Lainnya');other.required=this.value==='Lainnya'" class="mt-1 w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-950 dark:border-slate-700"><option value="">Pilih label periode</option><option>Harian</option><option>Mingguan</option><option>Bulanan</option><option>3 Bulanan</option><option>6 Bulanan</option><option>Tahunan</option><option>Lainnya</option></select><input id="pfPeriodikLain" placeholder="Keterangan periode" class="hidden mt-2 w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-950 dark:border-slate-700"></label>
+          <label class="font-bold">Anggaran (Rp) *<input id="pfAnggaran" required type="number" min="0" step="1000" class="mt-1 w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-950 dark:border-slate-700" placeholder="0"></label>
+          <label class="font-bold sm:col-span-2">Progress: <span id="pfProgressLabel">0%</span><input id="pfProgress" type="range" min="0" max="100" step="1" value="0" oninput="document.getElementById('pfProgressLabel').textContent=this.value+'%'" class="mt-2 w-full accent-teal-600"></label>
+          <label class="font-bold sm:col-span-2">Realisasi<textarea id="pfRealisasi" rows="2" class="mt-1 w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-950 dark:border-slate-700"></textarea></label>
+          <label class="font-bold sm:col-span-2">Kendala<textarea id="pfKendala" rows="2" class="mt-1 w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-950 dark:border-slate-700"></textarea></label>
+          <label class="font-bold sm:col-span-2">Evaluasi<textarea id="pfEvaluasi" rows="2" class="mt-1 w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-950 dark:border-slate-700"></textarea></label>
+        </div>
+        <div class="flex justify-end gap-2 pt-3 border-t dark:border-slate-800"><button type="button" onclick="closeProkerModal()" class="px-4 py-2.5 rounded-xl border dark:border-slate-700">Batal</button><button id="btnSaveProker" class="px-5 py-2.5 rounded-xl bg-brand-600 text-white font-bold">Simpan Proker</button></div>
+      </form>
     </div>
   </div>
 
@@ -786,6 +840,7 @@
     let currentUser = null;
     let musyawarahData = [];
     let usersList = [];
+    let prokerData = [];
     let selectedJenisFilter = '';
     let chartBelumInstance = null;
     let chartProgresInstance = null;
@@ -922,6 +977,7 @@
         currentUser = JSON.parse(savedUser);
         if (!currentUser || !currentUser.apiToken) throw new Error('Sesi tidak tersedia');
         await fetchUsersList();
+        await loadProkerData();
         showMainApp();
         switchTab('dashboard');
         await loadAllData();
@@ -968,6 +1024,7 @@
           currentUser = { ...data.userData, apiToken: data.token };
           localStorage.setItem('musyawarah_user', JSON.stringify(currentUser));
           await fetchUsersList();
+          await loadProkerData();
           showToast(`Selamat datang, ${currentUser.nama || currentUser.user}!`, "success");
           showMainApp();
           switchTab('dashboard');
@@ -1097,7 +1154,7 @@
 
     // SIDEBAR TAB SWITCHING
     function switchTab(tabName) {
-      ['dashboard', 'notulensi', 'kanban', 'mytasks'].forEach(t => {
+      ['dashboard', 'notulensi', 'kanban', 'mytasks', 'proker'].forEach(t => {
         const v = document.getElementById(`view-${t}`);
         const b = document.getElementById(`nav-${t}`);
         if (v) v.classList.add('hidden');
@@ -1124,6 +1181,107 @@
         if (backdrop) backdrop.classList.add('hidden');
       }
     }
+
+    // ==================== PROGRAM KERJA ====================
+    async function loadProkerData() {
+      if (!currentUser || !currentUser.apiToken) return;
+      try {
+        const resp = await fetch(MUSYAWARAH_APP_URL,{method:'POST',body:JSON.stringify({action:'getProker',token:currentUser.apiToken})});
+        const res = await resp.json();
+        if (res.status === 'success') { prokerData = res.data || []; populateProkerFilters(); renderProkerList(); }
+        else if (res.code === 'UNAUTHORIZED') handleLogout();
+        else console.warn('Proker:',res.message);
+      } catch(err) { console.error('Load Proker:',err); }
+    }
+    function populateProkerFilters() {
+      const sel=document.getElementById('prokerFilterDapukan'); if(!sel)return;
+      const current=sel.value; const names=[...new Set(prokerData.map(x=>x.dapukan).filter(Boolean))].sort();
+      sel.innerHTML='<option value="">Semua dapukan</option>'+names.map(x=>`<option value="${escapeProkerHtml(x)}">${escapeProkerHtml(x)}</option>`).join(''); sel.value=current;
+    }
+    function escapeProkerHtml(v) { return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function rupiahProker(v) { return 'Rp '+Number(v||0).toLocaleString('id-ID'); }
+    let prokerDapukanChart = null;
+    function renderProkerDapukanChart() {
+      const canvas = document.getElementById('prokerDapukanChart');
+      if (!canvas || typeof Chart === 'undefined') return;
+      const counts = {};
+      prokerData.forEach(item => {
+        const name = String(item.dapukan || 'Belum ditentukan').trim() || 'Belum ditentukan';
+        counts[name] = (counts[name] || 0) + 1;
+      });
+      const labels = Object.keys(counts).sort((a,b)=>a.localeCompare(b,'id'));
+      const values = labels.map(name => counts[name]);
+      if (prokerDapukanChart) prokerDapukanChart.destroy();
+      prokerDapukanChart = new Chart(canvas.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Jumlah Proker',
+            data: values,
+            backgroundColor: 'rgba(13, 148, 136, 0.78)',
+            borderColor: 'rgb(13, 148, 136)',
+            borderWidth: 1,
+            borderRadius: 7,
+            maxBarThickness: 56
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: context => ' ' + context.parsed.y + ' Proker' } }
+          },
+          scales: {
+            x: {
+              title: { display: true, text: 'Dapukan' },
+              grid: { display: false },
+              ticks: { autoSkip: false, maxRotation: 35, minRotation: 0 }
+            },
+            y: {
+              beginAtZero: true,
+              ticks: { precision: 0, stepSize: 1 },
+              title: { display: true, text: 'Jumlah Proker' }
+            }
+          }
+        }
+      });
+    }
+    function renderProkerList() {
+      const total=prokerData.length, todo=prokerData.filter(x=>x.status==='Belum Dimulai').length, doing=prokerData.filter(x=>x.status==='Dalam Proses').length, done=prokerData.filter(x=>x.status==='Selesai').length;
+      const totalBudget=prokerData.reduce((sum,x)=>sum+(Number(x.anggaran)||0),0);
+      [['prokerStatTotal',total],['prokerStatTodo',todo],['prokerStatDoing',doing],['prokerStatDone',done],['prokerStatBudget',rupiahProker(totalBudget)]].forEach(([id,v])=>{const e=document.getElementById(id);if(e)e.textContent=v;});
+      renderProkerDapukanChart();
+      const q=(document.getElementById('prokerSearch')?.value||'').toLowerCase(), d=document.getElementById('prokerFilterDapukan')?.value||'', s=document.getElementById('prokerFilterStatus')?.value||'';
+      const rows=prokerData.filter(x=>(!q||[x.judul_proker,x.deskripsi,x.dapukan].join(' ').toLowerCase().includes(q))&&(!d||x.dapukan===d)&&(!s||x.status===s));
+      const box=document.getElementById('prokerListContainer'); if(!box)return;
+      if(!rows.length){box.innerHTML='<div class="col-span-full text-center p-12 bg-white dark:bg-slate-900 rounded-2xl border dark:border-slate-800 text-slate-500 text-sm">Belum ada Proker yang sesuai dengan filter.</div>';return;}
+      box.innerHTML=rows.map(x=>{const can=String(currentUser?.dapukan||'').trim().toLowerCase()===String(x.dapukan||'').trim().toLowerCase();const pct=Math.max(0,Math.min(100,Number(x.progress)||0));return `<article class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+        <div class="flex justify-between gap-3"><div class="min-w-0"><div class="text-[10px] font-bold uppercase tracking-wider text-brand-600">${escapeProkerHtml(x.dapukan)}</div><h3 class="font-black text-base mt-1">${escapeProkerHtml(x.judul_proker)}</h3></div><span class="text-[10px] font-bold px-2.5 py-1 rounded-lg h-fit ${x.status==='Selesai'?'bg-emerald-100 text-emerald-700':x.status==='Dalam Proses'?'bg-amber-100 text-amber-700':'bg-slate-100 text-slate-600'}">${escapeProkerHtml(x.status)}</span></div>
+        <p class="text-xs text-slate-500 line-clamp-2">${escapeProkerHtml(x.deskripsi||x.target||'Tidak ada deskripsi')}</p>
+        <div><div class="flex justify-between text-[11px] mb-1"><span class="font-semibold text-slate-500">Progress</span><b>${pct}%</b></div><div class="h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden"><div class="h-full bg-brand-500 rounded-full" style="width:${pct}%"></div></div></div>
+        <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-500"><div>Periode: <b class="text-slate-700 dark:text-slate-300">${escapeProkerHtml(x.periodik||'-')}</b></div><div>Anggaran: <b class="text-slate-700 dark:text-slate-300">${rupiahProker(x.anggaran)}</b></div><div>Mulai: <b class="text-slate-700 dark:text-slate-300">${escapeProkerHtml(x.tanggal_mulai||'-')}</b></div><div>Selesai: <b class="text-slate-700 dark:text-slate-300">${escapeProkerHtml(x.tanggal_berakhir||'-')}</b></div></div>
+        ${x.indikator_keberhasilan?`<div class="text-xs"><b>Indikator:</b> ${escapeProkerHtml(x.indikator_keberhasilan)}</div>`:''}
+        <div class="flex justify-end gap-2 pt-2 border-t dark:border-slate-800">${can?`<button onclick="openProkerModal('${encodeURIComponent(x.proker_id)}')" class="px-3 py-2 rounded-lg bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 text-xs font-bold">Edit / Update</button><button onclick="archiveProker('${encodeURIComponent(x.proker_id)}')" class="px-3 py-2 rounded-lg bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300 text-xs font-bold">Arsipkan</button>`:'<span class="text-[10px] text-slate-400">Hanya lihat</span>'}</div></article>`;}).join('');
+    }
+    function openProkerModal(encodedId='') {
+      const id=encodedId?decodeURIComponent(encodedId):'', x=id?prokerData.find(p=>p.proker_id===id):null;
+      if(x && String(x.dapukan).trim().toLowerCase()!==String(currentUser?.dapukan||'').trim().toLowerCase()){showToast('Anda tidak memiliki hak edit Proker ini.','error');return;}
+      document.getElementById('prokerForm').reset(); document.getElementById('pfId').value=x?.proker_id||'';
+      const fields={pfJudul:'judul_proker',pfDeskripsi:'deskripsi',pfTarget:'target',pfIndikator:'indikator_keberhasilan',pfMulai:'tanggal_mulai',pfSelesai:'tanggal_berakhir',pfPeriodik:'periodik',pfPeriodikLain:'periodik_lainnya',pfAnggaran:'anggaran',pfProgress:'progress',pfRealisasi:'realisasi',pfKendala:'kendala',pfEvaluasi:'evaluasi'};
+      Object.entries(fields).forEach(([id,key])=>{const el=document.getElementById(id);if(el)el.value=x?.[key]??(key==='progress'?0:'');});
+      document.getElementById('pfProgressLabel').textContent=(x?.progress||0)+'%'; const periodikLain=document.getElementById('pfPeriodikLain');const isPeriodikLain=document.getElementById('pfPeriodik').value==='Lainnya';periodikLain.classList.toggle('hidden',!isPeriodikLain);periodikLain.required=isPeriodikLain;
+      document.getElementById('prokerModalTitle').textContent=x?'Update Program Kerja':'Tambah Program Kerja';document.getElementById('prokerOwnerLabel').textContent='Dapukan: '+(currentUser?.dapukan||'-');document.getElementById('prokerModal').classList.remove('hidden');
+    }
+    function closeProkerModal(){document.getElementById('prokerModal').classList.add('hidden');}
+    async function submitProker(e){e.preventDefault();
+      const mulai=document.getElementById('pfMulai').value, selesai=document.getElementById('pfSelesai').value;
+      if(mulai && selesai && selesai < mulai){showToast('Tanggal Selesai tidak boleh lebih awal dari Tanggal Mulai.','error');document.getElementById('pfSelesai').focus();return;}
+      const btn=document.getElementById('btnSaveProker');btn.disabled=true;btn.textContent='Menyimpan...';
+      const data={proker_id:document.getElementById('pfId').value,judul_proker:document.getElementById('pfJudul').value,deskripsi:document.getElementById('pfDeskripsi').value,target:document.getElementById('pfTarget').value,indikator_keberhasilan:document.getElementById('pfIndikator').value,tanggal_mulai:document.getElementById('pfMulai').value,tanggal_berakhir:document.getElementById('pfSelesai').value,periodik:document.getElementById('pfPeriodik').value,periodik_lainnya:document.getElementById('pfPeriodikLain').value,anggaran:document.getElementById('pfAnggaran').value,progress:document.getElementById('pfProgress').value,realisasi:document.getElementById('pfRealisasi').value,kendala:document.getElementById('pfKendala').value,evaluasi:document.getElementById('pfEvaluasi').value};
+      try{const resp=await fetch(MUSYAWARAH_APP_URL,{method:'POST',body:JSON.stringify({action:'saveProker',token:currentUser.apiToken,data})});const res=await resp.json();if(res.status==='success'){showToast(res.message,'success');closeProkerModal();await loadProkerData();}else showToast(res.message||'Gagal menyimpan Proker.','error');}catch(err){console.error(err);showToast('Gagal menghubungi server.','error');}finally{btn.disabled=false;btn.textContent='Simpan Proker';}}
+    async function archiveProker(encodedId){const id=decodeURIComponent(encodedId);if(!confirm('Arsipkan Proker ini? Data tidak dihapus permanen.'))return;try{const resp=await fetch(MUSYAWARAH_APP_URL,{method:'POST',body:JSON.stringify({action:'archiveProker',token:currentUser.apiToken,proker_id:id})});const res=await resp.json();if(res.status==='success'){showToast(res.message,'success');await loadProkerData();}else showToast(res.message||'Gagal mengarsipkan.','error');}catch(err){showToast('Gagal menghubungi server.','error');}}
 
     // DASHBOARD PRESET DATES & STATS RENDER
     function setDashboardPresetDate(preset) {
